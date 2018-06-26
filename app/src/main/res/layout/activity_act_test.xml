@@ -37,14 +37,20 @@
                 android:textSize="@dimen/guillotine_item_text_size" />
         </android.support.v7.widget.Toolbar>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/item1"
-            layout="@layout/items_main_board" />
-        <!--只需要插入一个，在items_main_board中append一个新的-->
-        <include
-            android:id="@+id/item2"
-            layout="@layout/items_main_board" />
+        </android.support.v7.widget.RecyclerView>
+
+        <!--<include-->
+            <!--android:id="@+id/item1"-->
+            <!--layout="@layout/items_main_board" />-->
+        <!--&lt;!&ndash;只需要插入一个，在items_main_board中append一个新的&ndash;&gt;-->
+        <!--<include-->
+            <!--android:id="@+id/item2"-->
+            <!--layout="@layout/items_main_board" />-->
 
 
 
