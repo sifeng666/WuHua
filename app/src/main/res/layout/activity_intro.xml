@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_intro"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tang.wuhua.IntroToMain"
+    android:background="@drawable/intro_pic">
+<Button
+    android:id="@+id/buttonSkip"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_alignParentTop="true"
+    android:layout_marginEnd="12dp"
+    android:layout_marginTop="21dp"
+    android:background="@android:color/transparent"
+    android:text="跳过"
+    android:textAllCaps="false"
+    android:textColor="#f0f0"
+    android:textSize="30sp" />
+</RelativeLayout>

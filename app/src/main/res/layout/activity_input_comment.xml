@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#64000000"
+    >
+    <FrameLayout
+        android:id="@+id/mask_input_comment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="3dp"
+        android:paddingLeft="10dp"
+        android:background="@color/comment_color_2"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        >
+
+        <EditText
+            android:id="@+id/edit_input_comment"
+            android:hint="Input your comment"
+            android:layout_width="285dp"
+            android:layout_height="wrap_content"
+            android:textColorHint="#737373"
+            android:textColor="@android:color/black"
+            android:theme="@style/MyEditText"
+            android:textSize="17sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/btn_send_input_comment"
+                android:layout_width="45dp"
+                android:layout_height="32dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/round_edittext"
+                android:onClick="sendComment"
+                android:paddingLeft="8dp"
+                android:paddingTop="8dp"
+                android:text="发送"
+                android:textColor="#757575"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

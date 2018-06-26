@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_margin="5dp"
+android:layout_marginBottom="10dp"
+android:layout_marginLeft="10dp"
+android:layout_marginRight="10dp"
+app:cardBackgroundColor="@android:color/white"
+app:cardCornerRadius="5dp"
+app:cardUseCompatPadding="false">
+
+    <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/img_portrait"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        android:onClick="click_portrait"
+        android:src="@mipmap/messi_1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_usr_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="梅西·真"
+            android:textColor="@color/usr_name_color_2"
+            android:textStyle="normal"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_usr_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingRight="10dp"
+            android:text="我是梅西，我现在慌得一比"
+            android:textColor="#666"
+            android:textSize="16sp" />
+
+        <com.jaeger.ninegridimageview.NineGridImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/layout_nine_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+
+            app:imgGap="4dp"
+            app:showStyle="fill"
+            app:maxSize="9"
+            app:singleImgSize="120dp" />
+
+        <!--不知道是干嘛的-->
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginRight="40dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/pic_iiv"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="#000"
+                android:scaleType="fitXY" />
+
+            <ImageView
+                android:id="@+id/start_iv"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/messi_panic" />
+        </FrameLayout>
+        <!--不知道是干嘛的-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_show_and_pack"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/showAll"
+                    android:textColor="@color/usr_name_color_2"
+                    android:textSize="16sp"
+                    android:onClick="click_show_and_pack"
+                    android:visibility="visible"/>
+
+                <TextView
+                    android:id="@+id/text_location"
+                    android:onClick="click_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="莫斯科"
+                    android:textColor="@color/usr_name_color_2"
+                    android:textSize="10sp"
+                    android:visibility="visible"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="0dp">
+
+                    <TextView
+                        android:id="@+id/text_time"
+                        android:layout_centerVertical="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2018-06-22 03:31"
+                        android:textColor="#7A7A7A"
+                        android:layout_marginTop="3dp"
+                        android:textSize="10sp" />
+
+                    <!--这里用anim里面的出现与消失效果-->
+                    <!--final Animation anim = AnimationUtils.loadAnimation(this, R.anim.anim_praise_or_comment);-->
+                    <!--imgFlower.startAnimation(anim);-->
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/card_comment_and_heart"
+                        android:layout_width="47dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/img_show_comment_and_heart"
+                        android:layout_marginRight="5dp"
+                        app:cardBackgroundColor="@color/comment_heart_color_1"
+                        app:cardCornerRadius="3dp"
+                        app:cardElevation="2dp">
+                        <ImageView
+                            android:layout_marginTop="2dp"
+                            android:id="@+id/img_heart"
+                            android:layout_width="16dp"
+                            android:onClick="click_heart"
+                            android:layout_height="16dp"
+                            android:layout_marginLeft="5dp"
+                            android:src="@mipmap/heart_orange" />
+
+                        <ImageView
+                            android:layout_marginTop="2dp"
+                            android:id="@+id/img_comment"
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:onClick="click_comment"
+                            android:layout_marginLeft="26dp"
+                            android:src="@mipmap/write_comment_3" />
+
+                    </android.support.v7.widget.CardView>
+
+                    <ImageView
+                        android:id="@+id/img_show_comment_and_heart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/album_operation"
+                        android:onClick="click_show_comment_and_heart"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="-2dp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_comment_like"
+            android:layout_width="254dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:visibility="visible"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:id="@+id/layout_like"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/like_cmt_bg">
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="11dp"
+                    android:src="@mipmap/heart_red" />
+                <TextView
+                    android:id="@+id/text_all_like_people"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:textSize="13sp"
+                    android:lineSpacingExtra="2dp"
+                    android:layout_marginTop="11dp"
+                    android:layout_marginBottom="3dp"
+                    android:text="      B罗，内马耳，詹姆丝，裤里"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="1dp"
+                android:background="@color/comment_color_2"
+                android:layout_marginBottom="12dp">
+
+
+                <!--测试-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_like_people_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="詹姆丝"
+                        android:textColor="@color/usr_name_color_2"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="2dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="@string/colon"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
+                        android:text="是真的难受，老铁"/>
+                </LinearLayout>
+                <!--测试-->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_person_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="B罗"
+                        android:textColor="@color/usr_name_color_2"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="2dp"/>
+                    <TextView
+                        android:id="@+id/text_choose_reply_or_colon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="@string/reply"/>
+                    <TextView
+                        android:id="@+id/text_person_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="詹姆丝"
+                        android:textColor="@color/usr_name_color_2"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:visibility="visible"/>
+                    <TextView
+                        android:id="@+id/text_comment_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="5dp"
+                        android:textSize="13sp"
+                        android:lineSpacingExtra="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:text="我觉得OK"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+</android.support.v7.widget.CardView>
