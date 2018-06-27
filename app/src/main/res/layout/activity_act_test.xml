@@ -37,12 +37,22 @@
                 android:textSize="@dimen/guillotine_item_text_size" />
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/main_recyclerView"
+
+        <!--在这里可以修改样式-->
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/main_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+
 
         <!--<include-->
             <!--android:id="@+id/item1"-->
