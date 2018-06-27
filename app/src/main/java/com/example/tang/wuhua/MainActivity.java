@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     private static final long RIPPLE_DURATION = 250;
     private List<Integer> momentList = new ArrayList<>();
+    private MomentAdapter momentAdapter;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
+                for (int i = 3; i < 6; i++) {
+                    momentList.add(i);
+                }
+                momentAdapter.notifyDataSetChanged();
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         }
         LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
         mainRecyclerview.setLayoutManager(mainLayoutManager);
-        MomentAdapter momentAdapter = new MomentAdapter(momentList);
+        momentAdapter = new MomentAdapter(momentList);
         mainRecyclerview.setAdapter(momentAdapter);
 
 
