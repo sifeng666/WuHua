@@ -145,19 +145,30 @@ app:cardUseCompatPadding="false">
                         android:layout_width="47dp"
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/img_show_comment_and_heart"
-                        android:layout_marginRight="5dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
                         app:cardBackgroundColor="@color/comment_heart_color_1"
                         app:cardCornerRadius="3dp"
                         app:cardElevation="2dp">
-                        <ImageView
-                            android:layout_marginTop="2dp"
+                        <!--<ImageView-->
+                            <!--android:layout_marginTop="2dp"-->
+                            <!--android:id="@+id/img_heart"-->
+                            <!--android:layout_width="16dp"-->
+                            <!--android:onClick="click_heart"-->
+                            <!--android:layout_height="16dp"-->
+                            <!--android:layout_marginLeft="5dp"-->
+                            <!--android:src="@mipmap/heart_orange" />-->
+
+
+                        <!--这里是用法-->
+                        <!--https://github.com/jd-alexander/LikeButton-->
+                        <com.like.LikeButton
+                            app:icon_type="heart"
+                            app:icon_size="14dp"
                             android:id="@+id/img_heart"
-                            android:layout_width="16dp"
-                            android:onClick="click_heart"
-                            android:layout_height="16dp"
-                            android:layout_marginLeft="5dp"
-                            android:src="@mipmap/heart_orange" />
+                            android:layout_marginLeft="-8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
 
                         <ImageView
                             android:layout_marginTop="2dp"
@@ -169,17 +180,6 @@ app:cardUseCompatPadding="false">
                             android:src="@mipmap/write_comment_3" />
 
                     </android.support.v7.widget.CardView>
-
-                    <ImageView
-                        android:id="@+id/img_show_comment_and_heart"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_centerVertical="true"
-                        android:src="@mipmap/album_operation"
-                        android:onClick="click_show_comment_and_heart"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="-2dp" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
