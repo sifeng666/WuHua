@@ -4,8 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.tang.wuhua.R;
+import com.like.LikeButton;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -17,10 +23,37 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
     private List<Integer> mMomentList;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public enum ViewName {
+        ITEM,
+        USERNAME,
+        COMMENT,
+        LIKE
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, ViewName viewName, ViewHolder holder, int position);
+    }
+
+    private OnItemClickListener mItemClickListener;
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView tvUsername; //用户名
+        public ImageView ivComment; //评论按钮
+        public LinearLayout llComment;
+        public LikeButton lbLike; //点赞按钮
+        public TextView tvLikePeople; //点赞的用户名
+        public boolean isLike;
 
         public ViewHolder(View view) {
             super(view);
+            tvUsername = (TextView) view.findViewById(R.id.text_usr_name);
+            ivComment = (ImageView) view.findViewById(R.id.img_comment);
+            llComment = (LinearLayout) view.findViewById(R.id.layout_comment);
+            lbLike = (LikeButton) view.findViewById(R.id.img_heart);
+            tvLikePeople = (TextView) view.findViewById(R.id.text_all_like_people);
+            isLike = false;
         }
     }
 
@@ -36,12 +69,39 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        ;
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+
+        final ViewHolder mHolder = holder;
+
+        if (mItemClickListener != null) {
+            holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClickListener.onItemClick(v, ViewName.USERNAME, mHolder, position);
+                }
+            });
+            holder.ivComment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClickListener.onItemClick(v, ViewName.COMMENT, mHolder, position);
+                }
+            });
+            holder.lbLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mItemClickListener.onItemClick(v, ViewName.LIKE, mHolder, position);
+                }
+            });
+        }
     }
 
     @Override
     public int getItemCount() {
         return mMomentList.size();
     }
+
+    public void setClickListener(OnItemClickListener clickListener) {
+        mItemClickListener = clickListener;
+    }
+
 }

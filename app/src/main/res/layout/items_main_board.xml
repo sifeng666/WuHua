@@ -175,7 +175,6 @@ app:cardUseCompatPadding="false">
                             android:id="@+id/img_comment"
                             android:layout_width="16dp"
                             android:layout_height="16dp"
-                            android:onClick="click_comment"
                             android:layout_marginLeft="26dp"
                             android:src="@mipmap/write_comment_3" />
 
