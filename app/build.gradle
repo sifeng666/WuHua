@@ -41,4 +41,14 @@ dependencies {
     compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.0-alpha-7'//没有使用特殊Header，可以不加这行
     testCompile 'junit:junit:4.12'
     compile 'com.github.jd-alexander:LikeButton:0.2.3'
+
+    //retrofit2
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile "com.squareup.retrofit2:converter-gson:2.1.0"
+    // Gson
+    compile 'com.google.code.gson:gson:2.8.0'
+    //DBFlow
+    annotationProcessor 'com.github.Raizlabs.DBFlow:dbflow-processor:4.0.0-beta7'
+    compile 'com.github.Raizlabs.DBFlow:dbflow-core:4.0.0-beta7'
+    compile 'com.github.Raizlabs.DBFlow:dbflow:4.0.0-beta7'
 }
