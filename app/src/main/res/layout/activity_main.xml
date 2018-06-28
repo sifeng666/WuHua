@@ -35,6 +35,14 @@
                 android:text="@string/activity"
                 android:textColor="#fff"
                 android:textSize="@dimen/guillotine_item_text_size" />
+
+            <Button
+                android:id="@+id/send_lyle"
+                style="@style/ImageView.Hamburger"
+                android:layout_gravity="right"
+                android:scaleX="0.7"
+                android:scaleY="0.7"
+                android:background="@mipmap/ic_camera_white_18pt_3x" />
         </android.support.v7.widget.Toolbar>
 
 
