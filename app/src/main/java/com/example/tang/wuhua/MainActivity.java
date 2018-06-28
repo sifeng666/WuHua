@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -127,8 +128,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 3; i++) {
             momentList.add(i);
         }
-        LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
-        mainLayoutManager.setStackFromEnd(true); //键盘弹出
+        final LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
+        //mainLayoutManager.setStackFromEnd(true); //键盘弹出
         mainRecyclerview.setLayoutManager(mainLayoutManager);
         momentAdapter = new MomentAdapter(momentList);
         momentAdapter.setClickListener(new MomentAdapter.OnItemClickListener() {
@@ -139,10 +140,14 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
                 }
                 else if (viewName == MomentAdapter.ViewName.COMMENT) {
-
+                    //mainLayoutManager.setStackFromEnd(true); // 使输入框弹出时内容上移
                     //弹出输入框
+
+                    mainLayoutManager.scrollToPositionWithOffset(position, 0); // 使输入框弹出时内容上移
+                    //Log.d("position", Integer.toString(position));
+
+                    View popupView = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_input_comment, null);
                     if (holder.popupWindow == null) {
-                        View popupView = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_input_comment, null);
                         holder.popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.WRAP_CONTENT, false);
                     }
@@ -183,6 +188,32 @@ public class MainActivity extends AppCompatActivity {
                             imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
                         }
                     }, 0);
+
+                    final EditText etCommentInput = (EditText) popupView.findViewById(R.id.edit_input_comment);
+                    TextView btnSubmit = (TextView) popupView.findViewById(R.id.btn_send_input_comment);
+                    btnSubmit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String content = etCommentInput.getText().toString();
+                            if (content.length() == 0) {
+                                Toast.makeText(MainActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            Toast.makeText(MainActivity.this, content, Toast.LENGTH_SHORT).show();
+                            View commentView = View.inflate(MainActivity.this, R.layout.items_comment, null);
+                            TextView tvPerson1 = commentView.findViewById(R.id.text_person_1);
+                            TextView tvPerson2 = commentView.findViewById(R.id.text_person_2);
+                            TextView tvReply = commentView.findViewById(R.id.text_choose_reply_or_colon);
+                            TextView tvContent = commentView.findViewById(R.id.text_comment_content);
+                            tvPerson1.setText(holder.tvUsername.getText().toString());
+                            tvPerson2.setVisibility(View.GONE);
+                            tvReply.setText(":");
+                            tvContent.setText(content);
+                            holder.llComment.addView(commentView);
+                            etCommentInput.setText("");
+                            holder.popupWindow.dismiss();
+                        }
+                    });
 
                 }
                 else if (viewName == MomentAdapter.ViewName.LIKE) {

@@ -25,7 +25,7 @@
 
         <EditText
             android:id="@+id/edit_input_comment"
-            android:hint="Input your comment"
+            android:hint="请输入评论"
             android:layout_width="285dp"
             android:layout_height="wrap_content"
             android:textColorHint="#737373"

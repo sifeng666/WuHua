@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/text_person_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="B罗"
+        android:textColor="@color/usr_name_color_2"
+        android:textSize="13sp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="2dp"/>
+    <TextView
+        android:id="@+id/text_choose_reply_or_colon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:textSize="13sp"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp"
+        android:text="@string/reply"/>
+    <TextView
+        android:id="@+id/text_person_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="詹姆丝"
+        android:textColor="@color/usr_name_color_2"
+        android:textSize="13sp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:visibility="visible"/>
+    <TextView
+        android:id="@+id/text_comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="5dp"
+        android:textSize="13sp"
+        android:lineSpacingExtra="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp"
+        android:text="我觉得OK"/>
+</LinearLayout>
