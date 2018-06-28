@@ -1,9 +1,12 @@
 package com.example.tang.wuhua;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -13,12 +16,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
         if (!permissionList.isEmpty()) {
             String [] permissions = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
@@ -116,17 +128,62 @@ public class MainActivity extends AppCompatActivity {
             momentList.add(i);
         }
         LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
+        mainLayoutManager.setStackFromEnd(true); //键盘弹出
         mainRecyclerview.setLayoutManager(mainLayoutManager);
         momentAdapter = new MomentAdapter(momentList);
         momentAdapter.setClickListener(new MomentAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, MomentAdapter.ViewName viewName, MomentAdapter.ViewHolder holder, int position) {
+            public void onItemClick(View view, MomentAdapter.ViewName viewName, final MomentAdapter.ViewHolder holder, int position) {
                 if (viewName == MomentAdapter.ViewName.USERNAME) {
                     TextView tv = (TextView) view;
                     Toast.makeText(MainActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
                 }
                 else if (viewName == MomentAdapter.ViewName.COMMENT) {
-                    Toast.makeText(MainActivity.this, "img_comment", Toast.LENGTH_SHORT).show();
+
+                    //弹出输入框
+                    if (holder.popupWindow == null) {
+                        View popupView = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_input_comment, null);
+                        holder.popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT, false);
+                    }
+
+                    holder.popupWindow.setFocusable(true); // 使其聚集 ，要想监听菜单里控件的事件就必须要调用此方法
+                    holder.popupWindow.setOutsideTouchable(false); // 设置允许在外点击消失。无效？
+                    holder.popupWindow.setBackgroundDrawable(new BitmapDrawable()); // 设置背景，这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景。 无效？
+                    holder.popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE); //软键盘不会挡着popupwindow
+                    //holder.popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                    holder.popupWindow.showAtLocation(view, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0); //显示菜单
+
+                    //监听菜单的关闭事件
+                    holder.popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            ;
+                        }
+                    });
+                    holder.popupWindow.setTouchable(true);
+
+                    //监听触屏事件
+                    holder.popupWindow.setTouchInterceptor(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                                holder.popupWindow.dismiss();
+                            }
+                            return false;
+                        }
+                    });
+
+                    //弹出软键盘，需要异步处理
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            InputMethodManager imm = (InputMethodManager) MainActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    }, 0);
+
                 }
                 else if (viewName == MomentAdapter.ViewName.LIKE) {
                     StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
@@ -135,13 +192,13 @@ public class MainActivity extends AppCompatActivity {
                         likeName.append(", ").append(myUsername);
                         holder.isLike = true;
                         holder.tvLikePeople.setText(likeName);
-                        holder.lbLike.setLiked(true);
+                        //holder.lbLike.setLiked(true);
                     }
                     else {
                         holder.isLike = false;
                         likeName.delete(likeName.length() - (myUsername.length() + 2), likeName.length());
                         holder.tvLikePeople.setText(likeName);
-                        holder.lbLike.setLiked(false);
+                        //holder.lbLike.setLiked(false);
                     }
                 }
             }

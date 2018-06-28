@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.tang.wuhua.R;
 import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import org.w3c.dom.Text;
 
@@ -45,6 +47,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         public LikeButton lbLike; //点赞按钮
         public TextView tvLikePeople; //点赞的用户名
         public boolean isLike;
+        public PopupWindow popupWindow;
 
         public ViewHolder(View view) {
             super(view);
@@ -72,6 +75,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
         final ViewHolder mHolder = holder;
+        final View lbv = (View) holder.lbLike;
 
         if (mItemClickListener != null) {
             holder.tvUsername.setOnClickListener(new View.OnClickListener() {
@@ -86,10 +90,15 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                     mItemClickListener.onItemClick(v, ViewName.COMMENT, mHolder, position);
                 }
             });
-            holder.lbLike.setOnClickListener(new View.OnClickListener() {
+            holder.lbLike.setOnLikeListener(new OnLikeListener() {
                 @Override
-                public void onClick(View v) {
-                    mItemClickListener.onItemClick(v, ViewName.LIKE, mHolder, position);
+                public void liked(LikeButton likeButton) {
+                    mItemClickListener.onItemClick(lbv, ViewName.LIKE, mHolder, position);
+                }
+
+                @Override
+                public void unLiked(LikeButton likeButton) {
+                    mItemClickListener.onItemClick(lbv, ViewName.LIKE, mHolder, position);
                 }
             });
         }
