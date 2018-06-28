@@ -22,7 +22,6 @@ app:cardUseCompatPadding="false">
         android:layout_height="60dp"
         android:layout_marginLeft="12dp"
         android:layout_marginTop="10dp"
-        android:onClick="click_portrait"
         android:src="@mipmap/messi_1" />
 
     <LinearLayout
@@ -108,12 +107,10 @@ app:cardUseCompatPadding="false">
                     android:text="@string/showAll"
                     android:textColor="@color/usr_name_color_2"
                     android:textSize="16sp"
-                    android:onClick="click_show_and_pack"
                     android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/text_location"
-                    android:onClick="click_location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
