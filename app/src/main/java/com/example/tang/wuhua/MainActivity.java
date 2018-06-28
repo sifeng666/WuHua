@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -107,6 +108,34 @@ public class MainActivity extends AppCompatActivity {
         LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
         mainRecyclerview.setLayoutManager(mainLayoutManager);
         momentAdapter = new MomentAdapter(momentList);
+        momentAdapter.setClickListener(new MomentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, MomentAdapter.ViewName viewName, MomentAdapter.ViewHolder holder, int position) {
+                if (viewName == MomentAdapter.ViewName.USERNAME) {
+                    TextView tv = (TextView) view;
+                    Toast.makeText(MainActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
+                }
+                else if (viewName == MomentAdapter.ViewName.COMMENT) {
+                    Toast.makeText(MainActivity.this, "img_comment", Toast.LENGTH_SHORT).show();
+                }
+                else if (viewName == MomentAdapter.ViewName.LIKE) {
+                    StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
+                    String myUsername = holder.tvUsername.getText().toString();
+                    if (!holder.isLike) {
+                        likeName.append(", ").append(myUsername);
+                        holder.isLike = true;
+                        holder.tvLikePeople.setText(likeName);
+                        holder.lbLike.setLiked(true);
+                    }
+                    else {
+                        holder.isLike = false;
+                        likeName.delete(likeName.length() - (myUsername.length() + 2), likeName.length());
+                        holder.tvLikePeople.setText(likeName);
+                        holder.lbLike.setLiked(false);
+                    }
+                }
+            }
+        });
         mainRecyclerview.setAdapter(momentAdapter);
 
 
