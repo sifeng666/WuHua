@@ -39,18 +39,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="头像"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
             android:layout_marginLeft="15dp"
             android:textColor="#26292e" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_head_portrait_profile"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_weight="0"
-            android:paddingBottom="7dp"
-            android:paddingTop="7dp"
+            android:paddingBottom="4dp"
+            android:paddingTop="4dp"
             android:paddingRight="10dp"
             android:src="@mipmap/messi_1"/>
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="用户名"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
 
             android:textColor="#26292e" />
@@ -84,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Messi"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="#26292e"
             />
 
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="手机"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
 
             android:textColor="#26292e" />
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="400-666-8800"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="#26292e"
             />
 
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="5"
             android:text="地点"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:layout_gravity="center"
 
             android:textColor="#26292e" />
@@ -151,7 +151,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="阿根廷"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="#26292e"
             />
 
