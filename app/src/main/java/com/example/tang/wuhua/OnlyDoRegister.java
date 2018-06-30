@@ -15,13 +15,13 @@ public class OnlyDoRegister extends AppCompatActivity {
 
     private EditText editNameRegister;
     private EditText editPwdRegister;
-    private EditText editMailRegister;
+    private EditText editPhoneRegister;
     private ImageView imgClearNameRegister;
     private ImageView imgClearPwdRegister;
-    private ImageView imgClearMailRegister;
+    private ImageView imgClearPhoneRegister;
     private String userNameRegister;
     private String userPwdRegister;
-    private String userMailRegister;
+    private String userPhoneRegister;
     private Button bntRegister2;
 
     @Override
@@ -35,13 +35,13 @@ public class OnlyDoRegister extends AppCompatActivity {
     private void init(){
         editNameRegister = (EditText) findViewById(R.id.edit_name_register);
         editPwdRegister = (EditText) findViewById(R.id.edit_pwd_register);
-        //editMailRegister = (EditText) findViewById(R.id.edit_mail_register);
+        editPhoneRegister = (EditText) findViewById(R.id.edit_phone_register);
         imgClearNameRegister = (ImageView) findViewById(R.id.img_clear_name_register);
         imgClearPwdRegister = (ImageView) findViewById(R.id.img_clear_pwd_register);
-        //imgClearMailRegister = (ImageView) findViewById(R.id.img_clear_mail_register);
+        imgClearPhoneRegister = (ImageView) findViewById(R.id.img_clear_phone_register);
 
         EditTextClearTools.addClearListener(editNameRegister, imgClearNameRegister);
         EditTextClearTools.addClearListener(editPwdRegister, imgClearPwdRegister);
-        EditTextClearTools.addClearListener(editMailRegister, imgClearMailRegister);
+        EditTextClearTools.addClearListener(editPhoneRegister, imgClearPhoneRegister);
     }
 }
