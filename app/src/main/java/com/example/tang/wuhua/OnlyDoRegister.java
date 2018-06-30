@@ -35,10 +35,10 @@ public class OnlyDoRegister extends AppCompatActivity {
     private void init(){
         editNameRegister = (EditText) findViewById(R.id.edit_name_register);
         editPwdRegister = (EditText) findViewById(R.id.edit_pwd_register);
-        editMailRegister = (EditText) findViewById(R.id.edit_mail_register);
+        //editMailRegister = (EditText) findViewById(R.id.edit_mail_register);
         imgClearNameRegister = (ImageView) findViewById(R.id.img_clear_name_register);
         imgClearPwdRegister = (ImageView) findViewById(R.id.img_clear_pwd_register);
-        imgClearMailRegister = (ImageView) findViewById(R.id.img_clear_mail_register);
+        //imgClearMailRegister = (ImageView) findViewById(R.id.img_clear_mail_register);
 
         EditTextClearTools.addClearListener(editNameRegister, imgClearNameRegister);
         EditTextClearTools.addClearListener(editPwdRegister, imgClearPwdRegister);

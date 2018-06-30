@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -55,22 +58,16 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     private static final long RIPPLE_DURATION = 250;
     private static final int REQUEST_CODE_CHOOSE = 23;
-    private List<Integer> momentList = new ArrayList<>();
-    private MomentAdapter momentAdapter;
-    public LocationClient mLocationClient; //位置信息
-    private double latitude; //经度
-    private double longitude; //纬度
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.root)
     FrameLayout root;
     @BindView(R.id.content_hamburger)
     View contentHamburger;
-    @BindView(R.id.main_recyclerView)
-    RecyclerView mainRecyclerview;
-    @BindView(R.id.refreshLayout)
-    RefreshLayout refreshLayout;
+    //@BindView(R.id.main_recyclerView)
+    //RecyclerView mainRecyclerview;
+    //@BindView(R.id.refreshLayout)
+    //RefreshLayout refreshLayout;
 
     @BindView(R.id.send_lyle)
     Button sendLyle;
@@ -81,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mLocationClient = new LocationClient(getApplicationContext());
-        mLocationClient.registerLocationListener(new MyLocationListener());
+        //申请权限
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -104,138 +100,6 @@ public class MainActivity extends AppCompatActivity {
             String [] permissions = permissionList.toArray(new String[permissionList.size()]);
             ActivityCompat.requestPermissions(MainActivity.this, permissions, 1);
         }
-        else {
-            requestLocation();
-        }
-
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-            }
-        });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                for (int i = 3; i < 6; i++) {
-                    momentList.add(i);
-                }
-                momentAdapter.notifyDataSetChanged();
-                refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
-            }
-        });
-
-        for (int i = 0; i < 3; i++) {
-            momentList.add(i);
-        }
-        final LinearLayoutManager mainLayoutManager = new LinearLayoutManager(this);
-        //mainLayoutManager.setStackFromEnd(true); //键盘弹出
-        mainRecyclerview.setLayoutManager(mainLayoutManager);
-        momentAdapter = new MomentAdapter(momentList);
-        momentAdapter.setClickListener(new MomentAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, MomentAdapter.ViewName viewName, final MomentAdapter.ViewHolder holder, int position) {
-                if (viewName == MomentAdapter.ViewName.USERNAME) {
-                    TextView tv = (TextView) view;
-                    Toast.makeText(MainActivity.this, tv.getText(), Toast.LENGTH_SHORT).show();
-                }
-                else if (viewName == MomentAdapter.ViewName.COMMENT) {
-                    //mainLayoutManager.setStackFromEnd(true); // 使输入框弹出时内容上移
-                    //弹出输入框
-
-                    mainLayoutManager.scrollToPositionWithOffset(position, 0); // 使输入框弹出时内容上移
-                    //Log.d("position", Integer.toString(position));
-
-                    View popupView = LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_input_comment, null);
-                    if (holder.popupWindow == null) {
-                        holder.popupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.WRAP_CONTENT, false);
-                    }
-
-                    holder.popupWindow.setFocusable(true); // 使其聚集 ，要想监听菜单里控件的事件就必须要调用此方法
-                    holder.popupWindow.setOutsideTouchable(false); // 设置允许在外点击消失。无效？
-                    holder.popupWindow.setBackgroundDrawable(new BitmapDrawable()); // 设置背景，这个是为了点击“返回Back”也能使其消失，并且并不会影响你的背景。 无效？
-                    holder.popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE); //软键盘不会挡着popupwindow
-                    //holder.popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                    holder.popupWindow.showAtLocation(view, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 0); //显示菜单
-
-                    //监听菜单的关闭事件
-                    holder.popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                        @Override
-                        public void onDismiss() {
-                            ;
-                        }
-                    });
-                    holder.popupWindow.setTouchable(true);
-
-                    //监听触屏事件
-                    holder.popupWindow.setTouchInterceptor(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                                holder.popupWindow.dismiss();
-                            }
-                            return false;
-                        }
-                    });
-
-                    //弹出软键盘，需要异步处理
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            InputMethodManager imm = (InputMethodManager) MainActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
-                        }
-                    }, 0);
-
-                    final EditText etCommentInput = (EditText) popupView.findViewById(R.id.edit_input_comment);
-                    TextView btnSubmit = (TextView) popupView.findViewById(R.id.btn_send_input_comment);
-                    btnSubmit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String content = etCommentInput.getText().toString();
-                            if (content.length() == 0) {
-                                Toast.makeText(MainActivity.this, "评论不能为空", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            Toast.makeText(MainActivity.this, content, Toast.LENGTH_SHORT).show();
-                            View commentView = View.inflate(MainActivity.this, R.layout.items_comment, null);
-                            TextView tvPerson1 = commentView.findViewById(R.id.text_person_1);
-                            TextView tvPerson2 = commentView.findViewById(R.id.text_person_2);
-                            TextView tvReply = commentView.findViewById(R.id.text_choose_reply_or_colon);
-                            TextView tvContent = commentView.findViewById(R.id.text_comment_content);
-                            tvPerson1.setText(holder.tvUsername.getText().toString());
-                            tvPerson2.setVisibility(View.GONE);
-                            tvReply.setText(":");
-                            tvContent.setText(content);
-                            holder.llComment.addView(commentView);
-                            etCommentInput.setText("");
-                            holder.popupWindow.dismiss();
-                        }
-                    });
-
-                }
-                else if (viewName == MomentAdapter.ViewName.LIKE) {
-                    StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
-                    String myUsername = holder.tvUsername.getText().toString();
-                    if (!holder.isLike) {
-                        likeName.append(", ").append(myUsername);
-                        holder.isLike = true;
-                        holder.tvLikePeople.setText(likeName);
-                        //holder.lbLike.setLiked(true);
-                    }
-                    else {
-                        holder.isLike = false;
-                        likeName.delete(likeName.length() - (myUsername.length() + 2), likeName.length());
-                        holder.tvLikePeople.setText(likeName);
-                        //holder.lbLike.setLiked(false);
-                    }
-                }
-            }
-        });
-        mainRecyclerview.setAdapter(momentAdapter);
-
 
 
         if (toolbar != null) {
@@ -244,7 +108,98 @@ public class MainActivity extends AppCompatActivity {
         }
 
         View guillotineMenu = LayoutInflater.from(this).inflate(R.layout.activity_guillotine, null);
+        LinearLayout llProfit = (LinearLayout) guillotineMenu.findViewById(R.id.profile_group);
+        LinearLayout llAlbum = (LinearLayout) guillotineMenu.findViewById(R.id.album_group);
+        LinearLayout llLyle = (LinearLayout) guillotineMenu.findViewById(R.id.lyle_group);
+        LinearLayout llSettings = (LinearLayout) guillotineMenu.findViewById(R.id.settings_group);
+        LinearLayout llSupport = (LinearLayout) guillotineMenu.findViewById(R.id.support_group);
+        final TextView tvMenuTitle = (TextView) findViewById(R.id.menu_title);
+        final ImageView ivSwitchMenu = (ImageView) guillotineMenu.findViewById(R.id.guillotine_hamburger);
+        FragmentManager menuManager = getSupportFragmentManager();
+        FragmentTransaction menuTransaction = menuManager.beginTransaction();
+        menuTransaction.replace(R.id.main_frame, new MomentFragment());
+        menuTransaction.commit();
         root.addView(guillotineMenu);
+        llProfit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager menuManager = getSupportFragmentManager();
+                FragmentTransaction menuTransaction = menuManager.beginTransaction();
+                menuTransaction.replace(R.id.main_frame, new ProfileFragment());
+                menuTransaction.commit();
+                tvMenuTitle.setText("个人信息");
+                ivSwitchMenu.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivSwitchMenu.performClick();
+                    }
+                });
+            }
+        });
+        llAlbum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager menuManager = getSupportFragmentManager();
+                FragmentTransaction menuTransaction = menuManager.beginTransaction();
+                menuTransaction.replace(R.id.main_frame, new AlbumFragment());
+                menuTransaction.commit();
+                tvMenuTitle.setText("相册");
+                ivSwitchMenu.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivSwitchMenu.performClick();
+                    }
+                });
+            }
+        });
+        llLyle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager menuManager = getSupportFragmentManager();
+                FragmentTransaction menuTransaction = menuManager.beginTransaction();
+                menuTransaction.replace(R.id.main_frame, new MomentFragment());
+                menuTransaction.commit();
+                tvMenuTitle.setText("lyle");
+                ivSwitchMenu.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivSwitchMenu.performClick();
+                    }
+                });
+            }
+        });
+        llSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager menuManager = getSupportFragmentManager();
+                FragmentTransaction menuTransaction = menuManager.beginTransaction();
+                menuTransaction.replace(R.id.main_frame, new SettingFragment());
+                menuTransaction.commit();
+                tvMenuTitle.setText("设置");
+                ivSwitchMenu.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivSwitchMenu.performClick();
+                    }
+                });
+            }
+        });
+        llSupport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager menuManager = getSupportFragmentManager();
+                FragmentTransaction menuTransaction = menuManager.beginTransaction();
+                menuTransaction.replace(R.id.main_frame, new SupportFragment());
+                menuTransaction.commit();
+                tvMenuTitle.setText("赞赏");
+                ivSwitchMenu.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ivSwitchMenu.performClick();
+                    }
+                });
+            }
+        });
 
         new GuillotineAnimation.GuillotineBuilder(guillotineMenu, guillotineMenu.findViewById(R.id.guillotine_hamburger), contentHamburger)
                 .setStartDelay(RIPPLE_DURATION)
@@ -268,27 +223,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void requestLocation() {
-        initLocation();
-        mLocationClient.start();
-    }
-
-    private void initLocation() {
-        LocationClientOption option = new LocationClientOption();
-        option.setIsNeedAddress(true);
-        mLocationClient.setLocOption(option);
-    }
-
-    public class MyLocationListener implements BDLocationListener {
-        @Override
-        public void onReceiveLocation(BDLocation bdLocation) {
-            latitude = bdLocation.getLatitude();
-            longitude = bdLocation.getLongitude();
-            Toast.makeText(MainActivity.this, bdLocation.getStreet(), Toast.LENGTH_SHORT).show();
-            mLocationClient.stop();
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -301,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
                             return;
                         }
                     }
-                    requestLocation();
                 } else {
                     Toast.makeText(this, "发生未知错误", Toast.LENGTH_SHORT).show();
                     finish();
