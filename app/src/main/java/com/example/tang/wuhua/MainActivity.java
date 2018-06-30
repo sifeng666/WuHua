@@ -128,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new ProfileFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("个人信息");
+                sendLyle.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -144,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new AlbumFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("相册");
+                sendLyle.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new MomentFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("lyle");
+                sendLyle.setVisibility(View.VISIBLE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -176,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new SettingFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("设置");
+                sendLyle.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -192,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new SupportFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("赞赏");
+                sendLyle.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
