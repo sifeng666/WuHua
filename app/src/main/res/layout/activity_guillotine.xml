@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f2f2f2"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -19,30 +18,46 @@
     <LinearLayout
         android:id="@+id/profile_group"
         style="@style/LinearLayout.GuillotineItem"
-        android:layout_marginTop="@dimen/guillotine_medium_margin">
+        android:layout_marginTop="@dimen/guillotine_large_margin">
 
         <ImageView
             style="@style/ImageView.GuillotineItem"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:src="@mipmap/usr_1" />
+            android:src="@mipmap/ic_person_black_48dp" />
 
         <TextView
             style="@style/TextView.GuillotineItem"
             android:textColor="#000"
-            android:text="@string/profile" />
+            android:text="个人信息" />
     </LinearLayout>
 
-
     <LinearLayout
-        android:id="@+id/activity_group"
+        android:id="@+id/album_group"
         style="@style/LinearLayout.GuillotineItem">
 
         <ImageView
             style="@style/ImageView.GuillotineItem"
             android:layout_height="30dp"
             android:layout_width="30dp"
-            android:src="@mipmap/friend_1" />
+            android:src="@mipmap/ic_face_black_48dp" />
+
+        <TextView
+            style="@style/TextView.GuillotineItem.Selected"
+            android:textColor="#000"
+            android:typeface="monospace"
+            android:text="相册" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyle_group"
+        style="@style/LinearLayout.GuillotineItem">
+
+        <ImageView
+            style="@style/ImageView.GuillotineItem"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:src="@mipmap/ic_camera_black_48dp" />
 
         <TextView
             style="@style/TextView.GuillotineItem.Selected"
@@ -51,21 +66,6 @@
             android:text="lyle" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/feed_group"
-        style="@style/LinearLayout.GuillotineItem">
-
-        <ImageView
-            style="@style/ImageView.GuillotineItem"
-            android:layout_height="30dp"
-            android:layout_width="30dp"
-            android:src="@mipmap/location_1" />
-
-        <TextView
-            style="@style/TextView.GuillotineItem"
-            android:textColor="#000"
-            android:text="NEAR BY" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/settings_group"
@@ -80,6 +80,22 @@
         <TextView
             style="@style/TextView.GuillotineItem"
             android:textColor="#000"
-            android:text="@string/settings" />
+            android:text="设置" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/support_group"
+        style="@style/LinearLayout.GuillotineItem">
+
+        <ImageView
+            style="@style/ImageView.GuillotineItem"
+            android:layout_height="30dp"
+            android:layout_width="30dp"
+            android:src="@mipmap/ic_thumb_up_black_48dp" />
+
+        <TextView
+            style="@style/TextView.GuillotineItem"
+            android:textColor="#000"
+            android:text="赞赏" />
     </LinearLayout>
 </LinearLayout>

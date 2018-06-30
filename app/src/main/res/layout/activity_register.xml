@@ -147,7 +147,7 @@
 
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/layout_mail_register"
+        android:id="@+id/layout_phone_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/layout_pwd_register"
@@ -155,42 +155,42 @@
         android:background="@drawable/rectangle_edittext">
 
         <ImageView
-            android:id="@+id/img_mail_icon_register"
+            android:id="@+id/img_phone_icon_register"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:paddingBottom="15dp"
             android:paddingLeft="25dp"
             android:paddingTop="15dp"
-            android:src="@mipmap/mail_1" />
+            android:src="@mipmap/ic_phone_android_black_48dp" />
 
         <View
-            android:id="@+id/view_mail_register"
+            android:id="@+id/view_phone_register"
             android:layout_width="1dp"
             android:layout_height="20dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/img_mail_icon_register"
+            android:layout_toRightOf="@id/img_phone_icon_register"
             android:background="@color/colorCursor" />
 
         <EditText
-            android:id="@+id/edit_mail_register"
+            android:id="@+id/edit_phone_register"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/view_mail_register"
+            android:layout_toRightOf="@id/view_phone_register"
             android:background="@null"
             android:drawablePadding="5dp"
             android:ems="19"
-            android:hint=" 邮箱"
+            android:hint=" 手机"
             android:inputType="textPassword"
             android:textColorHint="@color/colorCursor"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="15sp" />
 
         <ImageView
-            android:id="@+id/img_clear_mail_register"
+            android:id="@+id/img_clear_phone_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -204,7 +204,7 @@
         android:id="@+id/btn_register_register"
         android:layout_width="340dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/layout_mail_register"
+        android:layout_below="@id/layout_phone_register"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:background="@drawable/round_corner_bg"

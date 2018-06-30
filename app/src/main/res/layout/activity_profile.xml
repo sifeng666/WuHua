@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <android.support.v7.widget.Toolbar
+            style="@style/Toolbar"
+            app:contentInsetStart="0dp">
+
+            <ImageView
+                android:id="@+id/return_profile"
+                style="@style/ImageView.Hamburger"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="0dp"
+                android:src="@mipmap/ic_backmenu" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="个人信息"
+                android:textColor="#fff"
+                android:textSize="@dimen/guillotine_item_text_size" />
+        </android.support.v7.widget.Toolbar>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="头像"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="15dp"
+            android:textColor="#26292e" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_head_portrait_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_weight="0"
+            android:paddingBottom="7dp"
+            android:paddingTop="7dp"
+            android:paddingRight="10dp"
+            android:src="@mipmap/messi_1"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#C9C9C9" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="用户名"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+
+            android:textColor="#26292e" />
+
+        <TextView
+            android:id="@+id/text_usr_name_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Messi"
+            android:textSize="16sp"
+            android:textColor="#26292e"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#C9C9C9" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="手机"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+
+            android:textColor="#26292e" />
+
+        <TextView
+            android:id="@+id/text_phone_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="400-666-8800"
+            android:textSize="16sp"
+            android:textColor="#26292e"
+            />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#C9C9C9" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:text="地点"
+            android:textSize="18sp"
+            android:layout_gravity="center"
+
+            android:textColor="#26292e" />
+
+        <TextView
+            android:id="@+id/text_location_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="阿根廷"
+            android:textSize="16sp"
+            android:textColor="#26292e"
+            />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#C9C9C9" />
+
+</LinearLayout>
