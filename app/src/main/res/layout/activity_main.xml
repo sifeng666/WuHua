@@ -29,6 +29,7 @@
                 android:src="@drawable/ic_menu_90" />
 
             <TextView
+                android:id="@+id/menu_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -48,19 +49,25 @@
 
 
         <!--在这里可以修改样式-->
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshLayout"
+
+        <FrameLayout
+            android:id="@+id/main_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/main_recyclerView"
+
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/main_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-            </android.support.v7.widget.RecyclerView>
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+                </android.support.v7.widget.RecyclerView>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-
+        </FrameLayout>
 
 
         <!--<include-->
