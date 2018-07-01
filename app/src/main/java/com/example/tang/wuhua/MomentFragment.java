@@ -2,11 +2,9 @@ package com.example.tang.wuhua;
 
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,16 +27,15 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.tang.wuhua.Adapter.MomentAdapter;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.example.tang.wuhua.Data.Comment;
+import com.example.tang.wuhua.Data.Moment;
+import com.example.tang.wuhua.Data.User;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.ArrayList;
 
 /**
  * Created by root on 18-6-30.
@@ -50,10 +47,12 @@ public class MomentFragment extends Fragment {
     RecyclerView mainRecyclerview;
     RefreshLayout refreshLayout;
 
-
-    private List<Integer> momentList = new ArrayList<>();
+    private static final String BAIDU_MAP_KEY = "VLmb30ftbg4nTLF5uTKqduTVtOxp7mCi";
+    private ArrayList<Moment> momentList;
+    private ArrayList<User> userList;
     private MomentAdapter momentAdapter;
     public LocationClient mLocationClient; //位置信息
+    private View personView; //在评论点击函数中用到
     private double latitude; //经度
     private double longitude; //纬度
 
@@ -69,6 +68,8 @@ public class MomentFragment extends Fragment {
 
         requestLocation();
 
+        initData();
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -78,24 +79,18 @@ public class MomentFragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                for (int i = 3; i < 6; i++) {
-                    momentList.add(i);
-                }
-                momentAdapter.notifyDataSetChanged();
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
             }
         });
 
-        for (int i = 0; i < 3; i++) {
-            momentList.add(i);
-        }
+
         final LinearLayoutManager mainLayoutManager = new LinearLayoutManager(getContext());
         mainRecyclerview.setLayoutManager(mainLayoutManager);
-        momentAdapter = new MomentAdapter(momentList);
+        momentAdapter = new MomentAdapter(getContext(), momentList);
         mainRecyclerview.setAdapter(momentAdapter);
         momentAdapter.setClickListener(new MomentAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, MomentAdapter.ViewName viewName, final MomentAdapter.ViewHolder holder, int position) {
+            public void onItemClick(View view, MomentAdapter.ViewName viewName, final MomentAdapter.ViewHolder holder, final int position) {
                 if (viewName == MomentAdapter.ViewName.USERNAME) {
                     TextView tv = (TextView) view;
                     Toast.makeText(getContext(), tv.getText(), Toast.LENGTH_SHORT).show();
@@ -151,6 +146,7 @@ public class MomentFragment extends Fragment {
 
                     final EditText etCommentInput = (EditText) popupView.findViewById(R.id.edit_input_comment);
                     TextView btnSubmit = (TextView) popupView.findViewById(R.id.btn_send_input_comment);
+                    personView = view;
                     btnSubmit.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -159,17 +155,15 @@ public class MomentFragment extends Fragment {
                                 Toast.makeText(getContext(), "评论不能为空", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                            Toast.makeText(getContext(), content, Toast.LENGTH_SHORT).show();
-                            View commentView = View.inflate(getContext(), R.layout.items_comment, null);
-                            TextView tvPerson1 = commentView.findViewById(R.id.text_person_1);
-                            TextView tvPerson2 = commentView.findViewById(R.id.text_person_2);
-                            TextView tvReply = commentView.findViewById(R.id.text_choose_reply_or_colon);
-                            TextView tvContent = commentView.findViewById(R.id.text_comment_content);
-                            tvPerson1.setText(holder.tvUsername.getText().toString());
-                            tvPerson2.setVisibility(View.GONE);
-                            tvReply.setText(":");
-                            tvContent.setText(content);
-                            holder.llComment.addView(commentView);
+                            Comment comment;
+                            if (personView.getId() == R.id.img_comment) {
+                                comment = new Comment(momentList.get(position).getOwner().getUsername(), content);
+                            }
+                            else {
+                                comment = new Comment(momentList.get(position).getOwner().getUsername(), ((TextView) personView).getText().toString(), content);
+                            }
+                            momentList.get(position).getComments().add(comment);
+                            momentAdapter.notifyDataSetChanged();
                             etCommentInput.setText("");
                             holder.popupWindow.dismiss();
                         }
@@ -177,17 +171,27 @@ public class MomentFragment extends Fragment {
 
                 } else if (viewName == MomentAdapter.ViewName.LIKE) {
                     StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
-                    String myUsername = holder.tvUsername.getText().toString();
-                    if (!holder.isLike) {
-                        likeName.append(", ").append(myUsername);
-                        holder.isLike = true;
-                        holder.tvLikePeople.setText(likeName);
+                    String myUsername = momentList.get(position).getOwner().getUsername();
+                    if (!momentList.get(position).isLike()) {
+                        momentList.get(position).getLikes().add(myUsername);
+                        momentList.get(position).setLike(true);
+                        momentAdapter.notifyDataSetChanged();
                         //holder.lbLike.setLiked(true);
                     } else {
-                        holder.isLike = false;
-                        likeName.delete(likeName.length() - (myUsername.length() + 2), likeName.length());
-                        holder.tvLikePeople.setText(likeName);
+                        momentList.get(position).getLikes().remove(momentList.get(position).getLikes().size()-1);
+                        momentList.get(position).setLike(false);
+                        momentAdapter.notifyDataSetChanged();
                         //holder.lbLike.setLiked(false);
+                    }
+                } else if (viewName == MomentAdapter.ViewName.SHOW) {
+                    String text = holder.tvShowAndPack.getText().toString();
+                    if (text == "全文") {
+                        holder.tvContent.setText(momentList.get(position).getContent());
+                        holder.tvShowAndPack.setText("收起");
+                    }
+                    else if (text == "收起") {
+                        holder.tvContent.setText(momentList.get(position).getContent().substring(0, 108));
+                        holder.tvShowAndPack.setText("全文");
                     }
                 }
             }
@@ -213,6 +217,28 @@ public class MomentFragment extends Fragment {
             longitude = bdLocation.getLongitude();
             Toast.makeText(getContext(), bdLocation.getStreet(), Toast.LENGTH_SHORT).show();
             mLocationClient.stop();
+        }
+    }
+
+
+    public void initData() {
+        momentList = new ArrayList<>();
+        userList = new ArrayList<>();
+        String [] users = new String[] {
+                "梅西", "C罗", "詹姆斯", "库里"
+        };
+        String [] contents = {
+                "今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错" +
+                        "今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错" +
+                        "今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错" +
+                        "今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错今天天气不错",
+                "安卓弄到我好烦",
+                "世界杯再见",
+                "哈哈哈哈"
+        };
+        for (int i = 0; i < users.length; i++) {
+            userList.add(new User(users[i]));
+            momentList.add(new Moment(userList.get(i), contents[i]));
         }
     }
 }
