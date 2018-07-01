@@ -8,8 +8,8 @@ import android.util.Log;
  */
 
 public class LoginModel {
-    // 账户
-    private String account;
+    // 用户名
+    private String username;
 
     // 密码
     private String password;
@@ -20,13 +20,12 @@ public class LoginModel {
     /**
      * 构造方法
      */
-    public LoginModel(String account, String password){
-        this.account = account;
-        this.password = password;
+    public LoginModel(String username, String password){
+        this(username, password, null);
     }
 
-    public LoginModel(String account, String password, String pushId){
-        this.account = account;
+    public LoginModel(String username, String password, String pushId){
+        this.username = username;
         this.password = password;
         this.pushId = pushId;
     }
@@ -34,12 +33,12 @@ public class LoginModel {
     /**
      * getter 和 setter
      */
-    public String getAccount() {
-        return account;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

@@ -1,14 +1,14 @@
-package com.example.tang.wuhua.model.api.moment;
+package com.example.tang.wuhua.model.card;
 
 import java.util.Date;
 
 /**
- * 朋友圈请求实体
  * @author z1ycheng
  */
 
-public class MomentModel {
+public class MomentCard {
 
+    // 朋友圈id
     private String momentId;
 
     // 文本
@@ -29,18 +29,9 @@ public class MomentModel {
     // 发布时间
     private Date publishAt;
 
+
     public String getMomentId() {
         return momentId;
-    }
-
-    public MomentModel(String momentId, String text, String attach, int type, String publisherId, String position, Date publishAt) {
-        this.momentId = momentId;
-        this.text = text;
-        this.attach = attach;
-        this.type = type;
-        this.publisherId = publisherId;
-        this.position = position;
-        this.publishAt = publishAt;
     }
 
     public void setMomentId(String momentId) {

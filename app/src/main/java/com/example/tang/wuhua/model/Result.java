@@ -3,11 +3,11 @@ package com.example.tang.wuhua.model;
 import java.util.Date;
 
 /**
- * 返回model，根据需求有其他泛型
+ * retrofit发送请求后得到的返回，返回model，根据需求有其他泛型
  * @author z1ycheng
  */
 
-public class ResponseModel<T> {
+public class Result<T> {
     /**
      * 状态信息
      */
@@ -35,6 +35,8 @@ public class ResponseModel<T> {
 
     public static final int ERROR_ACCOUNT_NO_PERMISSION = 2010;
 
+
+
     // 状态码
     private int code;
 
@@ -44,11 +46,18 @@ public class ResponseModel<T> {
     // 时间
     private Date time;
 
-    // 结果
-    private T result;
+    // 数据
+    private T data;
 
-    public boolean success() {
-        return code == SUCCEED;
+
+    @Override
+    public String toString() {
+        return "Result{" +
+                "code=" + code +
+                ", message=" + message +
+                ", time=" + time +
+                ", data=" + data +
+                "}";
     }
 
     public int getCode() {
@@ -59,14 +68,6 @@ public class ResponseModel<T> {
         this.code = code;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
     public String getMessage() {
         return message;
     }
@@ -75,12 +76,19 @@ public class ResponseModel<T> {
         this.message = message;
     }
 
-    public T getResult() {
-        return result;
+    public Date getTime() {
+        return time;
     }
 
-    public void setResult(T result) {
-        this.result = result;
+    public void setTime(Date time) {
+        this.time = time;
     }
 
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
 }
