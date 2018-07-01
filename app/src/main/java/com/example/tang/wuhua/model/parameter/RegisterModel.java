@@ -1,4 +1,6 @@
-package com.example.tang.wuhua.model.api.account;
+package com.example.tang.wuhua.model.parameter;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * 用户注册请求的实体类参数
@@ -6,27 +8,22 @@ package com.example.tang.wuhua.model.api.account;
  */
 
 public class RegisterModel {
+
     // 用户名
+    @SerializedName("UserName")
     private String username;
 
     // 密码
+    @SerializedName("PassWord")
     private String password;
-
-    // 推送id
-    private String pushId;
 
     /**
      * 构造方法
      */
 
-    public RegisterModel(String username, String password, String pushId) {
+    public RegisterModel(String username, String password) {
         this.username = username;
         this.password = password;
-        this.pushId = pushId;
-    }
-
-    public RegisterModel(String username, String password) {
-        this(username, password, null);
     }
 
     /**
@@ -48,11 +45,4 @@ public class RegisterModel {
         this.password = password;
     }
 
-    public String getPushId() {
-        return pushId;
-    }
-
-    public void setPushId(String pushId) {
-        this.pushId = pushId;
-    }
 }

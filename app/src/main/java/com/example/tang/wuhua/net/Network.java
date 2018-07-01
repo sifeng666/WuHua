@@ -1,18 +1,12 @@
 package com.example.tang.wuhua.net;
 
-import android.text.TextUtils;
-
-import com.example.tang.wuhua.Account;
 import com.example.tang.wuhua.Constant;
+import com.example.tang.wuhua.net.service.BaiduApiService;
+import com.example.tang.wuhua.net.service.RemoteService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.IOException;
-
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -28,6 +22,9 @@ public class Network {
 
     // retrofit对象
     private Retrofit mRetrofit;
+
+    // 百度retrofit对象
+    private Retrofit mBaiduRetrofit;
 
     // OkHttpClient对象
     private OkHttpClient mClient;
@@ -122,10 +119,40 @@ public class Network {
     }
 
     /**
+     * 获得baidu retrofit对象
+     * @return retrofit对象
+     */
+    private static Retrofit getBaiduRetrofit() {
+
+        // 如果retrofit对象已经构造了，直接返回
+        if (instance.mBaiduRetrofit != null) {
+            return instance.mBaiduRetrofit;
+        }
+
+        // 确保OkHttpClient对象已经被构造
+        getOkHttpClient();
+
+
+        // 如果没有被构造，构造一个Retrofit对象
+        Retrofit.Builder builder = new Retrofit.Builder();
+        instance.mBaiduRetrofit = builder.baseUrl(Constant.Value.BAIDU_API_URL)
+                //设置Gson解析器
+                .addConverterFactory(GsonConverterFactory.create(getGson()))
+                .client(instance.mClient)
+                .build();
+
+        return instance.mBaiduRetrofit;
+    }
+
+    /**
      * 返回一个请求代理
      * @return RemoteService代理
      */
     public static RemoteService remote() {
         return Network.getRetrofit().create(RemoteService.class);
+    }
+
+    public static BaiduApiService baiduRemote() {
+        return Network.getBaiduRetrofit().create(BaiduApiService.class);
     }
 }

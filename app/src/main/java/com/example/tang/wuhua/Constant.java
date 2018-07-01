@@ -8,14 +8,13 @@ package com.example.tang.wuhua;
 public interface Constant {
     interface Value {
         // 基础url
-        String BASE_URL = "http://192.168.1.1:8080/";
+        String BASE_URL = "http://ffsw9a.natappfree.cc/MyServer/";
 
         // 乐帮的url
         // String BASE_URL = "http://139.199.9.244:8082/";
 
         // 百度api的url
         String BAIDU_API_URL = "http://api.map.baidu.com/";
-
 
         // 电话号码的正则
         String REGEX_PHONENUM = "[1][3,4,5,7,8][0-9]{9}$";
