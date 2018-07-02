@@ -9,8 +9,8 @@ import com.google.gson.annotations.SerializedName;
 
 public class InfoUpdateModel {
     // 用户id
-    @SerializedName("Uid")
-    private String userId;
+    @SerializedName("UserName")
+    private String username;
 
     // 昵称
     @SerializedName("Nickname")
@@ -24,19 +24,19 @@ public class InfoUpdateModel {
     @SerializedName("Sign")
     private String signature;
 
-    public InfoUpdateModel(String userId, String nickname, String portraitPath, String signature) {
-        this.userId = userId;
+    public InfoUpdateModel(String username, String nickname, String portraitPath, String signature) {
+        this.username = username;
         this.nickname = nickname;
         this.portraitPath = portraitPath;
         this.signature = signature;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getNickname() {

@@ -13,8 +13,13 @@ import com.example.tang.wuhua.model.response.UserResponse;
 import com.example.tang.wuhua.net.Network;
 import com.example.tang.wuhua.net.service.RemoteService;
 
+import java.io.File;
 import java.util.Date;
+import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
@@ -108,6 +113,27 @@ public class NetworkHelper {
     public static void publishMoment(MomentModel momentModel, Callback<BaseResponse> callback) {
 
         // TODO 需要加一下上传图片的逻辑
+        List<String> paths = momentModel.getImagesPaths();
+        if (paths != null) {
+            RemoteService remoteService = Network.remote();
+            MediaType MEDIA_TYPE_IMG = MediaType.parse("image/jpeg");
+            MultipartBody.Builder builder = new MultipartBody.Builder();
+            builder.setType(MultipartBody.FORM);
+            RequestBody requestBody;
+            try {
+                for (int i = 0; i < paths.size(); ++ i) {
+                    File file = new File(paths.get(i));
+                    requestBody = RequestBody.create(MEDIA_TYPE_IMG, file);
+                    builder.addFormDataPart("momentImage", file.getName(), requestBody);
+                }
+                RequestBody finalRequestBody = builder.build();
+                Call<BaseResponse> call = remoteService.publishMoment(momentModel);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         RemoteService remoteService = Network.remote();
         Call<BaseResponse> call = remoteService.publishMoment(momentModel);
         call.enqueue(callback);
@@ -160,9 +186,33 @@ public class NetworkHelper {
     public static void updateUserInfo(InfoUpdateModel infoUpdateModel,
                                       Callback<BaseResponse> callback) {
 
-        // TODO 上传图片
+        // 获取远程服务
         RemoteService remoteService = Network.remote();
-        Call<BaseResponse> call = remoteService.updateUserInfo(infoUpdateModel);
+
+        // 头像图片的本地路径
+        String portraitPath = infoUpdateModel.getPortraitPath();
+
+        // 图片的请求体
+        MultipartBody.Part imageBody = null;
+
+        if (portraitPath != null) {
+            try {
+                // 根据图片路径构造一个file对象
+                File file = new File(portraitPath);
+
+                // 根据获得的文件对象构造一个MultipartBody.Part对象
+                RequestBody requestFile =
+                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                imageBody = MultipartBody.Part.createFormData("image",
+                        file.getName(), requestFile);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        Call<BaseResponse> call = remoteService.updateUserInfo(infoUpdateModel.getUsername(),
+                infoUpdateModel.getNickname(), imageBody, infoUpdateModel.getSignature());
         call.enqueue(callback);
     }
 

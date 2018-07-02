@@ -14,7 +14,10 @@ import com.example.tang.wuhua.model.response.UserResponse;
 
 import java.util.Date;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -23,11 +26,31 @@ import retrofit2.http.Query;
 
 
 /**
- * 我们自己服务器的接口
+ * 一些Retrofit的说明：
+ * --------------------
+ * 注意：注解中的是相对主机的url地址
+ * （如/Register就代表主机根目录下的Register目录，所以这里我们前面都不加"/"）
+ *
+ * Multipart注解表示该请求体是一个支持文件上传的表单
+ * 与参数Part和PartMap配合使用
+ * PartMap接受的数据类型为Map<String, ResquestBody>.
+ *
+ * 另外，FormUrlEncoded注解表示请求体是一个（平平无奇）的表单
+ * 与参数Field和FieldMap配合使用
+ * FieldMap接受的数据类型为Map<String, String>.
+ *
+ * Query它们的功能和Field它们是一样的
+ * 不同之处在于Query它们的请求参数会体现在请求行上（HTTP报文最前面一行，用?拼接的那种）
+ * Field的参数在请求体中
+ *
+ * MultipartBody是RequestBody的子类
+ * RequestBody被用于json/String请求
+ * MultipartBody被用于文件请求
+ *--------------------
+ *
  * @author z1ycheng
+ * 我们自己的服务器服务的接口
  */
-
-
 public interface RemoteService {
 
     /**
@@ -136,11 +159,27 @@ public interface RemoteService {
 
 
     /**
+     * 用户修改个人信息
+     * （应该是这个）
+     * @param username 用户名
+     * @param nickname 昵称
+     * @param image 图片
+     * @param signature 签名
+     * @return BaseResponse仅包含状态信息
+     */
+    @Multipart
+    @POST("Update")
+    Call<BaseResponse> updateUserInfo(@Part("UserName") String username,
+                                           @Part("Nickname") String nickname,
+                                           @Part MultipartBody.Part image,
+                                           @Part("Sign") String signature);
+
+    /**
      * 根据用户id查询用户信息
      * @param userId 某个用户的id
      * @return 该用户的所有信息
      */
-    @GET("")
+    @GET("/")
     Call<UserResponse> getUserInfo(@Query("Uid") String userId);
 
     /**
@@ -148,7 +187,7 @@ public interface RemoteService {
      * @param userId 某个用户的id
      * @return 一个list 里面包含了该用户的所有的moment
      */
-    @GET("")
+    @GET("/")
     Call<MomentResponse> getUserAllMoments(@Query("Uid") String userId);
 
 }
