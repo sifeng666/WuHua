@@ -42,10 +42,10 @@ public class SendPageNineImage extends AppCompatActivity {
             "http://img.lssdjt.com/201506/24003803129.jpg",
             "http://img4.cache.netease.com/photo/0005/2013-04-11/600x450_8S5JAMQV00BV0005.jpg",
             "http://image.uczzd.cn/12206158155493040271.jpeg",
-//            "http://www.cnr.cn/newscenter/tyxw/international/news/20151104/W020151104324334665281.jpg",
-//            "http://cdnq.duitang.com/uploads/item/201406/19/20140619172206_F5AMv.thumb.700_0.jpeg",
-//            "http://images.china.cn/attachement/jpg/site1000/20140617/7427ea210951150a150456.jpg",
-//            "http://i2.hoopchina.com.cn/blogfile/201303/30/136461474350812.jpg",
+            "http://www.cnr.cn/newscenter/tyxw/international/news/20151104/W020151104324334665281.jpg",
+            "http://cdnq.duitang.com/uploads/item/201406/19/20140619172206_F5AMv.thumb.700_0.jpeg",
+            "http://images.china.cn/attachement/jpg/site1000/20140617/7427ea210951150a150456.jpg",
+            "http://i2.hoopchina.com.cn/blogfile/201303/30/136461474350812.jpg",
     };
 
 
