@@ -1,7 +1,9 @@
 package com.example.tang.wuhua;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,8 +21,8 @@ public class LoginAndRegister extends AppCompatActivity {
     private ImageView imgClearPwdLogin;
     private String userNameLogin;
     private String userPwdLogin;
-    private Button bntLogin;
-    private Button bntRegister1;
+    private Button btnLogin;
+    private Button btnRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,21 @@ public class LoginAndRegister extends AppCompatActivity {
         editPwdLogin = (EditText) findViewById(R.id.edit_pwd_login);
         imgClearNameLogin = (ImageView) findViewById(R.id.img_clear_name_login);
         imgClearPwdLogin = (ImageView) findViewById(R.id.img_clear_pwd_login);
+        btnLogin = (Button) findViewById(R.id.btn_login);
+        btnRegister = (Button) findViewById(R.id.btn_register_login);
 
         EditTextClearTools.addClearListener(editNameLogin, imgClearNameLogin);
         EditTextClearTools.addClearListener(editPwdLogin, imgClearPwdLogin);
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userNameLogin = editNameLogin.getText().toString();
+                userPwdLogin = editPwdLogin.getText().toString();
+                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
+                );
+                startActivity(intent);
+            }
+        });
     }
 }
