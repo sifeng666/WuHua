@@ -18,16 +18,16 @@ public class InfoUpdateModel {
 
     // 头像路径
     @SerializedName("Profile_pic")
-    private String portrait;
+    private String portraitPath;
 
     // 个人介绍
     @SerializedName("Sign")
     private String signature;
 
-    public InfoUpdateModel(String userId, String nickname, String portrait, String signature) {
+    public InfoUpdateModel(String userId, String nickname, String portraitPath, String signature) {
         this.userId = userId;
         this.nickname = nickname;
-        this.portrait = portrait;
+        this.portraitPath = portraitPath;
         this.signature = signature;
     }
 
@@ -47,12 +47,12 @@ public class InfoUpdateModel {
         this.nickname = nickname;
     }
 
-    public String getPortrait() {
-        return portrait;
+    public String getPortraitPath() {
+        return portraitPath;
     }
 
-    public void setPortrait(String portrait) {
-        this.portrait = portrait;
+    public void setPortraitPath(String portraitPath) {
+        this.portraitPath = portraitPath;
     }
 
     public String getSignature() {

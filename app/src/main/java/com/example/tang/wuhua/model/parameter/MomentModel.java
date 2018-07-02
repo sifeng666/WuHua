@@ -3,6 +3,7 @@ package com.example.tang.wuhua.model.parameter;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 发送朋友圈的参数model
@@ -29,11 +30,11 @@ public class MomentModel {
 
     // 所有图片路径
     @SerializedName("Image")
-    private String[] images;
+    private List<String> imagesPaths;
 
     // 所有视频路径
     @SerializedName("Video")
-    private String[] videos;
+    private List<String> videosPaths;
 
     // 发布时间
     @SerializedName("Time_m")
@@ -44,15 +45,15 @@ public class MomentModel {
     private String location;
 
     public MomentModel(String publisherId, double latitude, double longitude,
-                       String text, String[] images, String[] videos,
+                       String text, List<String> imagesPaths, List<String> videosPaths,
                        Date publishTime, String location) {
 
         this.publisherId = publisherId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.text = text;
-        this.images = images;
-        this.videos = videos;
+        this.imagesPaths = imagesPaths;
+        this.videosPaths = videosPaths;
         this.publishTime = publishTime;
         this.location = location;
     }
@@ -89,20 +90,20 @@ public class MomentModel {
         this.text = text;
     }
 
-    public String[] getImages() {
-        return images;
+    public List<String> getImagesPaths() {
+        return imagesPaths;
     }
 
-    public void setImages(String[] images) {
-        this.images = images;
+    public void setImagesPaths(List<String> imagesPaths) {
+        this.imagesPaths = imagesPaths;
     }
 
-    public String[] getVideos() {
-        return videos;
+    public List<String> getVideosPaths() {
+        return videosPaths;
     }
 
-    public void setVideos(String[] videos) {
-        this.videos = videos;
+    public void setVideosPath(List<String> videosPaths) {
+        this.videosPaths = videosPaths;
     }
 
     public Date getPublishTime() {
