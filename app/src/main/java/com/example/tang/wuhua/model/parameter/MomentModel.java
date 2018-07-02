@@ -27,13 +27,13 @@ public class MomentModel {
     @SerializedName("Text_m")
     private String text;
 
-    // 图片
+    // 所有图片路径
     @SerializedName("Image")
-    private String image;
+    private String[] images;
 
-    // 视频
+    // 所有视频路径
     @SerializedName("Video")
-    private String video;
+    private String[] videos;
 
     // 发布时间
     @SerializedName("Time_m")
@@ -44,15 +44,15 @@ public class MomentModel {
     private String location;
 
     public MomentModel(String publisherId, double latitude, double longitude,
-                       String text, String image, String video,
+                       String text, String[] images, String[] videos,
                        Date publishTime, String location) {
 
         this.publisherId = publisherId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.text = text;
-        this.image = image;
-        this.video = video;
+        this.images = images;
+        this.videos = videos;
         this.publishTime = publishTime;
         this.location = location;
     }
@@ -89,20 +89,20 @@ public class MomentModel {
         this.text = text;
     }
 
-    public String getImage() {
-        return image;
+    public String[] getImages() {
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(String[] images) {
+        this.images = images;
     }
 
-    public String getVideo() {
-        return video;
+    public String[] getVideos() {
+        return videos;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideos(String[] videos) {
+        this.videos = videos;
     }
 
     public Date getPublishTime() {

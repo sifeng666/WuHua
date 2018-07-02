@@ -16,7 +16,7 @@ public class InfoUpdateModel {
     @SerializedName("Nickname")
     private String nickname;
 
-    // 头像
+    // 头像路径
     @SerializedName("Profile_pic")
     private String portrait;
 
