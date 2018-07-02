@@ -220,17 +220,15 @@ public class MainActivity extends AppCompatActivity {
                 .setDuration(400)
                 .build();
 
+
+
         sendLyle.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Matisse.from(MainActivity.this)
-                        .choose(MimeType.allOf())//图片类型
-                        .countable(true)//true:选中后显示数字;false:选中后显示对号
-                        .maxSelectable(5)//可选的最大数
-                        .capture(true)//选择照片时，是否显示拍照
-                        .captureStrategy(new CaptureStrategy(true, "com.example.tang.wuhua.fileprovider"))//参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
-                        .imageEngine(new GlideEngine())//图片加载引擎
-                        .forResult(REQUEST_CODE_CHOOSE);//
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this,
+                        SendPageNineImage.class);
+                startActivity(intent);
+                finish();
             }
         });
 
