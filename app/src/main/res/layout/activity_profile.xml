@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="用户名"
+            android:text="昵称"
             android:textSize="16sp"
             android:layout_gravity="center"
 
@@ -140,7 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="5"
-            android:text="地点"
+            android:text="个性签名"
             android:textSize="16sp"
             android:layout_gravity="center"
 
@@ -150,7 +150,10 @@
             android:id="@+id/text_location_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="阿根廷"
+            android:text="Messi is a super football player."
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:maxWidth="240dp"
             android:textSize="14sp"
             android:textColor="#26292e"
             />

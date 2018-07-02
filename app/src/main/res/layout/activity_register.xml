@@ -55,7 +55,7 @@
             android:paddingBottom="15dp"
             android:paddingLeft="25dp"
             android:paddingTop="15dp"
-            android:src="@mipmap/usr_1" />
+            android:src="@mipmap/ic_phone_android_black_48dp" />
 
         <View
             android:id="@+id/view_name_register"
@@ -75,7 +75,7 @@
             android:layout_toRightOf="@id/view_name_register"
             android:background="@null"
             android:ems="19"
-            android:hint=" 用户名"
+            android:hint=" 手机"
             android:textColorHint="@color/colorCursor"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="15sp" />
@@ -162,7 +162,7 @@
             android:paddingBottom="15dp"
             android:paddingLeft="25dp"
             android:paddingTop="15dp"
-            android:src="@mipmap/ic_phone_android_black_48dp" />
+            android:src="@mipmap/ic_security_36pt_3x" />
 
         <View
             android:id="@+id/view_phone_register"
@@ -183,7 +183,7 @@
             android:background="@null"
             android:drawablePadding="5dp"
             android:ems="19"
-            android:hint=" 手机"
+            android:hint=" 确认密码"
             android:inputType="textPassword"
             android:textColorHint="@color/colorCursor"
             android:textCursorDrawable="@drawable/color_cursor"
