@@ -30,7 +30,7 @@ public class NetworkHelper {
      * @param registerModel 注册model
      * @param callback 回调函数
      */
-    public static void regiser(RegisterModel registerModel, Callback<BaseResponse> callback){
+    public static void register(RegisterModel registerModel, Callback<BaseResponse> callback){
         RemoteService remoteService = Network.remote();
         Call<BaseResponse> call = remoteService.register(registerModel);
         call.enqueue(callback);
@@ -69,7 +69,8 @@ public class NetworkHelper {
             // 此时可以向服务器发送一个在本次请求时间之后的一个日期（如1天后）
             // 服务器在此日期之前最近的10条即是最新的10条
             // 返回一天之后的时间
-            paramDate = new Date(System.currentTimeMillis());
+            long oneDay = 24 * 60 * 60 * 1000;
+            paramDate = new Date(System.currentTimeMillis() + oneDay);
         }
         Call<MomentResponse> call =
                 remoteService.refreshMoments(latitude, longitude, paramDate);
@@ -127,13 +128,12 @@ public class NetworkHelper {
      * 给某条朋友圈点赞
      * @param userId 点赞人的id
      * @param momentId 被点赞朋友圈的id
-     * @param likeTime 点赞的时间
      * @param callback 回调函数
      */
-    public static void like(String userId, String momentId, Date likeTime,
-                            Callback<BaseResponse> callback) {
+    public static void like(String userId, String momentId, Callback<BaseResponse> callback) {
 
         RemoteService remoteService = Network.remote();
+        Date likeTime = new Date(System.currentTimeMillis()); // 不用手动生成当前时间
         Call<BaseResponse> call = remoteService.like(userId, momentId, likeTime);
         call.enqueue(callback);
     }
