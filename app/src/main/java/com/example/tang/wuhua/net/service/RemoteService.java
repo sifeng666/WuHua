@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.http.POST;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 
@@ -63,8 +64,8 @@ public interface RemoteService {
      * @return 一个list 如果时间为空返回10条最新的消息(少于10条则返回全部);
      * 不为空返回直到lastMomentTime最新的10条（同上）
      */
-    @GET("GetMoments")
-    Call<MomentResponse> getMoments(@Query("Latitude") double latitude,
+    @GET("RefreshMoments")
+    Call<MomentResponse> refreshMoments(@Query("Latitude") double latitude,
                                           @Query("Longitude") double longitude,
                                           @Query("Time") Date lastMomentTime);
 
@@ -132,6 +133,7 @@ public interface RemoteService {
      */
     @POST("Update")
     Call<BaseResponse> updateUserInfo(@Body InfoUpdateModel infoUpdateModel);
+
 
     /**
      * 根据用户id查询用户信息
