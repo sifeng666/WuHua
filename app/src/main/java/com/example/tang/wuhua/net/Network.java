@@ -152,6 +152,10 @@ public class Network {
         return Network.getRetrofit().create(RemoteService.class);
     }
 
+    /**
+     * 返回百度api的请求代理
+     * @return BaiduApiService服务
+     */
     public static BaiduApiService baiduRemote() {
         return Network.getBaiduRetrofit().create(BaiduApiService.class);
     }
