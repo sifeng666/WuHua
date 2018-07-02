@@ -42,7 +42,7 @@ android:background="@color/logoScreenBackground">
             android:paddingBottom="15dp"
             android:paddingLeft="25dp"
             android:paddingTop="15dp"
-            android:src="@mipmap/usr_1" />
+            android:src="@mipmap/ic_phone_android_black_48dp" />
 
         <View
             android:id="@+id/view_name_login"
@@ -63,6 +63,7 @@ android:background="@color/logoScreenBackground">
             android:background="@null"
             android:ems="19"
             android:hint=" 手机号"
+            android:inputType="phone"
             android:textColorHint="@color/colorCursor"
             android:textCursorDrawable="@drawable/color_cursor"
             android:textSize="15sp" />
