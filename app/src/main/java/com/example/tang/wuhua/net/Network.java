@@ -107,7 +107,7 @@ public class Network {
         getOkHttpClient();
 
 
-        // 如果没有被构造，构造一个Retrofit对象
+        // 如果没有被构造，构造一个Retrofit对象 测试一下
         Retrofit.Builder builder = new Retrofit.Builder();
         instance.mRetrofit = builder.baseUrl(Constant.Value.BASE_URL)
                 //设置Gson解析器
