@@ -7,41 +7,49 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by tang on 26/06/2018.
  */
 
 public class OnlyDoRegister extends AppCompatActivity {
 
-    private EditText editNameRegister;
-    private EditText editPwdRegister;
-    private EditText editPhoneRegister;
-    private ImageView imgClearNameRegister;
-    private ImageView imgClearPwdRegister;
-    private ImageView imgClearPhoneRegister;
+    @BindView(R.id.edit_name_register)
+    EditText editNameRegister;
+    @BindView(R.id.img_clear_name_register)
+    ImageView imgClearNameRegister;
+    @BindView(R.id.edit_pwd_register)
+    EditText editPwdRegister;
+    @BindView(R.id.img_clear_pwd_register)
+    ImageView imgClearPwdRegister;
+    @BindView(R.id.edit_pwd2_register)
+    EditText editPwd2Register;
+    @BindView(R.id.img_clear_pwd2_register)
+    ImageView imgClearPwd2Register;
+
+    @BindView(R.id.btn_register_register)
+    Button btnRegisterRegister;
+
+
     private String userNameRegister;
     private String userPwdRegister;
-    private String userPhoneRegister;
-    private Button bntRegister2;
+    private String userPwd2Register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_register);
+        ButterKnife.bind(this);
         init();
     }
 
-    private void init(){
-        editNameRegister = (EditText) findViewById(R.id.edit_name_register);
-        editPwdRegister = (EditText) findViewById(R.id.edit_pwd_register);
-        editPhoneRegister = (EditText) findViewById(R.id.edit_phone_register);
-        imgClearNameRegister = (ImageView) findViewById(R.id.img_clear_name_register);
-        imgClearPwdRegister = (ImageView) findViewById(R.id.img_clear_pwd_register);
-        imgClearPhoneRegister = (ImageView) findViewById(R.id.img_clear_phone_register);
+    private void init() {
 
         EditTextClearTools.addClearListener(editNameRegister, imgClearNameRegister);
         EditTextClearTools.addClearListener(editPwdRegister, imgClearPwdRegister);
-        EditTextClearTools.addClearListener(editPhoneRegister, imgClearPhoneRegister);
+        EditTextClearTools.addClearListener(editPwd2Register, imgClearPwd2Register);
     }
 }
