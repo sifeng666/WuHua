@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private long mExitTime; //退出时的时间
     private User user; //登录的用户
     private boolean isOffline; //离线测试
+    final private int RESULT_CODE_SEND = 10;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.root)
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,
                         SendPageNineImage.class);
-                startActivity(intent);
+                startActivityForResult(intent, RESULT_CODE_SEND);
                 //finish();
             }
         });
@@ -270,6 +271,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             List<Uri> result = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + result);
+        }
+        else if (requestCode == RESULT_CODE_SEND && resultCode == RESULT_OK) {
+            Log.d("send", "send");
         }
     }
 

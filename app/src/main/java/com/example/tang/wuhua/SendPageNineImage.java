@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tang.wuhua.model.parameter.MomentModel;
+import com.example.tang.wuhua.model.response.BaseResponse;
+import com.example.tang.wuhua.net.helper.NetworkHelper;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.squareup.picasso.Picasso;
@@ -27,11 +30,15 @@ import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by tang on 02/07/2018.
@@ -174,6 +181,33 @@ public class SendPageNineImage extends AppCompatActivity {
             }
 
         };
+    }
+
+    public void sendMoment(String userId, double latitude, double longitude, String text, List<String> images,
+                           List<String> videos, Date time, String location) {
+        NetworkHelper.publishMoment(new MomentModel(userId, latitude, longitude, text, images, videos, time, location),
+                new Callback<BaseResponse>() {
+                    @Override
+                    public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                        if (response.isSuccessful()) {
+                            if (response.body().success()) {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                            else {
+                                Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else {
+                            Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseResponse> call, Throwable t) {
+
+                    }
+                });
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.example.tang.wuhua.Data;
 
+import com.example.tang.wuhua.model.response.card.CommentCard;
+
 /**
  * Created by root on 18-6-28.
  */
@@ -24,6 +26,10 @@ public class Comment {
         this.receiver = receiver;
         this.type = 2;
         this.content = content;
+    }
+
+    public Comment(CommentCard commentCard) {
+
     }
 
     public String getSender() {

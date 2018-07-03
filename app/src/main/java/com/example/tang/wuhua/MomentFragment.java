@@ -30,8 +30,14 @@ import com.example.tang.wuhua.Adapter.MomentAdapter;
 import com.example.tang.wuhua.Data.Comment;
 import com.example.tang.wuhua.Data.Moment;
 import com.example.tang.wuhua.Data.User;
+import com.example.tang.wuhua.model.parameter.CommentModel;
 import com.example.tang.wuhua.model.parameter.MomentModel;
+import com.example.tang.wuhua.model.response.BaseResponse;
+import com.example.tang.wuhua.model.response.CommentResponse;
+import com.example.tang.wuhua.model.response.LikeResponse;
 import com.example.tang.wuhua.model.response.MomentResponse;
+import com.example.tang.wuhua.model.response.card.CommentCard;
+import com.example.tang.wuhua.model.response.card.LikeCard;
 import com.example.tang.wuhua.model.response.card.MomentCard;
 import com.example.tang.wuhua.net.Network;
 import com.example.tang.wuhua.net.helper.NetworkHelper;
@@ -285,4 +291,66 @@ public class MomentFragment extends Fragment {
             }
         });
     }
+
+    private void getComments(String mid, final int position) {
+        NetworkHelper.getCommentsByMomentId(mid, new Callback<CommentResponse>() {
+            @Override
+            public void onResponse(Call<CommentResponse> call, Response<CommentResponse> response) {
+                if (response.isSuccessful()) {
+                    CommentResponse result = response.body();
+                    if (result.success()) {
+                        List<CommentCard> commentCardList = result.getCommentCards();
+                        for (int i = 0; i < commentCardList.size(); i++) {
+                            momentList.get(position).getComments().add(new Comment(commentCardList.get(i)));
+                        }
+                        momentAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CommentResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getLikes(String mid, int position) {
+        NetworkHelper.getLikesByMomentId(mid, new Callback<LikeResponse>() {
+            @Override
+            public void onResponse(Call<LikeResponse> call, Response<LikeResponse> response) {
+                if (response.isSuccessful()) {
+                    LikeResponse result = response.body();
+                    if (result.success()) {
+                        List<LikeCard> likeCardList = result.getLikeCards();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<LikeResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void sendComment(String sourceId, String desId, String text, String mid, Date time) {
+        NetworkHelper.publishComment(new CommentModel(sourceId, desId, text, mid, time), new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().success()) {
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
 }
