@@ -14,8 +14,11 @@ import com.example.tang.wuhua.net.Network;
 import com.example.tang.wuhua.net.service.RemoteService;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -112,30 +115,66 @@ public class NetworkHelper {
      */
     public static void publishMoment(MomentModel momentModel, Callback<BaseResponse> callback) {
 
-        // TODO 需要加一下上传图片的逻辑
-        List<String> paths = momentModel.getImagesPaths();
-        if (paths != null) {
-            RemoteService remoteService = Network.remote();
-            MediaType MEDIA_TYPE_IMG = MediaType.parse("image/jpeg");
-            MultipartBody.Builder builder = new MultipartBody.Builder();
-            builder.setType(MultipartBody.FORM);
-            RequestBody requestBody;
-            try {
-                for (int i = 0; i < paths.size(); ++ i) {
-                    File file = new File(paths.get(i));
-                    requestBody = RequestBody.create(MEDIA_TYPE_IMG, file);
-                    builder.addFormDataPart("momentImage", file.getName(), requestBody);
+        // 远程服务
+        RemoteService remoteService = Network.remote();
+
+        // 获取路径
+        List<String> imagesPaths = momentModel.getImagesPaths();
+        List<String> videosPaths = momentModel.getVideosPaths();
+
+        // List<MultipartBody.Part>部分
+        List<MultipartBody.Part> imageParts = new ArrayList<>();
+        List<MultipartBody.Part> videoParts = new ArrayList<>();
+
+        // 如果需要上传图片
+        if (imagesPaths != null && imagesPaths.size() > 0) {
+            for (int i = 0; i < imagesPaths.size(); ++ i) {
+                try {
+                    // 首先根据图片路径构造一个file对象
+                    File image = new File(imagesPaths.get(i));
+
+                    // 根据这个图片创建一个RequestBody
+                    RequestBody requestBody =
+                            RequestBody.create(MediaType.parse("multipart/form-data"), image);
+
+                    // 根据这个RequestBody创建一个MultipartBody.Part
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("image" + i,
+                            image.getName(), requestBody);
+
+                    imageParts.add(part);
                 }
-                RequestBody finalRequestBody = builder.build();
-                Call<BaseResponse> call = remoteService.publishMoment(momentModel);
-            }
-            catch (Exception e){
-                e.printStackTrace();
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
-        RemoteService remoteService = Network.remote();
-        Call<BaseResponse> call = remoteService.publishMoment(momentModel);
+        // 如果需要上传视频
+        if (videosPaths != null && videosPaths.size() > 0) {
+            for (int i = 0; i < videosPaths.size(); ++ i) {
+                try {
+                    // 首先根据图片路径构造一个file对象
+                    File video = new File(videosPaths.get(i));
+
+                    // 根据这个图片创建一个RequestBody
+                    RequestBody requestBody =
+                            RequestBody.create(MediaType.parse("multipart/form-data"), video);
+
+                    // 根据这个RequestBody创建一个MultipartBody.Part
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("video" + i,
+                            video.getName(), requestBody);
+
+                    videoParts.add(part);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Call<BaseResponse> call = remoteService.publishMoment(momentModel.getPublisherId(),
+                momentModel.getLatitude(), momentModel.getLongitude(), momentModel.getText(),
+                imageParts, videoParts, momentModel.getPublishTime(), momentModel.getLocation());
         call.enqueue(callback);
     }
 
@@ -195,14 +234,18 @@ public class NetworkHelper {
         // 图片的请求体
         MultipartBody.Part imageBody = null;
 
+        // 如果所选择的头像的路径不为空
         if (portraitPath != null) {
             try {
                 // 根据图片路径构造一个file对象
                 File file = new File(portraitPath);
 
-                // 根据获得的文件对象构造一个MultipartBody.Part对象
+                // 首先创建一个RequestBody对象
                 RequestBody requestFile =
                         RequestBody.create(MediaType.parse("multipart/form-data"), file);
+
+                // 再根据这里的RequestBody对象创建一个MultipartBody.Part
+                // 这里的image是和后端约定好的key
                 imageBody = MultipartBody.Part.createFormData("image",
                         file.getName(), requestFile);
             }

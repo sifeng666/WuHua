@@ -20,11 +20,11 @@ public class MomentCard {
     private String publisherId;
 
     // 纬度
-    @SerializedName("LocX")
+    @SerializedName("LocY")
     private double latitude;
 
     // 经度
-    @SerializedName("LocY")
+    @SerializedName("LocX")
     private double longitude;
 
     // 文本
