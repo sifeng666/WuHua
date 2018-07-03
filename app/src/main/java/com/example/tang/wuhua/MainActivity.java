@@ -44,6 +44,7 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.example.tang.wuhua.Adapter.MomentAdapter;
+import com.example.tang.wuhua.Data.User;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private static final long RIPPLE_DURATION = 250;
     private static final int REQUEST_CODE_CHOOSE = 23;
     private long mExitTime; //退出时的时间
+    private User user; //登录的用户
+    private boolean isOffline; //离线测试
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.root)
@@ -84,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        if (user == null) {
+            user = (User) getIntent().getSerializableExtra("user_data");
+        }
+        isOffline = getIntent().getBooleanExtra("offline", true);
 
         //申请权限
         List<String> permissionList = new ArrayList<>();
@@ -133,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 FragmentManager menuManager = getSupportFragmentManager();
                 FragmentTransaction menuTransaction = menuManager.beginTransaction();
                 menuTransaction.replace(R.id.main_frame, new ProfileFragment());
+                //menuTransaction.addToBackStack(null);
                 menuTransaction.commit();
                 tvMenuTitle.setText("个人信息");
                 sendLyle.setVisibility(View.GONE);
@@ -228,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,
                         SendPageNineImage.class);
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
@@ -281,6 +290,13 @@ public class MainActivity extends AppCompatActivity {
             finish();
             System.exit(0);
         }
+    }
+
+    public User getUser() {
+        if (isOffline) {
+            return null;
+        }
+        return user;
     }
 }
 

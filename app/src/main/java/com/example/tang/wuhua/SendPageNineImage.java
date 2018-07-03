@@ -8,12 +8,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jaeger.ninegridimageview.NineGridImageView;
@@ -32,6 +37,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import wujing.cn.library.adapter.DisplayPhotoAdapter;
+
+import static wujing.cn.library.XLoad.context;
 
 /**
  * Created by tang on 02/07/2018.
@@ -41,6 +49,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SendPageNineImage extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGHT = 2000;//delay second
     private static final int REQUEST_CODE_CHOOSE = 23;
+    private LinearLayout layout;
+    private TextView tvHint;
     @BindView(R.id.img_add_button_in_send_page)
     CircleImageView imgAddButtonInSendPage;
 
@@ -58,8 +68,7 @@ public class SendPageNineImage extends AppCompatActivity {
             //"http://i2.hoopchina.com.cn/blogfile/201303/30/136461474350812.jpg",
     };
 
-
-    //@BindView(R.id.ngiv_nine_grid)
+    @BindView(R.id.ngiv_nine_grid)
     NineGridImageView<String> nine_grid;
 
     private NineGridImageViewAdapter<String> mAdapter1;
@@ -70,22 +79,22 @@ public class SendPageNineImage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_page);
         ButterKnife.bind(this);
-        nine_grid = (NineGridImageView<String>) findViewById(R.id.ngiv_nine_grid);
+        tvHint = (TextView) findViewById(R.id.addImg_hint);
+        layout = (LinearLayout) findViewById(R.id.send_layout);
         imgAddButtonInSendPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Matisse.from(SendPageNineImage.this)
                         .choose(MimeType.allOf())//图片类型
                         .countable(true)//true:选中后显示数字;false:选中后显示对号
-                        .maxSelectable(9)//可选的最大数
+                        .maxSelectable(9-urls_list.size())//可选的最大数
                         .capture(true)//选择照片时，是否显示拍照
                         .captureStrategy(new CaptureStrategy(true, "com.example.tang.wuhua.fileprovider"))//参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                         .imageEngine(new GlideEngine())//图片加载引擎
                         .forResult(REQUEST_CODE_CHOOSE);//
             }
         });
-
-        urls_list.addAll(Arrays.asList(IMG_URL_LIST));
+        //urls_list.addAll(Arrays.asList(IMG_URL_LIST));
         initAdapter();
         nine_grid.setAdapter(mAdapter1);
         nine_grid.setImagesData(urls_list);
@@ -101,17 +110,21 @@ public class SendPageNineImage extends AppCompatActivity {
             List<Uri> result = Matisse.obtainResult(data);
             for (int i = 0; i < result.size(); i++) {
                 Log.d("img", result.get(i).toString());
-                //urls_list.add(getRealPathFromUri(getApplicationContext(),  result.get(i)));
-                //urls_list.add(result.get(i));
+                urls_list.add("file://" + getRealPathFromUri(getApplicationContext(),  result.get(i)));
             }
-            urls_list.add("http://i2.hoopchina.com.cn/blogfile/201303/30/136461474350812.jpg");
-            //urls_list.remove(0);
-            Log.d("list", urls_list.toString());
-
-            //initAdapter();
-//            nine_grid = (NineGridImageView<String>) findViewById(R.id.ngiv_nine_grid);
-            //nine_grid.setAdapter(mAdapter1);
-            //nine_grid.setImagesData(urls_list);
+            layout.removeView(nine_grid);
+            nine_grid = new NineGridImageView<String>(this);
+            nine_grid.setAdapter(mAdapter1);
+            nine_grid.setImagesData(urls_list);
+            nine_grid.setGap(4);
+            nine_grid.setShowStyle(NineGridImageView.STYLE_GRID);
+            nine_grid.setPadding(10, 0, 10, 0);
+            //nine_grid.setSingleImgSize(100);
+            layout.addView(nine_grid, 3);
+            if (urls_list.size() == 9) {
+                imgAddButtonInSendPage.setVisibility(View.GONE);
+                tvHint.setVisibility(View.GONE);
+            }
         }
     }
 

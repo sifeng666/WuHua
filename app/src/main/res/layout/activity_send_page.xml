@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/send_layout"
         >
 
         <android.support.v7.widget.Toolbar
@@ -89,7 +90,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp">
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,6 +104,7 @@
                     android:src="@mipmap/ic_add_orange_2"/>
 
                 <TextView
+                    android:id="@+id/addImg_hint"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="添加图片"
@@ -117,7 +120,6 @@
 
         <com.jaeger.ninegridimageview.NineGridImageView
 
-            android:layout_marginTop="15dp"
             android:id="@+id/ngiv_nine_grid"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -127,6 +129,7 @@
             app:imgGap="4dp"
             app:showStyle="grid"
             app:singleImgSize="100dp"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -42,6 +42,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".OnlyDoRegister"></activity>
         <activity android:name=".SendPageNineImage"/>
 
         <service
