@@ -23,6 +23,10 @@ public class LikeCard {
     @SerializedName("Uid")
     private String userId;
 
+    // 点赞人的id
+    @SerializedName("Nickname")
+    private String nickname;
+
     // 点赞的时间
     @SerializedName("Time_l")
     private Date likeTime;
@@ -51,6 +55,14 @@ public class LikeCard {
         this.userId = userId;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public Date getLikeTime() {
         return likeTime;
     }
@@ -65,6 +77,7 @@ public class LikeCard {
                 "likeId='" + likeId + '\'' +
                 ", momentId='" + momentId + '\'' +
                 ", userId='" + userId + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", likeTime=" + likeTime +
                 '}';
     }

@@ -19,9 +19,17 @@ public class CommentCard {
     @SerializedName("Source_c")
     private String sourceId;
 
+    // 评论人的昵称
+    @SerializedName("Source_nickname")
+    private String sourceNickname;
+
     // 被评论的人的id
     @SerializedName("Dest_c")
     private String destinationId;
+
+    // 被评论的人的id
+    @SerializedName("Dest_nickname")
+    private String destinationNickname;
 
     // 评论内容
     @SerializedName("Text_c")
@@ -51,12 +59,28 @@ public class CommentCard {
         this.sourceId = sourceId;
     }
 
+    public String getSourceNickname() {
+        return sourceNickname;
+    }
+
+    public void setSourceNickname(String sourceNickname) {
+        this.sourceNickname = sourceNickname;
+    }
+
     public String getDestinationId() {
         return destinationId;
     }
 
     public void setDestinationId(String destinationId) {
         this.destinationId = destinationId;
+    }
+
+    public String getDestinationNickname() {
+        return destinationNickname;
+    }
+
+    public void setDestinationNickname(String destinationNickname) {
+        this.destinationNickname = destinationNickname;
     }
 
     public String getText() {
@@ -88,7 +112,9 @@ public class CommentCard {
         return "CommentCard{" +
                 "commentId='" + commentId + '\'' +
                 ", sourceId='" + sourceId + '\'' +
+                ", sourceNickname='" + sourceNickname + '\'' +
                 ", destinationId='" + destinationId + '\'' +
+                ", destinationNickname='" + destinationNickname + '\'' +
                 ", text='" + text + '\'' +
                 ", momentId='" + momentId + '\'' +
                 ", commentTime=" + commentTime +

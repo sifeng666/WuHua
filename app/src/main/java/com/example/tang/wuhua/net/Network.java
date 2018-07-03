@@ -45,16 +45,13 @@ public class Network {
      * 获得一个OkHttpClient对象
      * @return OkHttpClient对象
      */
-    public static OkHttpClient getOkHttpClient() {
+    private static OkHttpClient getOkHttpClient() {
 
-        // 如果对象已经被实例化，直接返回
-        if (instance.mClient != null) {
-            return instance.mClient;
-        }
-        // 否则创建一个OkHttpClient对象
-        OkHttpClient client = new OkHttpClient.Builder()
+        // 如果未被实例化
+        if (instance.mClient == null) {
+            instance.mClient = new OkHttpClient.Builder()
                 /*
-                .addInterceptor(new Interceptor() { // 添加一个拦截器 作用是缓存okhttp已经实现
+                .addInterceptor(new Interceptor() { // 添加一个拦截器 用途大概是拦截每次的请求 往里面添加一点东西
                     @Override
                     public Response intercept(Chain chain) throws IOException {
                         // 拦截我们发起请求的request，之后为其添加头部，最后返回添加后的对象
@@ -70,8 +67,9 @@ public class Network {
                         return chain.proceed(newRequest);
                     }
                 })*/
-                .build();
-        instance.mClient = client;
+                    .build();
+        }
+
         return instance.mClient;
     }
 
@@ -80,16 +78,16 @@ public class Network {
      * @return 一个Gson对象
      */
     private static Gson getGson() {
-        if (instance.mGson != null)
-            return instance.mGson;
-        else {
-            // 先构造一个Gson对象
-            Gson gson = new GsonBuilder()
+
+        // 如果未被实例化
+        if (instance.mGson == null) {
+            instance.mGson =
+                    new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd hh:mm:ss")
                     .create();
-            instance.mGson = gson;
-            return instance.mGson;
         }
+
+        return instance.mGson;
     }
 
     /**
@@ -98,22 +96,21 @@ public class Network {
      */
     private static Retrofit getRetrofit() {
 
-        // 如果retrofit对象已经构造了，直接返回
-        if (instance.mRetrofit != null) {
-            return instance.mRetrofit;
+        // 如果retrofit对象未被实例化
+        if (instance.mRetrofit == null) {
+            // 确保OkHttpClient对象已经被构造
+            getOkHttpClient();
+
+            // 如果没有被构造，构造一个Retrofit对象 测试一下
+            Retrofit.Builder builder = new Retrofit.Builder();
+            instance.mRetrofit = builder.baseUrl(Constant.Value.BASE_URL)
+                    // 设置标准数据类型的解析器 为了使传出的字符串不带引号 需要在gson解析器之前
+                    // .addConverterFactory(ScalarsConverterFactory.create())
+                    // 设置Gson解析器
+                    .addConverterFactory(GsonConverterFactory.create(getGson()))
+                    .client(instance.mClient)
+                    .build();
         }
-
-        // 确保OkHttpClient对象已经被构造
-        getOkHttpClient();
-
-
-        // 如果没有被构造，构造一个Retrofit对象 测试一下
-        Retrofit.Builder builder = new Retrofit.Builder();
-        instance.mRetrofit = builder.baseUrl(Constant.Value.BASE_URL)
-                //设置Gson解析器
-                .addConverterFactory(GsonConverterFactory.create(getGson()))
-                .client(instance.mClient)
-                .build();
 
         return instance.mRetrofit;
     }
@@ -124,22 +121,21 @@ public class Network {
      */
     private static Retrofit getBaiduRetrofit() {
 
-        // 如果retrofit对象已经构造了，直接返回
-        if (instance.mBaiduRetrofit != null) {
-            return instance.mBaiduRetrofit;
+        // 如果retrofit对象未被实例化
+        if (instance.mBaiduRetrofit == null) {
+            // 确保OkHttpClient对象已经被构造
+            getOkHttpClient();
+
+            // 如果没有被构造，构造一个Retrofit对象 测试一下
+            Retrofit.Builder builder = new Retrofit.Builder();
+            instance.mBaiduRetrofit = builder.baseUrl(Constant.Value.BAIDU_API_URL)
+                    // 设置标准数据类型的解析器 为了使传出的字符串不带引号 需要在gson解析器之前
+                    // .addConverterFactory(ScalarsConverterFactory.create())
+                    // 设置Gson解析器
+                    .addConverterFactory(GsonConverterFactory.create(getGson()))
+                    .client(instance.mClient)
+                    .build();
         }
-
-        // 确保OkHttpClient对象已经被构造
-        getOkHttpClient();
-
-
-        // 如果没有被构造，构造一个Retrofit对象
-        Retrofit.Builder builder = new Retrofit.Builder();
-        instance.mBaiduRetrofit = builder.baseUrl(Constant.Value.BAIDU_API_URL)
-                //设置Gson解析器
-                .addConverterFactory(GsonConverterFactory.create(getGson()))
-                .client(instance.mClient)
-                .build();
 
         return instance.mBaiduRetrofit;
     }

@@ -1,6 +1,7 @@
 package com.example.tang.wuhua.net.service;
 
 
+import com.example.tang.wuhua.model.parameter.LikeModel;
 import com.example.tang.wuhua.model.parameter.LoginModel;
 import com.example.tang.wuhua.model.parameter.RegisterModel;
 import com.example.tang.wuhua.model.parameter.CommentModel;
@@ -154,15 +155,12 @@ public interface RemoteService {
 
     /**
      * 点赞
-     * @param userId 点赞人的id
-     * @param momentId 点赞的moment的id
-     * @param likeTime 点赞的时间
-     * @return BaseResponse仅包含状态信息
+     * OK
+     * @param likeModel 点赞的model
+     * @return BaseResponse仅包含状态信息 表示点赞是否成功
      */
-    @POST("Like")
-    Call<BaseResponse> like(@Query("Uid") String userId,
-                            @Query("Mid") String momentId,
-                            @Query("Time") Date likeTime);
+    @POST("DoLike")
+    Call<BaseResponse> like(@Body LikeModel likeModel);
 
     /**
      * 取消点赞
@@ -174,31 +172,17 @@ public interface RemoteService {
     Call<BaseResponse> likeCancel(@Query("Uid") String userId,
                                   @Query("Mid") String momentId);
 
-
     /**
-     * 用户修改个人信息
-     * @param infoUpdateModel 用户的model
-     * @return BaseResponse仅包含状态信息
-     */
-    @POST("Update")
-    Call<BaseResponse> updateUserInfo(@Body InfoUpdateModel infoUpdateModel);
-
-
-    /**
-     * 用户修改个人信息（可选）
-     * @param username 用户名
-     * @param nickname 昵称
+     * 修改用户个人信息
+     * OK
+     * @param map 包含用户名 昵称 签名 密码
      * @param image 图片
-     * @param signature 签名
-     * @return BaseResponse仅包含状态信息
+     * @return BaseResponse 表示修改是否成功
      */
     @Multipart
-    @POST("Update")
-    Call<BaseResponse> updateUserInfo(@Part("UserName") String username,
-                                      @Part("Nickname") String nickname,
-                                      @Part MultipartBody.Part image, // 这个地方@Path后面不能加东西
-                                      @Part("Sign") String signature);
-
+    @POST("UpdateUserInfo")
+    Call<BaseResponse> updateUserInfo(@PartMap Map<String, RequestBody> map,
+                                        @Part MultipartBody.Part image);
     /**
      * 根据用户id查询用户信息
      * @param userId 某个用户的id

@@ -16,6 +16,10 @@ public class InfoUpdateModel {
     @SerializedName("Nickname")
     private String nickname;
 
+    // 密码
+    @SerializedName("PassWord")
+    private String password;
+
     // 头像路径
     @SerializedName("Profile_pic")
     private String portraitPath;
@@ -24,9 +28,10 @@ public class InfoUpdateModel {
     @SerializedName("Sign")
     private String signature;
 
-    public InfoUpdateModel(String username, String nickname, String portraitPath, String signature) {
+    public InfoUpdateModel(String username, String nickname, String password, String portraitPath, String signature) {
         this.username = username;
         this.nickname = nickname;
+        this.password = password;
         this.portraitPath = portraitPath;
         this.signature = signature;
     }
@@ -45,6 +50,14 @@ public class InfoUpdateModel {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getPortraitPath() {

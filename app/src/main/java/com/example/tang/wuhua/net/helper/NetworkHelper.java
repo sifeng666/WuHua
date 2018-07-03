@@ -2,6 +2,7 @@ package com.example.tang.wuhua.net.helper;
 
 import com.example.tang.wuhua.model.parameter.CommentModel;
 import com.example.tang.wuhua.model.parameter.InfoUpdateModel;
+import com.example.tang.wuhua.model.parameter.LikeModel;
 import com.example.tang.wuhua.model.parameter.LoginModel;
 import com.example.tang.wuhua.model.parameter.MomentModel;
 import com.example.tang.wuhua.model.parameter.RegisterModel;
@@ -52,7 +53,8 @@ public class NetworkHelper {
     public static void login(LoginModel loginModel,  Callback<UserResponse> callback) {
         RemoteService remoteService = Network.remote();
         Call<UserResponse> call =
-                remoteService.login(loginModel.getUsername(), loginModel.getPassword());
+                //remoteService.login(loginModel.getUsername(), loginModel.getPassword());
+                remoteService.login(loginModel);
         call.enqueue(callback);
     }
 
@@ -190,16 +192,17 @@ public class NetworkHelper {
     }
 
     /**
+     * OK
      * 给某条朋友圈点赞
-     * @param userId 点赞人的id
-     * @param momentId 被点赞朋友圈的id
+     * @param likeModel 点赞的likeModel
      * @param callback 回调函数
      */
-    public static void like(String userId, String momentId, Callback<BaseResponse> callback) {
+    public static void like(LikeModel likeModel, Callback<BaseResponse> callback) {
 
         RemoteService remoteService = Network.remote();
-        Date likeTime = new Date(System.currentTimeMillis()); // 不用手动生成当前时间
-        Call<BaseResponse> call = remoteService.like(userId, momentId, likeTime);
+        Date curTime = new Date(System.currentTimeMillis()); // 不用手动生成当前时间
+        likeModel.setLikeTime(curTime);
+        Call<BaseResponse> call = remoteService.like(likeModel);
         call.enqueue(callback);
     }
 
@@ -218,7 +221,17 @@ public class NetworkHelper {
     }
 
     /**
+     * 将字符串转换为RequestBody
+     * @param value 字符串
+     * @return RequestBody
+     */
+    private static RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
+    }
+
+    /**
      * 更新用户信息
+     * OK
      * @param infoUpdateModel 更新用户信息的model
      * @param callback 回调函数
      */
@@ -232,30 +245,33 @@ public class NetworkHelper {
         String portraitPath = infoUpdateModel.getPortraitPath();
 
         // 图片的请求体
-        MultipartBody.Part imageBody = null;
-
-        // 如果所选择的头像的路径不为空
+        MultipartBody.Part imagePart = null;
         if (portraitPath != null) {
             try {
                 // 根据图片路径构造一个file对象
-                File file = new File(portraitPath);
+                File imageFile = new File(portraitPath);
 
                 // 首先创建一个RequestBody对象
                 RequestBody requestFile =
-                        RequestBody.create(MediaType.parse("multipart/form-data"), file);
+                        RequestBody.create(MediaType.parse("multipart/form-data"), imageFile);
 
                 // 再根据这里的RequestBody对象创建一个MultipartBody.Part
                 // 这里的image是和后端约定好的key
-                imageBody = MultipartBody.Part.createFormData("image",
-                        file.getName(), requestFile);
+                imagePart = MultipartBody.Part.createFormData("img",
+                        imageFile.getName(), requestFile);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        Map<String, RequestBody> bodyMap = new HashMap<>();
+        bodyMap.put("UserName", toRequestBody(infoUpdateModel.getUsername()));
+        bodyMap.put("Nickname", toRequestBody(infoUpdateModel.getNickname()));
+        bodyMap.put("Sign", toRequestBody(infoUpdateModel.getSignature()));
+        bodyMap.put("PassWord", toRequestBody(infoUpdateModel.getPassword()));
 
-        Call<BaseResponse> call = remoteService.updateUserInfo(infoUpdateModel.getUsername(),
-                infoUpdateModel.getNickname(), imageBody, infoUpdateModel.getSignature());
+
+        Call<BaseResponse> call = remoteService.updateUserInfo(bodyMap, imagePart);
         call.enqueue(callback);
     }
 
