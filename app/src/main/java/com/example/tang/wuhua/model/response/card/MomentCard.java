@@ -3,6 +3,7 @@ package com.example.tang.wuhua.model.response.card;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 包含一个moment的必要信息
@@ -33,11 +34,11 @@ public class MomentCard {
 
     // 图片
     @SerializedName("Image")
-    private String image;
+    private List<String> imagesUris;
 
     // 视频
     @SerializedName("Video")
-    private String video;
+    private List<String> videosUris;
 
     // 发布时间
     @SerializedName("Time_m")
@@ -87,20 +88,20 @@ public class MomentCard {
         this.text = text;
     }
 
-    public String getImage() {
-        return image;
+    public List<String> getImagesUris() {
+        return imagesUris;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImagesUris(List<String> imagesUris) {
+        this.imagesUris = imagesUris;
     }
 
-    public String getVideo() {
-        return video;
+    public List<String> getVideosUris() {
+        return videosUris;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setVideosUris(List<String> videosUris) {
+        this.videosUris = videosUris;
     }
 
     public Date getPublishTime() {
@@ -127,8 +128,8 @@ public class MomentCard {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", text='" + text + '\'' +
-                ", image='" + image + '\'' +
-                ", video='" + video + '\'' +
+                ", imagesUris=" + imagesUris +
+                ", videosUris=" + videosUris +
                 ", publishTime=" + publishTime +
                 ", location='" + location + '\'' +
                 '}';
