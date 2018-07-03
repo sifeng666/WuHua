@@ -93,6 +93,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp">
             <LinearLayout
+                android:id="@+id/add_img_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true">

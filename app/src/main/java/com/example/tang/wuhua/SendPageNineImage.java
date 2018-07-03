@@ -8,14 +8,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,17 +26,15 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import wujing.cn.library.adapter.DisplayPhotoAdapter;
+//import wujing.cn.library.adapter.DisplayPhotoAdapter;
 
-import static wujing.cn.library.XLoad.context;
+//import static wujing.cn.library.XLoad.context;
 
 /**
  * Created by tang on 02/07/2018.
@@ -49,11 +44,14 @@ import static wujing.cn.library.XLoad.context;
 public class SendPageNineImage extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGHT = 2000;//delay second
     private static final int REQUEST_CODE_CHOOSE = 23;
-    private LinearLayout layout;
-    private TextView tvHint;
+    @BindView(R.id.add_img_layout)
+    LinearLayout addImgLayout;
     @BindView(R.id.img_add_button_in_send_page)
     CircleImageView imgAddButtonInSendPage;
-
+    @BindView(R.id.ngiv_nine_grid)
+    NineGridImageView<String> nine_grid;
+    private NineGridImageViewAdapter<String> mAdapter1;
+    private LinearLayout layout;
 
     private List<String> urls_list = new ArrayList<>();
     private String[] IMG_URL_LIST = {
@@ -68,18 +66,12 @@ public class SendPageNineImage extends AppCompatActivity {
             //"http://i2.hoopchina.com.cn/blogfile/201303/30/136461474350812.jpg",
     };
 
-    @BindView(R.id.ngiv_nine_grid)
-    NineGridImageView<String> nine_grid;
-
-    private NineGridImageViewAdapter<String> mAdapter1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_page);
         ButterKnife.bind(this);
-        tvHint = (TextView) findViewById(R.id.addImg_hint);
         layout = (LinearLayout) findViewById(R.id.send_layout);
         imgAddButtonInSendPage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +79,7 @@ public class SendPageNineImage extends AppCompatActivity {
                 Matisse.from(SendPageNineImage.this)
                         .choose(MimeType.allOf())//图片类型
                         .countable(true)//true:选中后显示数字;false:选中后显示对号
-                        .maxSelectable(9-urls_list.size())//可选的最大数
+                        .maxSelectable(9 - urls_list.size())//可选的最大数
                         .capture(true)//选择照片时，是否显示拍照
                         .captureStrategy(new CaptureStrategy(true, "com.example.tang.wuhua.fileprovider"))//参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                         .imageEngine(new GlideEngine())//图片加载引擎
@@ -110,7 +102,7 @@ public class SendPageNineImage extends AppCompatActivity {
             List<Uri> result = Matisse.obtainResult(data);
             for (int i = 0; i < result.size(); i++) {
                 Log.d("img", result.get(i).toString());
-                urls_list.add("file://" + getRealPathFromUri(getApplicationContext(),  result.get(i)));
+                urls_list.add("file://" + getRealPathFromUri(getApplicationContext(), result.get(i)));
             }
             layout.removeView(nine_grid);
             nine_grid = new NineGridImageView<String>(this);
@@ -119,11 +111,25 @@ public class SendPageNineImage extends AppCompatActivity {
             nine_grid.setGap(4);
             nine_grid.setShowStyle(NineGridImageView.STYLE_GRID);
             nine_grid.setPadding(10, 0, 10, 0);
-            //nine_grid.setSingleImgSize(100);
+
+            nine_grid.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            nine_grid.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    return false;
+                }
+            });
+
+
             layout.addView(nine_grid, 3);
             if (urls_list.size() == 9) {
-                imgAddButtonInSendPage.setVisibility(View.GONE);
-                tvHint.setVisibility(View.GONE);
+                addImgLayout.setVisibility(View.GONE);
             }
         }
     }
@@ -203,7 +209,7 @@ public class SendPageNineImage extends AppCompatActivity {
                 Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
                 filePath = getDataColumn(context, contentUri, null, null);
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())){
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
             // 如果是 content 类型的 Uri
             filePath = getDataColumn(context, uri, null, null);
         } else if ("file".equals(uri.getScheme())) {
@@ -215,6 +221,7 @@ public class SendPageNineImage extends AppCompatActivity {
 
     /**
      * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
+     *
      * @return
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
