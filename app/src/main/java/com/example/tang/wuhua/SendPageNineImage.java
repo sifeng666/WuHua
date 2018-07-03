@@ -32,9 +32,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-//import wujing.cn.library.adapter.DisplayPhotoAdapter;
-
-//import static wujing.cn.library.XLoad.context;
 
 /**
  * Created by tang on 02/07/2018.
@@ -44,14 +41,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SendPageNineImage extends AppCompatActivity {
     private final int SPLASH_DISPLAY_LENGHT = 2000;//delay second
     private static final int REQUEST_CODE_CHOOSE = 23;
-    @BindView(R.id.add_img_layout)
-    LinearLayout addImgLayout;
+    private LinearLayout layout;
+    private TextView tvHint;
+    private TextView cancel;
+    private TextView send;
     @BindView(R.id.img_add_button_in_send_page)
     CircleImageView imgAddButtonInSendPage;
+    @BindView(R.id.add_img_layout)
+    LinearLayout addImgLayout;
     @BindView(R.id.ngiv_nine_grid)
     NineGridImageView<String> nine_grid;
+
     private NineGridImageViewAdapter<String> mAdapter1;
-    private LinearLayout layout;
 
     private List<String> urls_list = new ArrayList<>();
     private String[] IMG_URL_LIST = {
@@ -72,14 +73,34 @@ public class SendPageNineImage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_page);
         ButterKnife.bind(this);
+        tvHint = (TextView) findViewById(R.id.addImg_hint);
         layout = (LinearLayout) findViewById(R.id.send_layout);
+        cancel = (TextView) findViewById(R.id.cancel_in_send_page);
+        send = (TextView) findViewById(R.id.btn_send_moment);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_CANCELED);
+                finish();
+            }
+        });
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                finish();
+            }
+        });
+
         imgAddButtonInSendPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Matisse.from(SendPageNineImage.this)
                         .choose(MimeType.allOf())//图片类型
                         .countable(true)//true:选中后显示数字;false:选中后显示对号
-                        .maxSelectable(9 - urls_list.size())//可选的最大数
+                        .maxSelectable(9-urls_list.size())//可选的最大数
                         .capture(true)//选择照片时，是否显示拍照
                         .captureStrategy(new CaptureStrategy(true, "com.example.tang.wuhua.fileprovider"))//参数1 true表示拍照存储在共有目录，false表示存储在私有目录；参数2与 AndroidManifest中authorities值相同，用于适配7.0系统 必须设置
                         .imageEngine(new GlideEngine())//图片加载引擎
@@ -90,9 +111,6 @@ public class SendPageNineImage extends AppCompatActivity {
         initAdapter();
         nine_grid.setAdapter(mAdapter1);
         nine_grid.setImagesData(urls_list);
-//        if (urls_list.size() >= 9) {
-//            imgAddButtonInSendPage.setVisibility(View.GONE);
-//        }
     }
 
     @Override
@@ -102,7 +120,7 @@ public class SendPageNineImage extends AppCompatActivity {
             List<Uri> result = Matisse.obtainResult(data);
             for (int i = 0; i < result.size(); i++) {
                 Log.d("img", result.get(i).toString());
-                urls_list.add("file://" + getRealPathFromUri(getApplicationContext(), result.get(i)));
+                urls_list.add("file://" + getRealPathFromUri(getApplicationContext(),  result.get(i)));
             }
             layout.removeView(nine_grid);
             nine_grid = new NineGridImageView<String>(this);
@@ -209,7 +227,7 @@ public class SendPageNineImage extends AppCompatActivity {
                 Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(documentId));
                 filePath = getDataColumn(context, contentUri, null, null);
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("content".equalsIgnoreCase(uri.getScheme())){
             // 如果是 content 类型的 Uri
             filePath = getDataColumn(context, uri, null, null);
         } else if ("file".equals(uri.getScheme())) {
@@ -221,7 +239,6 @@ public class SendPageNineImage extends AppCompatActivity {
 
     /**
      * 获取数据库表中的 _data 列，即返回Uri对应的文件路径
-     *
      * @return
      */
     private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
