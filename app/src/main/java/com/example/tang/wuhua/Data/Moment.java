@@ -1,6 +1,9 @@
 package com.example.tang.wuhua.Data;
 
+import com.example.tang.wuhua.model.response.card.MomentCard;
+
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by root on 18-6-30.
@@ -8,8 +11,21 @@ import java.util.ArrayList;
 
 public class Moment {
     private String id;
+    private String userId;
     private User owner;
     private String content;
+    private String video;
+    private String location;
+    private String image0;
+    private String image1;
+    private String image2;
+    private String image3;
+    private String image4;
+    private String image5;
+    private String image6;
+    private String image7;
+
+    private Date publishTime;
     private boolean isLike;
 
     public boolean isLike() {
@@ -33,6 +49,16 @@ public class Moment {
 //        this.likes.add("科比");
 //        this.likes.add("奥尼尔");
     }
+
+    public Moment(MomentCard momentCard) {
+        this.userId = momentCard.getPublisherId();
+        this.id = momentCard.getMomentId();
+        this.content = momentCard.getText();
+        this.location = momentCard.getLocation();
+        this.publishTime = momentCard.getPublishTime();
+    }
+
+
 
     public User getOwner() {
         return owner;
