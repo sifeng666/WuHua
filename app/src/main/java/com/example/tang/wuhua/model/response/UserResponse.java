@@ -16,7 +16,7 @@ public class UserResponse {
 
     private UserCard userInfo;
 
-    private boolean success(){
+    public boolean success(){
         return state == 1;
     }
 

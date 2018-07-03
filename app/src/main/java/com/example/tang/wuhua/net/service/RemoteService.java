@@ -13,6 +13,8 @@ import com.example.tang.wuhua.model.response.MomentResponse;
 import com.example.tang.wuhua.model.response.UserResponse;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -22,6 +24,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 
@@ -76,7 +79,8 @@ public interface RemoteService {
      * @return 返回响应的UserResponse
      */
     @POST("Login")
-    Call<UserResponse> login(@Query("UserName") String username, @Query("PassWord") String password);
+    Call<UserResponse> login(@Query("UserName") String username,
+                             @Query("PassWord") String password);
 
 
     /**
@@ -89,8 +93,8 @@ public interface RemoteService {
      */
     @GET("RefreshMoments")
     Call<MomentResponse> refreshMoments(@Query("Latitude") double latitude,
-                                          @Query("Longitude") double longitude,
-                                          @Query("Time") Date lastMomentTime);
+                                        @Query("Longitude") double longitude,
+                                        @Query("Time") Date lastMomentTime);
 
     /**
      * 获取一个moment下所有的评论
@@ -108,7 +112,6 @@ public interface RemoteService {
     @GET("GetLikes")
     Call<LikeResponse> getLikes(@Query("Mid") String momentId);
 
-
     /**
      * 发送moment
      * @param momentModel 包含moment的必要信息
@@ -118,7 +121,30 @@ public interface RemoteService {
     Call<BaseResponse> publishMoment(@Body MomentModel momentModel);
 
     /**
-     * 用户更新个人信息的接口
+     * 发送moment(可选)
+     * @param userId 用户id
+     * @param latitude 纬度
+     * @param longitude 经度
+     * @param text 文本
+     * @param imageParts 图片part
+     * @param videoParts 视频part
+     * @param publishTime 发布时间
+     * @param location 发布地点
+     * @return BaseResponse仅包含状态信息
+     */
+    @Multipart
+    @POST("PublishMoment")
+    Call<BaseResponse> publishMoment(@Part("Uid") String userId,
+                                     @Part("LocY") double latitude,
+                                     @Part("LocX") double longitude,
+                                     @Part("Text_m") String text,
+                                     @Part List<MultipartBody.Part> imageParts,
+                                     @Part List<MultipartBody.Part> videoParts,
+                                     @Part("Time_m") Date publishTime,
+                                     @Part("Loc_Des") String location);
+
+    /**
+     * 发送评论
      * @param commentModel 包含评论的必要信息
      * @return BaseResponse仅包含状态信息
      */
@@ -146,7 +172,7 @@ public interface RemoteService {
      */
     @POST("LikeCancel")
     Call<BaseResponse> likeCancel(@Query("Uid") String userId,
-                            @Query("Mid") String momentId);
+                                  @Query("Mid") String momentId);
 
 
     /**
@@ -159,8 +185,7 @@ public interface RemoteService {
 
 
     /**
-     * 用户修改个人信息
-     * （应该是这个）
+     * 用户修改个人信息（可选）
      * @param username 用户名
      * @param nickname 昵称
      * @param image 图片
@@ -170,9 +195,9 @@ public interface RemoteService {
     @Multipart
     @POST("Update")
     Call<BaseResponse> updateUserInfo(@Part("UserName") String username,
-                                           @Part("Nickname") String nickname,
-                                           @Part MultipartBody.Part image,
-                                           @Part("Sign") String signature);
+                                      @Part("Nickname") String nickname,
+                                      @Part MultipartBody.Part image, // 这个地方@Path后面不能加东西
+                                      @Part("Sign") String signature);
 
     /**
      * 根据用户id查询用户信息
