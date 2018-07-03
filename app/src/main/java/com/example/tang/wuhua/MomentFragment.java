@@ -30,12 +30,24 @@ import com.example.tang.wuhua.Adapter.MomentAdapter;
 import com.example.tang.wuhua.Data.Comment;
 import com.example.tang.wuhua.Data.Moment;
 import com.example.tang.wuhua.Data.User;
+import com.example.tang.wuhua.model.parameter.MomentModel;
+import com.example.tang.wuhua.model.response.MomentResponse;
+import com.example.tang.wuhua.model.response.card.MomentCard;
+import com.example.tang.wuhua.net.Network;
+import com.example.tang.wuhua.net.helper.NetworkHelper;
+import com.example.tang.wuhua.net.service.RemoteService;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by root on 18-6-30.
@@ -215,7 +227,7 @@ public class MomentFragment extends Fragment {
         public void onReceiveLocation(BDLocation bdLocation) {
             latitude = bdLocation.getLatitude();
             longitude = bdLocation.getLongitude();
-            Toast.makeText(getContext(), bdLocation.getStreet(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(), bdLocation.getStreet(), Toast.LENGTH_SHORT).show();
             mLocationClient.stop();
         }
     }
@@ -240,5 +252,37 @@ public class MomentFragment extends Fragment {
             userList.add(new User(users[i]));
             momentList.add(new Moment(userList.get(i), contents[i]));
         }
+    }
+
+    public void requestMoments(double latitude, double longitude, final boolean isMovingUp, Date time) {
+        NetworkHelper.refreshMoments(latitude, longitude, isMovingUp, time, new Callback<MomentResponse>() {
+            @Override
+            public void onResponse(Call<MomentResponse> call, Response<MomentResponse> response) {
+                if (response.isSuccessful()) {
+                    MomentResponse result = response.body();
+                    if (result.success()) {
+                        List<MomentCard> momentCardList = result.getMomentCards();
+                        if (!isMovingUp) {
+                            momentList.clear();
+                        }
+                        for (int i = 0; i < momentCardList.size(); i++) {
+                            momentList.add(new Moment(momentCardList.get(i)));
+                        }
+                        momentAdapter.notifyDataSetChanged();
+                    }
+                    else {
+                        Toast.makeText(getContext(), "获取失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "获取失败", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MomentResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
