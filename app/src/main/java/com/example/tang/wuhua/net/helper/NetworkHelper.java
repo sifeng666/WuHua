@@ -2,10 +2,14 @@ package com.example.tang.wuhua.net.helper;
 
 import com.example.tang.wuhua.model.parameter.CommentModel;
 import com.example.tang.wuhua.model.parameter.InfoUpdateModel;
+import com.example.tang.wuhua.model.parameter.LikeCancelModel;
 import com.example.tang.wuhua.model.parameter.LikeModel;
 import com.example.tang.wuhua.model.parameter.LoginModel;
+import com.example.tang.wuhua.model.parameter.MomentIdModel;
 import com.example.tang.wuhua.model.parameter.MomentModel;
+import com.example.tang.wuhua.model.parameter.RefreshModel;
 import com.example.tang.wuhua.model.parameter.RegisterModel;
+import com.example.tang.wuhua.model.parameter.UserIdModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
 import com.example.tang.wuhua.model.response.CommentResponse;
 import com.example.tang.wuhua.model.response.LikeResponse;
@@ -45,6 +49,8 @@ public class NetworkHelper {
 
     /**
      * 注册的封装 异步请求
+     * OK
+     *
      * @param registerModel 注册model
      * @param callback 回调函数
      */
@@ -56,6 +62,8 @@ public class NetworkHelper {
 
     /**
      * 登录的封装 异步请求
+     * OK
+     *
      * @param loginModel 登录model
      * @param callback 回调函数
      */
@@ -69,22 +77,25 @@ public class NetworkHelper {
 
     /**
      * 获取更多信息
+     *
+     *
      * @param latitude 当前用户的纬度信息
      * @param longitude 当前用户的经度信息
-     * @param isMovingUp 是否从下往上滑动 true表示下滑 false表示上拉
+     * @param isFingerFromUpToDown 是否从上往下滑动
      * @param lastMomentTime 主页面最后一条moment的发布时间
      * @param callback 回调函数
      */
     public static void refreshMoments(double latitude, double longitude,
-                                      boolean isMovingUp, Date lastMomentTime,
+                                      boolean isFingerFromUpToDown, Date lastMomentTime,
                                       Callback<MomentResponse> callback ) {
 
         RemoteService remoteService = Network.remote();
 
         Date paramDate = lastMomentTime;
 
-        // 如果是上拉操作 刷新主页面获取最新的十条moment显示在主页面上
-        if (!isMovingUp) {
+        // 如果是手指从上往下滑的刷新
+        // 主页面获取最新的十条moment显示在主页面上
+        if (isFingerFromUpToDown) {
             // 此时可以向服务器发送一个在本次请求时间之后的一个日期（如1天后）
             // 服务器在此日期之前最近的10条即是最新的10条
             // 返回一天之后的时间
@@ -92,35 +103,40 @@ public class NetworkHelper {
             paramDate = new Date(System.currentTimeMillis() + oneDay);
         }
         Call<MomentResponse> call =
-                remoteService.refreshMoments(latitude, longitude, paramDate);
+                remoteService.refreshMoments(new RefreshModel(latitude, longitude, paramDate));
         call.enqueue(callback);
     }
 
     /**
-     * 根据moment的id查找该moment下的所有评论
-     * 异步请求
+     * 根据moment的id查找该moment下的所有评论 异步请求
+     *
+     *
      * @param momentId moment的id
      * @param callback 回调函数
      */
     public static void getCommentsByMomentId(String momentId, Callback<CommentResponse> callback){
         RemoteService remoteService = Network.remote();
-        Call<CommentResponse> call = remoteService.getComments(momentId);
+        Call<CommentResponse> call = remoteService.getComments(new MomentIdModel(momentId));
         call.enqueue(callback);
     }
 
     /**
      * 根据moment的id请求该moment下的所有赞
+     * OK
+     *
      * @param momentId moment的id
      * @param callback 回调函数
      */
     public static void getLikesByMomentId(String momentId, Callback<LikeResponse> callback){
         RemoteService remoteService = Network.remote();
-        Call<LikeResponse> call = remoteService.getLikes(momentId);
+        Call<LikeResponse> call = remoteService.getLikes(new MomentIdModel(momentId));
         call.enqueue(callback);
     }
 
     /**
      * 发布一条朋友圈动态
+     *
+     *
      * @param momentModel 朋友圈动态model
      * @param callback 回调函数
      */
@@ -139,10 +155,10 @@ public class NetworkHelper {
                 || momentModel.getMediaFileType() == MomentModel.MEDIA_TYPE_VIDEO) {
             for (int i = 0; i < mediaFilesPaths.size(); ++ i) {
                 try {
-                    // 首先根据图片路径构造一个file对象
+                    // 首先根据路径构造一个file对象
                     File mediaFile = new File(mediaFilesPaths.get(i));
 
-                    // 根据这个图片创建一个RequestBody
+                    // 创建一个RequestBody
                     RequestBody requestBody =
                             RequestBody.create(MediaType.parse("multipart/form-data"), mediaFile);
 
@@ -172,6 +188,8 @@ public class NetworkHelper {
 
     /**
      * 发布一条评论
+     *
+     *
      * @param commentModel 评论实体
      * @param callback 回调函数
      */
@@ -182,8 +200,9 @@ public class NetworkHelper {
     }
 
     /**
-     * OK
      * 给某条朋友圈点赞
+     * OK
+     *
      * @param likeModel 点赞的likeModel
      * @param callback 回调函数
      */
@@ -198,6 +217,8 @@ public class NetworkHelper {
 
     /**
      * 给某条朋友圈取消点赞
+     *
+     *
      * @param userId 取消点赞人的id
      * @param momentId 取消点赞的朋友圈的id
      * @param callback 回调函数
@@ -206,15 +227,15 @@ public class NetworkHelper {
                                   Callback<BaseResponse> callback) {
 
         RemoteService remoteService = Network.remote();
-        Call<BaseResponse> call = remoteService.likeCancel(userId, momentId);
+        Call<BaseResponse> call = remoteService.likeCancel(new LikeCancelModel(userId, momentId));
         call.enqueue(callback);
     }
-
 
 
     /**
      * 更新用户信息
      * OK
+     *
      * @param infoUpdateModel 更新用户信息的model
      * @param callback 回调函数
      */
@@ -260,23 +281,27 @@ public class NetworkHelper {
 
     /**
      * 根据用户id查询用户所有信息
+     *
+     *
      * @param userId 用户的id
      * @param callback 回调函数
      */
     public static void getUserInfoByUserId(String userId, Callback<UserResponse> callback) {
         RemoteService remoteService = Network.remote();
-        Call<UserResponse> call = remoteService.getUserInfo(userId);
+        Call<UserResponse> call = remoteService.getUserInfo(new UserIdModel(userId));
         call.enqueue(callback);
     }
 
     /**
      * 根据用户id查询用户的所有朋友圈
+     *
+     *
      * @param userId 用户id
      * @param callback 回调函数
      */
-    public static void getAllCommentsByUserId(String userId, Callback<MomentResponse> callback) {
+    public static void getAllMomentsByUserId(String userId, Callback<MomentResponse> callback) {
         RemoteService remoteService = Network.remote();
-        Call<MomentResponse> call = remoteService.getUserAllMoments(userId);
+        Call<MomentResponse> call = remoteService.getUserAllMoments(new UserIdModel(userId));
         call.enqueue(callback);
     }
 

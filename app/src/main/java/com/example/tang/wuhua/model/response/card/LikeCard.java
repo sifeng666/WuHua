@@ -11,10 +11,6 @@ import java.util.Date;
 
 public class LikeCard {
 
-    // 该条点赞记录的唯一标识
-    @SerializedName("Lid")
-    private String likeId;
-
     // 该条点赞记录所属的moment的id
     @SerializedName("Mid")
     private String momentId;
@@ -31,13 +27,6 @@ public class LikeCard {
     @SerializedName("Time_l")
     private Date likeTime;
 
-    public String getLikeId() {
-        return likeId;
-    }
-
-    public void setLikeId(String likeId) {
-        this.likeId = likeId;
-    }
 
     public String getMomentId() {
         return momentId;
@@ -74,8 +63,7 @@ public class LikeCard {
     @Override
     public String toString() {
         return "LikeCard{" +
-                "likeId='" + likeId + '\'' +
-                ", momentId='" + momentId + '\'' +
+                "momentId='" + momentId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", likeTime=" + likeTime +

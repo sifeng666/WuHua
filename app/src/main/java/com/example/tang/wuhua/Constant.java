@@ -8,8 +8,9 @@ package com.example.tang.wuhua;
 public interface Constant {
     interface Value {
         // 基础url
-        String BASE_URL = "http://fywhvp.natappfree.cc/MyServer/";
+        String BASE_URL = "http://swc3iw.natappfree.cc/MyServer/";
 
+        // String BASE_URL = "http://112.74.89.58:8080";
         // String BASE_URL = "http://fywhvp.natappfree.cc/";
 
         // 乐帮的url

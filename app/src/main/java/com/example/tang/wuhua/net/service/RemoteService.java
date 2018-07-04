@@ -1,12 +1,16 @@
 package com.example.tang.wuhua.net.service;
 
 
+import com.example.tang.wuhua.model.parameter.LikeCancelModel;
 import com.example.tang.wuhua.model.parameter.LikeModel;
 import com.example.tang.wuhua.model.parameter.LoginModel;
+import com.example.tang.wuhua.model.parameter.MomentIdModel;
+import com.example.tang.wuhua.model.parameter.RefreshModel;
 import com.example.tang.wuhua.model.parameter.RegisterModel;
 import com.example.tang.wuhua.model.parameter.CommentModel;
 import com.example.tang.wuhua.model.parameter.MomentModel;
 import com.example.tang.wuhua.model.parameter.InfoUpdateModel;
+import com.example.tang.wuhua.model.parameter.UserIdModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
 import com.example.tang.wuhua.model.response.CommentResponse;
 import com.example.tang.wuhua.model.response.LikeResponse;
@@ -54,11 +58,15 @@ import retrofit2.http.Query;
  *
  * @author z1ycheng
  * 我们自己的服务器服务的接口
+ * 全部使用post方法
+ * 除上传文件外全部使用json格式（仅一个参数也是json）
  */
 public interface RemoteService {
 
     /**
      * 注册
+     * OK
+     *
      * @param model 用户的注册信息
      * @return 返回BaseResponse 仅包含状态信息
      */
@@ -66,7 +74,9 @@ public interface RemoteService {
     Call<BaseResponse> register(@Body RegisterModel model);
 
     /**
-     * 登录(参数按json传递)
+     * 登录
+     * OK
+     *
      * @param model 用户的登录请求信息
      * @return 返回UserResponse
      */
@@ -74,84 +84,53 @@ public interface RemoteService {
     Call<UserResponse> login(@Body LoginModel model);
 
     /**
-     * 登录(参数直接传递)
-     * @param username 用户名
-     * @param password 密码
-     * @return 返回响应的UserResponse
-     */
-    @POST("Login")
-    Call<UserResponse> login(@Query("UserName") String username,
-                             @Query("PassWord") String password);
-
-
-    /**
      * 刷新，下拉获取更多moment
-     * @param latitude 纬度
-     * @param longitude 经度
-     * @param lastMomentTime 最后一条朋友圈发布的时间
+     *
+     *
      * @return 一个list 如果时间为空返回10条最新的消息(少于10条则返回全部);
      * 不为空返回直到lastMomentTime最新的10条（同上）
      */
-    @GET("RefreshMoments")
-    Call<MomentResponse> refreshMoments(@Query("Latitude") double latitude,
-                                        @Query("Longitude") double longitude,
-                                        @Query("Time") Date lastMomentTime);
+    @POST("RefreshMoments")
+    Call<MomentResponse> refreshMoments(@Body RefreshModel refreshModel);
 
     /**
      * 获取一个moment下所有的评论
-     * @param momentId moment的id
+     *
+     *
+     * @param momentIdModel moment的id的model
      * @return 一个list 包含该条朋友圈下面的所有评论
      */
-    @GET("GetComments")
-    Call<CommentResponse> getComments(@Query("Mid") String momentId);
+    @POST("GetComments")
+    Call<CommentResponse> getComments(@Body MomentIdModel momentIdModel);
 
     /**
      * 获得一个moment下的所有赞
-     * @param momentId moment的id
+     * OK
+     *
+     * @param momentIdModel moment的id的model
      * @return 一个list 包含该条朋友圈下面的所有赞
      */
-    @GET("GetLikes")
-    Call<LikeResponse> getLikes(@Query("Mid") String momentId);
+    @POST("GetLike")
+    Call<LikeResponse> getLikes(@Body MomentIdModel momentIdModel);
+
 
     /**
-     * 发送moment
-     * @param momentModel 包含moment的必要信息
-     * @return BaseResponse仅包含状态信息
+     * 发送朋友圈
+     *
+     *
+     * @param map 包含用户id，经度，纬度，文本，发布时间，发布地点，媒体文件的类型
+     * @param mediaParts 图片或者视频
+     * @return 发送是否成功
      */
-    @POST("PublishMoment")
-    Call<BaseResponse> publishMoment(@Body MomentModel momentModel);
-
-    /**
-     * 发送moment(可选)
-     * @param userId 用户id
-     * @param latitude 纬度
-     * @param longitude 经度
-     * @param text 文本
-     * @param imageParts 图片part
-     * @param videoParts 视频part
-     * @param publishTime 发布时间
-     * @param location 发布地点
-     * @return BaseResponse仅包含状态信息
-     */
-    @Multipart
-    @POST("PublishMoment")
-    Call<BaseResponse> publishMoment(@Part("Uid") String userId,
-                                     @Part("LocY") double latitude,
-                                     @Part("LocX") double longitude,
-                                     @Part("Text_m") String text,
-                                     @Part List<MultipartBody.Part> imageParts,
-                                     @Part List<MultipartBody.Part> videoParts,
-                                     @Part("Time_m") Date publishTime,
-                                     @Part("Loc_Des") String location);
-
     @Multipart
     @POST("PublishMoment")
     Call<BaseResponse> publishMoment(@PartMap Map<String, RequestBody> map,
                                      @Part List<MultipartBody.Part> mediaParts);
 
-
     /**
      * 发送评论
+     *
+     *
      * @param commentModel 包含评论的必要信息
      * @return BaseResponse仅包含状态信息
      */
@@ -162,6 +141,7 @@ public interface RemoteService {
     /**
      * 点赞
      * OK
+     *
      * @param likeModel 点赞的model
      * @return BaseResponse仅包含状态信息 表示点赞是否成功
      */
@@ -170,17 +150,19 @@ public interface RemoteService {
 
     /**
      * 取消点赞
-     * @param userId 取消点赞人的id
-     * @param momentId 取消点赞的moment的id
+     *
+     *
+     * @param likeCancelModel 取消点赞的model
      * @return BaseResponse仅包含状态信息
      */
     @POST("LikeCancel")
-    Call<BaseResponse> likeCancel(@Query("Uid") String userId,
-                                  @Query("Mid") String momentId);
+    Call<BaseResponse> likeCancel(@Body LikeCancelModel likeCancelModel);
+
 
     /**
      * 修改用户个人信息
      * OK
+     *
      * @param map 包含用户名 昵称 签名 密码
      * @param image 图片
      * @return BaseResponse 表示修改是否成功
@@ -191,18 +173,22 @@ public interface RemoteService {
                                         @Part MultipartBody.Part image);
     /**
      * 根据用户id查询用户信息
-     * @param userId 某个用户的id
+     *
+     *
+     * @param userIdModel 某个用户的id
      * @return 该用户的所有信息
      */
-    @GET("/")
-    Call<UserResponse> getUserInfo(@Query("Uid") String userId);
+    @POST("/")
+    Call<UserResponse> getUserInfo(@Body UserIdModel userIdModel);
 
     /**
      * 根据用户id查询该用户发布的所有moment
-     * @param userId 某个用户的id
+     *
+     *
+     * @param userIdModel 某个用户的id
      * @return 一个list 里面包含了该用户的所有的moment
      */
-    @GET("/")
-    Call<MomentResponse> getUserAllMoments(@Query("Uid") String userId);
+    @POST("/")
+    Call<MomentResponse> getUserAllMoments(@Body UserIdModel userIdModel);
 
 }

@@ -1,6 +1,7 @@
 package com.example.tang.wuhua.model.response;
 
 import com.example.tang.wuhua.model.response.card.LikeCard;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class LikeResponse {
 
     private int state;
 
+    @SerializedName("list")
     private List<LikeCard> likeCards;
 
     public boolean success(){
