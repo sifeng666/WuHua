@@ -10,6 +10,8 @@ public class Comment {
 
     private String sender;
     private String receiver;
+    private String senderId;
+    private String receiverId;
     private int type; //评论类型：1表示只评论 2表示回复别人
     private String content;
     private String id;
@@ -29,7 +31,17 @@ public class Comment {
     }
 
     public Comment(CommentCard commentCard) {
-
+        this.sender = commentCard.getSourceNickname();
+        this.senderId = commentCard.getSourceId();
+        this.receiver = commentCard.getDestinationNickname();
+        this.receiverId = commentCard.getDestinationId();
+        this.content = commentCard.getText();
+        if (this.receiverId == null) {
+            this.type = 1;
+        }
+        else {
+            this.type = 2;
+        }
     }
 
     public String getSender() {

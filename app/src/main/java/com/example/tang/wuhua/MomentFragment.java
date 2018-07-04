@@ -31,11 +31,13 @@ import com.example.tang.wuhua.Data.Comment;
 import com.example.tang.wuhua.Data.Moment;
 import com.example.tang.wuhua.Data.User;
 import com.example.tang.wuhua.model.parameter.CommentModel;
+import com.example.tang.wuhua.model.parameter.LikeModel;
 import com.example.tang.wuhua.model.parameter.MomentModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
 import com.example.tang.wuhua.model.response.CommentResponse;
 import com.example.tang.wuhua.model.response.LikeResponse;
 import com.example.tang.wuhua.model.response.MomentResponse;
+import com.example.tang.wuhua.model.response.UserResponse;
 import com.example.tang.wuhua.model.response.card.CommentCard;
 import com.example.tang.wuhua.model.response.card.LikeCard;
 import com.example.tang.wuhua.model.response.card.MomentCard;
@@ -70,6 +72,7 @@ public class MomentFragment extends Fragment {
     private ArrayList<User> userList;
     private MomentAdapter momentAdapter;
     public LocationClient mLocationClient; //位置信息
+    private User me;
     private View personView; //在评论点击函数中用到
     private double latitude; //经度
     private double longitude; //纬度
@@ -82,6 +85,7 @@ public class MomentFragment extends Fragment {
         refreshLayout = v.findViewById(R.id.refreshLayout);
         mLocationClient = new LocationClient(getContext());
         mLocationClient.registerLocationListener(new MomentFragment.MyLocationListener());
+        me = ((MainActivity) getActivity()).getUser();
         //ButterKnife.bind(v);
 
         requestLocation();
@@ -273,6 +277,9 @@ public class MomentFragment extends Fragment {
                         }
                         for (int i = 0; i < momentCardList.size(); i++) {
                             momentList.add(new Moment(momentCardList.get(i)));
+                            getUserInfo(momentList.get(i).getUserId(), i);
+                            getComments(momentList.get(i).getId(), i);
+                            getLikes(momentList.get(i).getId(), i);
                         }
                         momentAdapter.notifyDataSetChanged();
                     }
@@ -315,7 +322,7 @@ public class MomentFragment extends Fragment {
         });
     }
 
-    private void getLikes(String mid, int position) {
+    private void getLikes(String mid, final int position) {
         NetworkHelper.getLikesByMomentId(mid, new Callback<LikeResponse>() {
             @Override
             public void onResponse(Call<LikeResponse> call, Response<LikeResponse> response) {
@@ -323,7 +330,15 @@ public class MomentFragment extends Fragment {
                     LikeResponse result = response.body();
                     if (result.success()) {
                         List<LikeCard> likeCardList = result.getLikeCards();
-
+                        //boolean isLike = false;
+                        for (int i = 0; i < likeCardList.size(); i++) {
+                            String name = likeCardList.get(i).getNickname();
+                            if (name == me.getNickname()) {
+                                momentList.get(position).setLike(true);
+                            }
+                            momentList.get(position).getLikes().add(name);
+                        }
+                        momentAdapter.notifyDataSetChanged();
                     }
                 }
             }
@@ -335,13 +350,14 @@ public class MomentFragment extends Fragment {
         });
     }
 
-    private void sendComment(String sourceId, String desId, String text, String mid, Date time) {
+    //position: momentList中的位置
+    private void sendComment(String sourceId, String desId, String text, final String mid, Date time, final int position) {
         NetworkHelper.publishComment(new CommentModel(sourceId, desId, text, mid, time), new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().success()) {
-
+                        getComments(mid, position);
                     }
                 }
             }
@@ -352,5 +368,64 @@ public class MomentFragment extends Fragment {
             }
         });
     }
+
+    private void sendLike(final String mid, String uid, Date time, final int position) {
+        NetworkHelper.like(new LikeModel(mid, uid, time), new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().success()) {
+                        getLikes(mid, position);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void cancelLike(final String mid, String uid, Date time, final int position) {
+        NetworkHelper.likeCancel(uid, mid, new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                if (response.isSuccessful()) {
+                    if (response.body().success()) {
+                        getLikes(mid, position);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void getUserInfo(String uid, final int position) {
+        NetworkHelper.getUserInfoByUserId(uid, new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                if (response.isSuccessful()) {
+                    UserResponse result = response.body();
+                    if (position == -1) {
+                        me = new User(result);
+                    }
+                    else {
+                        momentList.get(position).setOwner(new User(result));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }
