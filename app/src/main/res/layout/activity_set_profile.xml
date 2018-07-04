@@ -3,6 +3,81 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <android.support.v7.widget.CardView
+            android:layout_alignParentLeft="true"
+            android:id="@+id/btn_back_cancel"
+            android:layout_width="wrap_content"
+
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="15dp"
+
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:cardBackgroundColor="#CCCCCC"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="0dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="返回"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textSize="16sp"
+            android:textColor="#fff"/>
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改个人信息"
+            android:layout_centerInParent="true"
+            android:textSize="16sp"
+            />
+        <android.support.v7.widget.CardView
+            android:layout_alignParentRight="true"
+            android:id="@+id/btn_verify_change"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="15dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            app:cardBackgroundColor="#EE9A49"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="0dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="修改"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textSize="16sp"
+            android:textColor="#fff"/>
+
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#C9C9C9" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,7 +95,7 @@
             android:textColor="#26292e" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_head_portrait_profile"
+            android:id="@+id/img_change_head_portrait_set_profile"
             android:layout_width="75dp"
             android:layout_height="75dp"
             android:layout_weight="0"
@@ -56,13 +131,15 @@
 
             android:textColor="#26292e" />
 
-        <TextView
-            android:id="@+id/text_usr_name_profile"
+        <EditText
+            android:id="@+id/edit_usr_name_set_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Messi"
+            android:maxLength="15"
             android:textSize="14sp"
             android:textColor="#26292e"
+            android:background="@null"
             />
 
     </LinearLayout>
@@ -90,13 +167,14 @@
 
             android:textColor="#26292e" />
 
-        <TextView
-            android:id="@+id/text_phone_profile"
+        <EditText
+            android:id="@+id/edit_phone_set_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="400-666-8800"
             android:textSize="14sp"
             android:textColor="#26292e"
+            android:background="@null"
             />
 
     </LinearLayout>
@@ -123,16 +201,17 @@
 
             android:textColor="#26292e" />
 
-        <TextView
+        <EditText
             android:id="@+id/text_location_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Messi is a super football player."
-            android:maxLines="1"
+            android:maxLines="2"
             android:ellipsize="end"
             android:maxWidth="240dp"
             android:textSize="14sp"
             android:textColor="#26292e"
+            android:background="@null"
             />
 
     </LinearLayout>
@@ -143,4 +222,13 @@
         android:layout_marginRight="8dp"
         android:background="#C9C9C9" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="点击右侧文字修改个人信息"
+        android:layout_gravity="right"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="15dp"
+        android:textSize="14sp"
+        />
 </LinearLayout>

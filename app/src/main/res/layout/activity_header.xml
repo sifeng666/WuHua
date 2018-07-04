@@ -88,14 +88,12 @@
             android:textSize="13sp" />
     </RelativeLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_show_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/item_selfHomepage"
-        layout="@layout/activity_self_homepage" />
-    <include
-        android:id="@+id/item_selfHomepage_temp1"
-        layout="@layout/activity_self_homepage" />
-    <include
-        android:id="@+id/item_selfHomepage_temp2"
-        layout="@layout/activity_self_homepage" />
+
+    </android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

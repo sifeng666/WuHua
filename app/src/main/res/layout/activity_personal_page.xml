@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            style="@style/Toolbar"
+            android:layout_marginBottom="0dp"
+            app:contentInsetStart="0dp">
+
+            <RelativeLayout
+                android:id="@+id/back_personal_page"
+                android:layout_gravity="left"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content">
+            <ImageView
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:scaleX="0.57"
+                android:scaleY="0.57"
+                android:src="@mipmap/ic_code_white_48dp_1" />
+            <TextView
+                android:layout_alignParentRight="true"
+                android:text="返回"
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                android:paddingRight="30dp"
+                style="@style/ImageView.Hamburger"
+                android:src="@mipmap/ic_backmenu" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/jump_personal_page"
+                android:layout_gravity="right"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content">
+                <!--跳转到lyle主页面对应位置进行评论点赞-->
+                <TextView
+                    android:text="评论"
+                    android:textColor="#fff"
+                    android:textSize="18sp"
+                    android:textStyle="normal"
+                    android:paddingRight="30dp"
+                    style="@style/ImageView.Hamburger"
+                    android:src="@mipmap/ic_backmenu" />
+                <ImageView
+                    android:layout_alignParentRight="true"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:scaleX="0.57"
+                    android:scaleY="0.57"
+                    android:src="@mipmap/ic_code_white_48dp_2" />
+            </RelativeLayout>
+
+
+
+        </android.support.v7.widget.Toolbar>
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/messi_panic"
+            />
+        <TextView
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="200dp"
+            android:text="comment!\ncomment! \ncomment!\ncomment!\ncomment!"
+            android:textColor="#fff"
+            android:ellipsize="end"
+            android:maxLines="4"
+            android:textSize="16sp"
+            />
+
+    </RelativeLayout>
+
+
+
+
+
+
+</LinearLayout>

@@ -38,13 +38,24 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/guillotine_item_text_size" />
 
-            <Button
+            <ImageView
                 android:id="@+id/send_lyle"
                 style="@style/ImageView.Hamburger"
                 android:layout_gravity="right"
+                android:visibility="gone"
                 android:scaleX="0.65"
                 android:scaleY="0.65"
                 android:background="@mipmap/ic_camera_white_18pt_3x" />
+
+            <ImageView
+                android:id="@+id/change_profile"
+                style="@style/ImageView.Hamburger"
+                android:layout_gravity="right"
+                android:visibility="visible"
+                android:scaleX="0.65"
+                android:scaleY="0.65"
+                android:background="@mipmap/ic_create_white_48dp" />
+
         </android.support.v7.widget.Toolbar>
 
 

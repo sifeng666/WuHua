@@ -140,7 +140,7 @@
             >
 
             <android.support.v7.widget.CardView
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="#B0E2FF"
@@ -149,18 +149,34 @@
                 android:layout_marginLeft="12dp"
                 android:layout_gravity="left|center"
                 android:layout_marginBottom="15dp">
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+
+                <RelativeLayout
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     android:layout_gravity="center"
-                    android:layout_marginRight="17dp"
-                    android:src="@mipmap/location_2" />
-                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="广州"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp" />
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/location_icon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentLeft="true"
+                        android:src="@mipmap/location_2" />
+                    <TextView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/my_location_send_page"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="广州1112222ddd222"
+                        android:maxWidth="100dp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:layout_toRightOf="@+id/location_icon"
+                        android:layout_marginLeft="3dp"
+                         />
+
+                </RelativeLayout>
+
 
             </android.support.v7.widget.CardView>
 
