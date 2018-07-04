@@ -12,6 +12,10 @@ import java.util.List;
 
 public class MomentModel {
 
+    public static int MEDIA_TYPE_IMG = 0;
+    public static int MEDIA_TYPE_VIDEO = 1;
+    public static int MEDIA_TYPE_NONE = 2;
+
     // 发布人的id
     @SerializedName("Uid")
     private String publisherId;
@@ -28,13 +32,20 @@ public class MomentModel {
     @SerializedName("Text_m")
     private String text;
 
-    // 所有图片路径
-    @SerializedName("Image")
-    private List<String> imagesPaths;
+    // 媒体文件的路径
+    private List<String> mediaFilesPaths;
 
-    // 所有视频路径
-    @SerializedName("Video")
-    private List<String> videosPaths;
+    // 媒体文件的类型
+    @SerializedName("type")
+    private int mediaFileType;
+
+    // 所有图片路径
+    //@SerializedName("Image")
+   // private List<String> imagesPaths;
+
+    // 视频的路径
+    //@SerializedName("Video")
+   // private String videoPath;
 
     // 发布时间
     @SerializedName("Time_m")
@@ -44,16 +55,17 @@ public class MomentModel {
     @SerializedName("Loc_Des")
     private String location;
 
+
     public MomentModel(String publisherId, double latitude, double longitude,
-                       String text, List<String> imagesPaths, List<String> videosPaths,
+                       String text, List<String> mediaFilesPaths, int mediaFileType,
                        Date publishTime, String location) {
 
         this.publisherId = publisherId;
         this.latitude = latitude;
         this.longitude = longitude;
         this.text = text;
-        this.imagesPaths = imagesPaths;
-        this.videosPaths = videosPaths;
+        this.mediaFilesPaths = mediaFilesPaths;
+        this.mediaFileType = mediaFileType;
         this.publishTime = publishTime;
         this.location = location;
     }
@@ -90,20 +102,20 @@ public class MomentModel {
         this.text = text;
     }
 
-    public List<String> getImagesPaths() {
-        return imagesPaths;
+    public List<String> getMediaFilesPaths() {
+        return mediaFilesPaths;
     }
 
-    public void setImagesPaths(List<String> imagesPaths) {
-        this.imagesPaths = imagesPaths;
+    public void setMediaFilesPaths(List<String> mediaFilesPaths) {
+        this.mediaFilesPaths = mediaFilesPaths;
     }
 
-    public List<String> getVideosPaths() {
-        return videosPaths;
+    public int getMediaFileType() {
+        return mediaFileType;
     }
 
-    public void setVideosPath(List<String> videosPaths) {
-        this.videosPaths = videosPaths;
+    public void setMediaFileType(int mediaFileType) {
+        this.mediaFileType = mediaFileType;
     }
 
     public Date getPublishTime() {

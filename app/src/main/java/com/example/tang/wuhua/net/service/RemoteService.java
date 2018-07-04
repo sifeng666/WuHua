@@ -144,6 +144,12 @@ public interface RemoteService {
                                      @Part("Time_m") Date publishTime,
                                      @Part("Loc_Des") String location);
 
+    @Multipart
+    @POST("PublishMoment")
+    Call<BaseResponse> publishMoment(@PartMap Map<String, RequestBody> map,
+                                     @Part List<MultipartBody.Part> mediaParts);
+
+
     /**
      * 发送评论
      * @param commentModel 包含评论的必要信息

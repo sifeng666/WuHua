@@ -35,6 +35,15 @@ import retrofit2.Callback;
 public class NetworkHelper {
 
     /**
+     * 将字符串转换为RequestBody
+     * @param value 字符串
+     * @return RequestBody
+     */
+    private static RequestBody toRequestBody(String value) {
+        return RequestBody.create(MediaType.parse("text/plain"), value);
+    }
+
+    /**
      * 注册的封装 异步请求
      * @param registerModel 注册model
      * @param callback 回调函数
@@ -120,63 +129,44 @@ public class NetworkHelper {
         // 远程服务
         RemoteService remoteService = Network.remote();
 
-        // 获取路径
-        List<String> imagesPaths = momentModel.getImagesPaths();
-        List<String> videosPaths = momentModel.getVideosPaths();
+        // 媒体文件的目录
+        List<String> mediaFilesPaths = momentModel.getMediaFilesPaths();
 
-        // List<MultipartBody.Part>部分
-        List<MultipartBody.Part> imageParts = new ArrayList<>();
-        List<MultipartBody.Part> videoParts = new ArrayList<>();
+        // MultipartBody.Part的列表
+        List<MultipartBody.Part> mediaParts = new ArrayList<>();
 
-        // 如果需要上传图片
-        if (imagesPaths != null && imagesPaths.size() > 0) {
-            for (int i = 0; i < imagesPaths.size(); ++ i) {
+        if (momentModel.getMediaFileType() == MomentModel.MEDIA_TYPE_IMG
+                || momentModel.getMediaFileType() == MomentModel.MEDIA_TYPE_VIDEO) {
+            for (int i = 0; i < mediaFilesPaths.size(); ++ i) {
                 try {
                     // 首先根据图片路径构造一个file对象
-                    File image = new File(imagesPaths.get(i));
+                    File mediaFile = new File(mediaFilesPaths.get(i));
 
                     // 根据这个图片创建一个RequestBody
                     RequestBody requestBody =
-                            RequestBody.create(MediaType.parse("multipart/form-data"), image);
+                            RequestBody.create(MediaType.parse("multipart/form-data"), mediaFile);
 
                     // 根据这个RequestBody创建一个MultipartBody.Part
-                    MultipartBody.Part part = MultipartBody.Part.createFormData("image" + i,
-                            image.getName(), requestBody);
+                    MultipartBody.Part part = MultipartBody.Part.createFormData(
+                            (momentModel.getMediaFileType() == MomentModel.MEDIA_TYPE_IMG) ?
+                                    "img" + i : "video", mediaFile.getName(), requestBody);
 
-                    imageParts.add(part);
-                }
-                catch (Exception e) {
+                    mediaParts.add(part);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
 
-        // 如果需要上传视频
-        if (videosPaths != null && videosPaths.size() > 0) {
-            for (int i = 0; i < videosPaths.size(); ++ i) {
-                try {
-                    // 首先根据图片路径构造一个file对象
-                    File video = new File(videosPaths.get(i));
-
-                    // 根据这个图片创建一个RequestBody
-                    RequestBody requestBody =
-                            RequestBody.create(MediaType.parse("multipart/form-data"), video);
-
-                    // 根据这个RequestBody创建一个MultipartBody.Part
-                    MultipartBody.Part part = MultipartBody.Part.createFormData("video" + i,
-                            video.getName(), requestBody);
-
-                    videoParts.add(part);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        Call<BaseResponse> call = remoteService.publishMoment(momentModel.getPublisherId(),
-                momentModel.getLatitude(), momentModel.getLongitude(), momentModel.getText(),
-                imageParts, videoParts, momentModel.getPublishTime(), momentModel.getLocation());
+        Map<String, RequestBody> bodyMap = new HashMap<>();
+        bodyMap.put("Uid", toRequestBody(momentModel.getPublisherId()));
+        bodyMap.put("LocY", toRequestBody(String.valueOf(momentModel.getLatitude())));
+        bodyMap.put("LocX", toRequestBody(String.valueOf(momentModel.getLongitude())));
+        bodyMap.put("Text_m", toRequestBody(momentModel.getText()));
+        bodyMap.put("type", toRequestBody(String.valueOf(momentModel.getMediaFileType())));
+        bodyMap.put("Time_m", toRequestBody(String.valueOf(momentModel.getPublishTime())));
+        bodyMap.put("Loc_Des", toRequestBody(String.valueOf(momentModel.getLocation())));
+        Call<BaseResponse> call = remoteService.publishMoment(bodyMap, mediaParts);
         call.enqueue(callback);
     }
 
@@ -220,14 +210,7 @@ public class NetworkHelper {
         call.enqueue(callback);
     }
 
-    /**
-     * 将字符串转换为RequestBody
-     * @param value 字符串
-     * @return RequestBody
-     */
-    private static RequestBody toRequestBody(String value) {
-        return RequestBody.create(MediaType.parse("text/plain"), value);
-    }
+
 
     /**
      * 更新用户信息
