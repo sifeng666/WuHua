@@ -65,6 +65,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     private static final long RIPPLE_DURATION = 250;
     private static final int REQUEST_CODE_CHOOSE = 23;
+    private static final int REQUEST_CODE_PROFILECHANGE = 24;
     private long mExitTime; //退出时的时间
     private User user; //登录的用户
     private boolean isOffline; //离线测试
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.send_lyle)
     ImageView sendLyle;
+    @BindView(R.id.change_profile)
+    ImageView changeProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.commit();
                 tvMenuTitle.setText("个人信息");
                 sendLyle.setVisibility(View.GONE);
+                changeProfile.setVisibility(View.VISIBLE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -163,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.commit();
                 tvMenuTitle.setText("相册");
                 sendLyle.setVisibility(View.GONE);
+                changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -180,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.commit();
                 tvMenuTitle.setText("lyle");
                 sendLyle.setVisibility(View.VISIBLE);
+                changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -197,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.commit();
                 tvMenuTitle.setText("设置");
                 sendLyle.setVisibility(View.GONE);
+                changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -214,6 +221,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.commit();
                 tvMenuTitle.setText("赞赏");
                 sendLyle.setVisibility(View.GONE);
+                changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
                     @Override
                     public void run() {
@@ -240,6 +248,15 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("user_data", user);
                 startActivityForResult(intent, RESULT_CODE_SEND);
                 //finish();
+            }
+        });
+
+        changeProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                intent.putExtra("user_data", user);
+                startActivityForResult(intent, REQUEST_CODE_PROFILECHANGE);
             }
         });
 

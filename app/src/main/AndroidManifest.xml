@@ -43,7 +43,8 @@
         </activity>
 
         <activity android:name=".OnlyDoRegister"></activity>
-        <activity android:name=".SendPageNineImage"/>
+        <activity android:name=".SendPageNineImage"></activity>
+        <activity android:name=".EditProfileActivity"></activity>
 
         <service
             android:name="com.baidu.location.f"

@@ -167,7 +167,7 @@
                         android:id="@+id/my_location_send_page"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="广州1112222ddd222"
+                        android:text="正在获取"
                         android:maxWidth="100dp"
                         android:maxLines="1"
                         android:ellipsize="end"

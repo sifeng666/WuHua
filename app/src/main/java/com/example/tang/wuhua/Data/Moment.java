@@ -48,6 +48,7 @@ public class Moment {
 //        this.likes.add("库里");
 //        this.likes.add("科比");
 //        this.likes.add("奥尼尔");
+
     }
 
     public Moment(MomentCard momentCard) {
@@ -74,5 +75,17 @@ public class Moment {
 
     public ArrayList<String> getLikes() {
         return likes;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

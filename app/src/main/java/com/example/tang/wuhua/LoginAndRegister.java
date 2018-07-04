@@ -62,6 +62,7 @@ public class LoginAndRegister extends AppCompatActivity {
             public void onClick(View v) {
                 userNameLogin = editNameLogin.getText().toString();
                 userPwdLogin = editPwdLogin.getText().toString();
+                //login(userNameLogin, userPwdLogin);
                 userNameLogin = "13919334033";
                 userPwdLogin = "123";
                 Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
@@ -139,7 +140,7 @@ public class LoginAndRegister extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-
+                Toast.makeText(LoginAndRegister.this, "Fail", Toast.LENGTH_SHORT).show();
             }
         });
     }

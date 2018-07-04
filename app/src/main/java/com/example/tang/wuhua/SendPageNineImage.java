@@ -10,14 +10,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.annotation.UiThread;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.example.tang.wuhua.Data.User;
 import com.example.tang.wuhua.model.parameter.MomentModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
 import com.example.tang.wuhua.net.helper.NetworkHelper;
@@ -52,12 +60,22 @@ public class SendPageNineImage extends AppCompatActivity {
     private TextView tvHint;
     private TextView cancel;
     private TextView send;
+    private LocationClient mLocationClient; //位置信息
+    private String location;
+    private double latitude; //经度
+    private double longitude; //纬度
+    private String textContent;
+    private User me;
     @BindView(R.id.img_add_button_in_send_page)
     CircleImageView imgAddButtonInSendPage;
     @BindView(R.id.add_img_layout)
     LinearLayout addImgLayout;
     @BindView(R.id.ngiv_nine_grid)
     NineGridImageView<String> nine_grid;
+    @BindView(R.id.my_location_send_page)
+    TextView tvLocation;
+    @BindView(R.id.edit_input_in_send_page)
+    EditText etText;
 
     private NineGridImageViewAdapter<String> mAdapter1;
 
@@ -80,10 +98,14 @@ public class SendPageNineImage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_page);
         ButterKnife.bind(this);
+        me = (User) getIntent().getSerializableExtra("user_data");
+        mLocationClient = new LocationClient(SendPageNineImage.this);
+        mLocationClient.registerLocationListener(new SendPageNineImage.MyLocationListener());
         tvHint = (TextView) findViewById(R.id.addImg_hint);
         layout = (LinearLayout) findViewById(R.id.send_layout);
         cancel = (TextView) findViewById(R.id.cancel_in_send_page);
         send = (TextView) findViewById(R.id.btn_send_moment);
+        requestLocation();
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +118,8 @@ public class SendPageNineImage extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textContent = etText.getText().toString();
+
                 setResult(RESULT_OK);
                 finish();
             }
@@ -171,6 +195,7 @@ public class SendPageNineImage extends AppCompatActivity {
 
             @Override
             protected ImageView generateImageView(Context context) {
+
                 return super.generateImageView(context);
             }
 
@@ -180,11 +205,13 @@ public class SendPageNineImage extends AppCompatActivity {
                 Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
             }
 
+
+
         };
     }
 
     public void sendMoment(String userId, double latitude, double longitude, String text, List<String> images,
-                           List<String> videos, Date time, String location) {
+                           int videos, Date time, String location) {
         NetworkHelper.publishMoment(new MomentModel(userId, latitude, longitude, text, images, videos, time, location),
                 new Callback<BaseResponse>() {
                     @Override
@@ -208,6 +235,36 @@ public class SendPageNineImage extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void requestLocation() {
+        initLocation();
+        mLocationClient.start();
+    }
+
+    private void initLocation() {
+        LocationClientOption option = new LocationClientOption();
+        option.setIsNeedAddress(true);
+        mLocationClient.setLocOption(option);
+    }
+
+    public class MyLocationListener implements BDLocationListener {
+        @Override
+        public void onReceiveLocation(BDLocation bdLocation) {
+            latitude = bdLocation.getLatitude();
+            longitude = bdLocation.getLongitude();
+            location = bdLocation.getStreet();
+            final String loc = location;
+            //Toast.makeText(getContext(), bdLocation.getStreet(), Toast.LENGTH_SHORT).show();
+            SendPageNineImage.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tvLocation.setText(loc);
+                }
+            });
+            Log.d("location", location);
+            mLocationClient.stop();
+        }
     }
 
     /**
