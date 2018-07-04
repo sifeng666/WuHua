@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
     //RefreshLayout refreshLayout;
 
     @BindView(R.id.send_lyle)
-    Button sendLyle;
+    ImageView sendLyle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this,
                         SendPageNineImage.class);
+                intent.putExtra("user_data", user);
                 startActivityForResult(intent, RESULT_CODE_SEND);
                 //finish();
             }
