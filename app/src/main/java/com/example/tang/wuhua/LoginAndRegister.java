@@ -1,6 +1,8 @@
 package com.example.tang.wuhua;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,8 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -37,6 +41,8 @@ public class LoginAndRegister extends AppCompatActivity {
     private String userPwdLogin;
     private Button btnLogin;
     private Button btnRegister;
+    private CheckBox cbAccount;
+    private CheckBox cbPassword;
     private long mExitTime; //退出时的时间
 
     @Override
@@ -54,14 +60,68 @@ public class LoginAndRegister extends AppCompatActivity {
         imgClearPwdLogin = (ImageView) findViewById(R.id.img_clear_pwd_login);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnRegister = (Button) findViewById(R.id.btn_register_login);
+        cbAccount = (CheckBox) findViewById(R.id.checkbox_name_login);
+        cbPassword = (CheckBox) findViewById(R.id.checkbox_pwd_login);
+
+        SharedPreferences sp = null;
+        sp = getSharedPreferences("userData", MODE_PRIVATE);
+        if (sp.getBoolean("rememberAccount", false)) {
+            cbAccount.setChecked(true);
+            editNameLogin.setText(sp.getString("username", null));
+            if (sp.getBoolean("rememberPassword", false)) {
+                cbPassword.setChecked(true);
+                editPwdLogin.setText(sp.getString("password", null));
+            }
+        }
+
 
         EditTextClearTools.addClearListener(editNameLogin, imgClearNameLogin);
         EditTextClearTools.addClearListener(editPwdLogin, imgClearPwdLogin);
+
+        cbPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    cbAccount.setChecked(true);
+                }
+            }
+        });
+
+        cbAccount.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (!isChecked) {
+                    cbPassword.setChecked(false);
+                }
+            }
+        });
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 userNameLogin = editNameLogin.getText().toString();
                 userPwdLogin = editPwdLogin.getText().toString();
+                SharedPreferences.Editor editor = getSharedPreferences("userData", MODE_PRIVATE).edit();
+                if (cbAccount.isChecked()) {
+                    editor.putString("username", userNameLogin);
+                    editor.putString("password", userPwdLogin);
+                    editor.putBoolean("rememberAccount", true);
+                    if (cbPassword.isChecked()) {
+                        editor.putBoolean("rememberPassword", true);
+                    }
+                    else {
+                        editor.putBoolean("rememberPassword", false);
+                        editor.putString("password", null);
+                    }
+                    editor.apply();
+                }
+                else {
+                    editor.putString("username", null);
+                    editor.putString("password", null);
+                    editor.putBoolean("rememberAccount", false);
+                    editor.putBoolean("rememberPassword", false);
+                    editor.apply();
+                }
                 //login(userNameLogin, userPwdLogin);
                 userNameLogin = "13919334033";
                 userPwdLogin = "123";
