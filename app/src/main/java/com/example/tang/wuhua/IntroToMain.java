@@ -14,7 +14,7 @@ import android.widget.Button;
  */
 
 public class IntroToMain extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGHT = 2000;//delay second
+    private final int SPLASH_DISPLAY_LENGHT = 5000;//delay second
     private Button mSkip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
