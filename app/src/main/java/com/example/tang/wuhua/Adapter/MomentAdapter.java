@@ -17,6 +17,7 @@ import com.example.tang.wuhua.MainActivity;
 import com.example.tang.wuhua.R;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -57,6 +58,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         public TextView tvShowAndPack; //显示全文
         public LikeButton lbLike; //点赞按钮
         public TextView tvLikePeople; //点赞的用户名
+        public ImageView ivPortrait; //头像
+        public TextView tvLocation; //位置
+        public TextView tvPublishTime; //时间
         public boolean isLike;
         public PopupWindow popupWindow;
 
@@ -70,6 +74,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             lbLike = (LikeButton) view.findViewById(R.id.img_heart);
             tvLikePeople = (TextView) view.findViewById(R.id.text_all_like_people);
             tvShowAndPack = (TextView) view.findViewById(R.id.text_show_and_pack);
+            ivPortrait = (ImageView) view.findViewById(R.id.img_portrait);
+            tvLocation = (TextView) view.findViewById(R.id.text_location);
+
             isLike = false;
         }
     }
@@ -91,7 +98,14 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         Moment moment = mMomentList.get(position);
 
         //设置发布者的名字
-        holder.tvUsername.setText(moment.getOwner().getUsername());
+        holder.tvUsername.setText(moment.getOwner().getNickname());
+
+        Picasso.with(context)
+                .load(moment.getOwner().getPortrait())
+                .into(holder.ivPortrait);
+
+        holder.tvLocation.setText(moment.getLocation());
+        holder.tvPublishTime.setText(moment.getPublishTime().toString());
 
         //设置文字内容，如果文字长度大于108个字，那么只显示部分内容，并显示全文按钮
         String momentContent = moment.getContent();

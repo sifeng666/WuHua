@@ -4,6 +4,7 @@ import com.example.tang.wuhua.model.response.card.MomentCard;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by root on 18-6-30.
@@ -24,6 +25,7 @@ public class Moment {
     private String image5;
     private String image6;
     private String image7;
+    private List<String> images;
 
     private Date publishTime;
     private boolean isLike;
@@ -57,6 +59,12 @@ public class Moment {
         this.content = momentCard.getText();
         this.location = momentCard.getLocation();
         this.publishTime = momentCard.getPublishTime();
+        this.images = momentCard.getImagesUrisList();
+        this.isLike = false;
+        this.comments = new ArrayList<>();
+        this.likes = new ArrayList<>();
+        this.owner = new User("Ben");
+        this.location = momentCard.getLocation();
     }
 
 
@@ -87,5 +95,13 @@ public class Moment {
 
     public String getUserId() {
         return userId;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Date getPublishTime() {
+        return publishTime;
     }
 }

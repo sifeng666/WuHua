@@ -30,6 +30,7 @@ import com.baidu.location.LocationClientOption;
 import com.example.tang.wuhua.Data.User;
 import com.example.tang.wuhua.model.parameter.MomentModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
+import com.example.tang.wuhua.net.Network;
 import com.example.tang.wuhua.net.helper.NetworkHelper;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -82,6 +83,7 @@ public class SendPageNineImage extends AppCompatActivity {
     private NineGridImageViewAdapter<String> mAdapter1;
 
     private List<String> urls_list = new ArrayList<>();
+    private List<String> urls_list_send = new ArrayList<>();
     private String[] IMG_URL_LIST = {
             "http://pic9.nipic.com/20100814/2889649_133155087075_2.jpg",
             "http://img5.imgtn.bdimg.com/it/u=3173289370,1988370443&fm=27&gp=0.jpg",
@@ -124,9 +126,12 @@ public class SendPageNineImage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 textContent = etText.getText().toString();
-
-                setResult(RESULT_OK);
-                finish();
+                Log.d("latitude", Double.toString(latitude));
+                Log.d("longitude", Double.toString(longitude));
+                Log.d("publishTime", new Date().toString());
+                sendMoment(me.getId(), latitude, longitude, textContent, urls_list_send, MomentModel.MEDIA_TYPE_IMG, new Date(), location);
+//                setResult(RESULT_OK);
+//                finish();
             }
         });
 
@@ -157,6 +162,7 @@ public class SendPageNineImage extends AppCompatActivity {
             for (int i = 0; i < result.size(); i++) {
                 Log.d("img", result.get(i).toString());
                 urls_list.add("file://" + getRealPathFromUri(getApplicationContext(),  result.get(i)));
+                urls_list_send.add(getRealPathFromUri(getApplicationContext(),  result.get(i)));
             }
             layout.removeView(nine_grid);
             nine_grid = new NineGridImageView<String>(this);
@@ -222,8 +228,10 @@ public class SendPageNineImage extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                         if (response.isSuccessful()) {
+                            Log.d("sendResponse", response.toString());
                             if (response.body().success()) {
                                 setResult(RESULT_OK);
+                                Log.d("send", "ok");
                                 finish();
                             }
                             else {
@@ -237,7 +245,8 @@ public class SendPageNineImage extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
-
+                        Toast.makeText(SendPageNineImage.this, "网络失败，请重试", Toast.LENGTH_SHORT).show();
+                        t.printStackTrace();
                     }
                 });
     }

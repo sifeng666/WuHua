@@ -7,9 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tang.wuhua.Data.User;
+import com.squareup.picasso.Picasso;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by root on 18-6-30.
@@ -20,6 +24,8 @@ public class ProfileFragment extends Fragment {
     private User user;
     private TextView tvNickName;
     private TextView tvPhone;
+    private TextView tvSignature;
+    private CircleImageView ivPortrait;
 
     @Nullable
     @Override
@@ -29,8 +35,14 @@ public class ProfileFragment extends Fragment {
         if (user != null) {
             tvNickName = (TextView) v.findViewById(R.id.text_usr_name_profile);
             tvPhone = (TextView) v.findViewById(R.id.text_phone_profile);
+            tvSignature = (TextView) v.findViewById(R.id.text_signature_profile);
+            ivPortrait = (CircleImageView) v.findViewById(R.id.img_head_portrait_profile);
             tvNickName.setText(user.getNickname());
             tvPhone.setText(user.getUsername());
+            tvSignature.setText(user.getSignature());
+            Picasso.with(getContext())
+                    .load(Constant.Value.BASE_URL + user.getPortrait())
+                    .into(ivPortrait);
         }
         return v;
     }

@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private User user; //登录的用户
     private boolean isOffline; //离线测试
     final private int RESULT_CODE_SEND = 10;
+    private TextView tvMenuTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.root)
@@ -96,9 +97,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        if (user == null) {
-            user = (User) getIntent().getSerializableExtra("user_data");
-        }
+        //if (user == null) {
+        user = (User) getIntent().getSerializableExtra("user_data");
+        //}
+        //Log.d("user", user.getUsername());
         isOffline = getIntent().getBooleanExtra("offline", true);
 
         //申请权限
@@ -136,8 +138,8 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout llLyle = (LinearLayout) guillotineMenu.findViewById(R.id.lyle_group);
         LinearLayout llSettings = (LinearLayout) guillotineMenu.findViewById(R.id.settings_group);
         LinearLayout llSupport = (LinearLayout) guillotineMenu.findViewById(R.id.support_group);
-        final TextView tvMenuTitle = (TextView) findViewById(R.id.menu_title);
         final ImageView ivSwitchMenu = (ImageView) guillotineMenu.findViewById(R.id.guillotine_hamburger);
+        tvMenuTitle = (TextView) findViewById(R.id.menu_title);
         FragmentManager menuManager = getSupportFragmentManager();
         FragmentTransaction menuTransaction = menuManager.beginTransaction();
         menuTransaction.replace(R.id.main_frame, new MomentFragment());
@@ -319,10 +321,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public User getUser() {
-        if (isOffline) {
-            return null;
-        }
+//        if (isOffline) {
+//            return null;
+//        }
         return user;
+    }
+
+    public TextView getTvMenuTitle() {
+        return tvMenuTitle;
     }
 }
 

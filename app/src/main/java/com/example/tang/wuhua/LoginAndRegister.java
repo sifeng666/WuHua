@@ -126,14 +126,14 @@ public class LoginAndRegister extends AppCompatActivity {
                     editor.putBoolean("rememberPassword", false);
                     editor.apply();
                 }
-                //login(userNameLogin, userPwdLogin);
-                userNameLogin = "13919334033";
-                userPwdLogin = "123";
-                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
-                );
-                intent.putExtra("offline", true);
-                startActivity(intent);
+                login(userNameLogin, userPwdLogin);
+//                userNameLogin = "13919334033";
+//                userPwdLogin = "123";
+//                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
+//                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
+//                );
+//                intent.putExtra("offline", true);
+//                startActivity(intent);
             }
         });
 
@@ -185,6 +185,7 @@ public class LoginAndRegister extends AppCompatActivity {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful()) {
                     UserResponse result = response.body();
+                    Log.d("response", result.toString());
                     if (result.success()) {
                         User user = new User(result);
                         Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(

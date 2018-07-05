@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -87,15 +88,16 @@ public class MomentFragment extends Fragment {
         mLocationClient.registerLocationListener(new MomentFragment.MyLocationListener());
         me = ((MainActivity) getActivity()).getUser();
         //ButterKnife.bind(v);
-
+        momentList = new ArrayList<>();
         requestLocation();
-
-        initData();
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+                requestMoments(latitude, longitude, true, new Date());
+                //initData();
+                //momentAdapter.notifyDataSetChanged();
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -105,6 +107,15 @@ public class MomentFragment extends Fragment {
             }
         });
 
+        refreshLayout.autoRefresh();
+
+        ((MainActivity) getActivity()).getTvMenuTitle().setOnTouchListener(new OnDoubleClickListener(new OnDoubleClickListener.DoubleClickCallback() {
+            @Override
+            public void onDoubleClick() {
+                mainRecyclerview.scrollToPosition(0);
+                refreshLayout.autoRefresh();
+            }
+        }));
 
         final LinearLayoutManager mainLayoutManager = new LinearLayoutManager(getContext());
         mainRecyclerview.setLayoutManager(mainLayoutManager);
@@ -179,10 +190,10 @@ public class MomentFragment extends Fragment {
                             }
                             Comment comment;
                             if (personView.getId() == R.id.img_comment) {
-                                comment = new Comment(momentList.get(position).getOwner().getUsername(), content);
+                                comment = new Comment(me.getUsername(), content);
                             }
                             else {
-                                comment = new Comment(momentList.get(position).getOwner().getUsername(), ((TextView) personView).getText().toString(), content);
+                                comment = new Comment(me.getUsername(), ((TextView) personView).getText().toString(), content);
                             }
                             momentList.get(position).getComments().add(comment);
                             momentAdapter.notifyDataSetChanged();
@@ -193,7 +204,7 @@ public class MomentFragment extends Fragment {
 
                 } else if (viewName == MomentAdapter.ViewName.LIKE) {
                     StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
-                    String myUsername = momentList.get(position).getOwner().getUsername();
+                    String myUsername = me.getUsername();
                     if (!momentList.get(position).isLike()) {
                         momentList.get(position).getLikes().add(myUsername);
                         momentList.get(position).setLike(true);
@@ -244,7 +255,7 @@ public class MomentFragment extends Fragment {
 
 
     public void initData() {
-        momentList = new ArrayList<>();
+        //momentList = new ArrayList<>();
         userList = new ArrayList<>();
         String [] users = new String[] {
                 "梅西", "C罗", "詹姆斯", "库里"
@@ -270,16 +281,17 @@ public class MomentFragment extends Fragment {
             public void onResponse(Call<MomentResponse> call, Response<MomentResponse> response) {
                 if (response.isSuccessful()) {
                     MomentResponse result = response.body();
+                    Log.d("momentResponse", result.toString());
                     if (result.success()) {
                         List<MomentCard> momentCardList = result.getMomentCards();
-                        if (!isMovingUp) {
+                        if (isMovingUp) {
                             momentList.clear();
                         }
                         for (int i = 0; i < momentCardList.size(); i++) {
                             momentList.add(new Moment(momentCardList.get(i)));
                             getUserInfo(momentList.get(i).getUserId(), i);
-                            getComments(momentList.get(i).getId(), i);
-                            getLikes(momentList.get(i).getId(), i);
+                            //getComments(momentList.get(i).getId(), i);
+                            //getLikes(momentList.get(i).getId(), i);
                         }
                         momentAdapter.notifyDataSetChanged();
                     }
@@ -339,6 +351,7 @@ public class MomentFragment extends Fragment {
                             momentList.get(position).getLikes().add(name);
                         }
                         momentAdapter.notifyDataSetChanged();
+
                     }
                 }
             }
@@ -411,18 +424,23 @@ public class MomentFragment extends Fragment {
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 if (response.isSuccessful()) {
                     UserResponse result = response.body();
-                    if (position == -1) {
-                        me = new User(result);
+                    Log.d("userInfo", result.toString());
+                    if (result.success()) {
+                        if (position == -1) {
+                            me = new User(result);
+                        } else {
+                            momentList.get(position).setOwner(new User(result));
+                        }
+                        momentAdapter.notifyDataSetChanged();
                     }
-                    else {
-                        momentList.get(position).setOwner(new User(result));
-                    }
+                    Log.d("momentList", momentList.get(position).getOwner().getUsername());
                 }
             }
 
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t) {
-
+                t.printStackTrace();
+                Log.d("userInfo", "fail");
             }
         });
     }
