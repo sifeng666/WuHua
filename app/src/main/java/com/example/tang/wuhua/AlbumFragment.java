@@ -28,7 +28,7 @@ public class AlbumFragment extends Fragment {
     }
 
     void getAlbum(String userid) {
-        NetworkHelper.getAllCommentsByUserId(userid, new Callback<MomentResponse>() {
+        NetworkHelper.getAllMomentsByUserId(userid, new Callback<MomentResponse>() {
             @Override
             public void onResponse(Call<MomentResponse> call, Response<MomentResponse> response) {
 

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +40,9 @@ public class OnlyDoRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(R.color.logoScreenBackground));
         setContentView(R.layout.activity_register);
         init();
     }
@@ -65,6 +69,7 @@ public class OnlyDoRegister extends AppCompatActivity {
                     Toast.makeText(OnlyDoRegister.this, "密码不一致", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //register(username, password);
                     Intent intent = new Intent();
                     intent.putExtra("username", editNameRegister.getText().toString());
                     setResult(RESULT_OK, intent);

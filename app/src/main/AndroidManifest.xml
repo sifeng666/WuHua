@@ -35,13 +35,20 @@
         </activity>
 
         <activity android:name=".LoginAndRegister">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity android:name=".IntroToMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".OnlyDoRegister"></activity>
         <activity android:name=".SendPageNineImage"></activity>
         <activity android:name=".EditProfileActivity"></activity>

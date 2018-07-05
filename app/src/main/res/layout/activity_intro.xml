@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.tang.wuhua.IntroToMain"
-    android:background="@drawable/intro_pic">
+    android:background="@drawable/intro_background">
 <Button
     android:id="@+id/buttonSkip"
     android:layout_width="wrap_content"

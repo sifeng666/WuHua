@@ -20,6 +20,8 @@ public class IntroToMain extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         setContentView(R.layout.activity_intro);
         mSkip = (Button)findViewById(R.id.buttonSkip);
         final Runnable myRun = new Runnable() {
@@ -40,7 +42,7 @@ public class IntroToMain extends AppCompatActivity {
                 //移除handler延迟加载里面的线程，就不会存在执行两次的情况
                 handler.removeCallbacks(myRun);
                 Intent intent = new Intent(IntroToMain.this,
-                        MainActivity.class);
+                        LoginAndRegister.class);
                 startActivity(intent);
                 finish();
             }

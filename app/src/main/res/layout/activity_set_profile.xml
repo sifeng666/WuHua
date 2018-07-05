@@ -24,6 +24,7 @@
             app:cardCornerRadius="3dp"
             app:cardElevation="0dp">
         <TextView
+            android:id="@+id/cancel_in_profile_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="返回"
@@ -56,6 +57,7 @@
             app:cardCornerRadius="3dp"
             app:cardElevation="0dp">
         <TextView
+            android:id="@+id/edit_in_profile_page"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="修改"
@@ -175,6 +177,7 @@
             android:textSize="14sp"
             android:textColor="#26292e"
             android:background="@null"
+            android:editable="false"
             />
 
     </LinearLayout>
@@ -272,7 +275,7 @@
             android:textColor="#26292e" />
 
         <EditText
-            android:id="@+id/text_location_profile"
+            android:id="@+id/edit_signatrue_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Messi is a super football player."
