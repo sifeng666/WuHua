@@ -90,7 +90,7 @@ public interface RemoteService {
      * @return 一个list 如果时间为空返回10条最新的消息(少于10条则返回全部);
      * 不为空返回直到lastMomentTime最新的10条（同上）
      */
-    @POST("RefreshMoments")
+    @POST("GetNewMoment")
     Call<MomentResponse> refreshMoments(@Body RefreshModel refreshModel);
 
     /**
@@ -100,7 +100,7 @@ public interface RemoteService {
      * @param momentIdModel moment的id的model
      * @return 一个list 包含该条朋友圈下面的所有评论
      */
-    @POST("GetComments")
+    @POST("GetComment")
     Call<CommentResponse> getComments(@Body MomentIdModel momentIdModel);
 
     /**
@@ -123,7 +123,7 @@ public interface RemoteService {
      * @return 发送是否成功
      */
     @Multipart
-    @POST("PublishMoment")
+    @POST("DoMoment")
     Call<BaseResponse> publishMoment(@PartMap Map<String, RequestBody> map,
                                      @Part List<MultipartBody.Part> mediaParts);
 
@@ -134,7 +134,7 @@ public interface RemoteService {
      * @param commentModel 包含评论的必要信息
      * @return BaseResponse仅包含状态信息
      */
-    @POST("PublishComment")
+    @POST("DoComment")
     Call<BaseResponse> publishComment(@Body CommentModel commentModel);
 
 
@@ -155,7 +155,7 @@ public interface RemoteService {
      * @param likeCancelModel 取消点赞的model
      * @return BaseResponse仅包含状态信息
      */
-    @POST("LikeCancel")
+    @POST("UndoLike")
     Call<BaseResponse> likeCancel(@Body LikeCancelModel likeCancelModel);
 
 
@@ -178,7 +178,7 @@ public interface RemoteService {
      * @param userIdModel 某个用户的id
      * @return 该用户的所有信息
      */
-    @POST("/")
+    @POST("GetUserInfo")
     Call<UserResponse> getUserInfo(@Body UserIdModel userIdModel);
 
     /**
@@ -188,7 +188,7 @@ public interface RemoteService {
      * @param userIdModel 某个用户的id
      * @return 一个list 里面包含了该用户的所有的moment
      */
-    @POST("/")
+    @POST("GetUserMoment")
     Call<MomentResponse> getUserAllMoments(@Body UserIdModel userIdModel);
 
 }
