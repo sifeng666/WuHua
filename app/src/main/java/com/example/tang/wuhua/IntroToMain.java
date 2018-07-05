@@ -28,7 +28,7 @@ public class IntroToMain extends AppCompatActivity {
             @Override
             public void run() {
                 // TODO Auto-generated method stub
-                Intent intent = new Intent(IntroToMain.this, MainActivity.class);
+                Intent intent = new Intent(IntroToMain.this, LoginAndRegister.class);
                 startActivity(intent);
                 finish();
             }
