@@ -41,6 +41,9 @@ public class User implements Serializable {
     }
 
     public String getPortrait() {
+        if (portrait == "") {
+            return null;
+        }
         return portrait;
     }
 

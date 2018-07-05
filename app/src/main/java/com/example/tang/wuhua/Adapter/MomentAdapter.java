@@ -76,7 +76,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             tvShowAndPack = (TextView) view.findViewById(R.id.text_show_and_pack);
             ivPortrait = (ImageView) view.findViewById(R.id.img_portrait);
             tvLocation = (TextView) view.findViewById(R.id.text_location);
-
+            tvPublishTime = (TextView) view.findViewById(R.id.text_time);
             isLike = false;
         }
     }
@@ -105,7 +105,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 .into(holder.ivPortrait);
 
         holder.tvLocation.setText(moment.getLocation());
-        holder.tvPublishTime.setText(moment.getPublishTime().toString());
+        if (moment.getPublishTime() != null) {
+            holder.tvPublishTime.setText(moment.getPublishTime().toString());
+        }
 
         //设置文字内容，如果文字长度大于108个字，那么只显示部分内容，并显示全文按钮
         String momentContent = moment.getContent();
