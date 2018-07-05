@@ -19,6 +19,8 @@ import com.example.tang.wuhua.net.Network;
 import com.example.tang.wuhua.net.service.RemoteService;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -180,7 +182,12 @@ public class NetworkHelper {
         bodyMap.put("LocX", toRequestBody(String.valueOf(momentModel.getLongitude())));
         bodyMap.put("Text_m", toRequestBody(momentModel.getText()));
         bodyMap.put("type", toRequestBody(String.valueOf(momentModel.getMediaFileType())));
-        bodyMap.put("Time_m", toRequestBody(String.valueOf(momentModel.getPublishTime())));
+
+        // 将日期格式转化为字符串
+        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String publishTimeString = simpleDateFormat.format(momentModel.getPublishTime());
+        bodyMap.put("Time_m", toRequestBody(publishTimeString));
+
         bodyMap.put("Loc_Des", toRequestBody(String.valueOf(momentModel.getLocation())));
         Call<BaseResponse> call = remoteService.publishMoment(bodyMap, mediaParts);
         call.enqueue(callback);

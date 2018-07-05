@@ -1,5 +1,7 @@
 package com.example.tang.wuhua.model.parameter;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Date;
 
 /**
@@ -8,12 +10,15 @@ import java.util.Date;
 
 public class RefreshModel {
     // 纬度
+    @SerializedName("LocY")
     private double latitude;
 
     // 经度
+    @SerializedName("LocX")
     private double longitude;
 
     // 最后一条朋友圈发布的时间
+    @SerializedName("Time_m")
     private Date lastMomentTime;
 
     public RefreshModel(double latitude, double longitude, Date lastMomentTime) {

@@ -2,6 +2,7 @@ package com.example.tang.wuhua.model.response.card;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,13 +33,37 @@ public class MomentCard {
     @SerializedName("Text_m")
     private String text;
 
-    // 图片
-    @SerializedName("Image")
-    private List<String> imagesUris;
+    // 图片一家
+    @SerializedName("Image1")
+    private String imageUri1;
+
+    @SerializedName("Image2")
+    private String imageUri2;
+
+    @SerializedName("Image3")
+    private String imageUri3;
+
+    @SerializedName("Image4")
+    private String imageUri4;
+
+    @SerializedName("Image5")
+    private String imageUri5;
+
+    @SerializedName("Image6")
+    private String imageUri6;
+
+    @SerializedName("Image7")
+    private String imageUri7;
+
+    @SerializedName("Image8")
+    private String imageUri8;
+
+    @SerializedName("Image9")
+    private String imageUri9;
 
     // 视频
     @SerializedName("Video")
-    private List<String> videosUris;
+    private String videoUri;
 
     // 发布时间
     @SerializedName("Time_m")
@@ -88,20 +113,12 @@ public class MomentCard {
         this.text = text;
     }
 
-    public List<String> getImagesUris() {
-        return imagesUris;
+    public String getVideoUri() {
+        return videoUri;
     }
 
-    public void setImagesUris(List<String> imagesUris) {
-        this.imagesUris = imagesUris;
-    }
-
-    public List<String> getVideosUris() {
-        return videosUris;
-    }
-
-    public void setVideosUris(List<String> videosUris) {
-        this.videosUris = videosUris;
+    public void setVideoUri(String videoUri) {
+        this.videoUri = videoUri;
     }
 
     public Date getPublishTime() {
@@ -120,6 +137,34 @@ public class MomentCard {
         this.location = location;
     }
 
+    public void setImagesUrisList(List<String> imagesUris) {
+        if (imagesUris != null && imagesUris.size() > 0 && imagesUris.size() <= 9) {
+            imageUri1 = imagesUris.get(0);
+            imageUri2 = imagesUris.get(1);
+            imageUri3 = imagesUris.get(2);
+            imageUri4 = imagesUris.get(3);
+            imageUri5 = imagesUris.get(4);
+            imageUri6 = imagesUris.get(5);
+            imageUri7 = imagesUris.get(6);
+            imageUri8 = imagesUris.get(7);
+            imageUri9 = imagesUris.get(8);
+        }
+    }
+
+    public List<String> getImagesUrisList() {
+        List<String> list = new ArrayList<>();
+        list.add(imageUri1);
+        list.add(imageUri2);
+        list.add(imageUri3);
+        list.add(imageUri4);
+        list.add(imageUri5);
+        list.add(imageUri6);
+        list.add(imageUri7);
+        list.add(imageUri8);
+        list.add(imageUri9);
+        return list;
+    }
+
     @Override
     public String toString() {
         return "MomentCard{" +
@@ -128,8 +173,16 @@ public class MomentCard {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", text='" + text + '\'' +
-                ", imagesUris=" + imagesUris +
-                ", videosUris=" + videosUris +
+                ", imageUri1='" + imageUri1 + '\'' +
+                ", imageUri2='" + imageUri2 + '\'' +
+                ", imageUri3='" + imageUri3 + '\'' +
+                ", imageUri4='" + imageUri4 + '\'' +
+                ", imageUri5='" + imageUri5 + '\'' +
+                ", imageUri6='" + imageUri6 + '\'' +
+                ", imageUri7='" + imageUri7 + '\'' +
+                ", imageUri8='" + imageUri8 + '\'' +
+                ", imageUri9='" + imageUri9 + '\'' +
+                ", videoUri='" + videoUri + '\'' +
                 ", publishTime=" + publishTime +
                 ", location='" + location + '\'' +
                 '}';
