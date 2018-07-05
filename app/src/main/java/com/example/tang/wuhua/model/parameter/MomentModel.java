@@ -2,6 +2,7 @@ package com.example.tang.wuhua.model.parameter;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -133,4 +134,8 @@ public class MomentModel {
     public void setLocation(String location) {
         this.location = location;
     }
+
+//    public long contentLength() throws IOException {
+//        return 0;
+//    }
 }

@@ -1,6 +1,7 @@
 package com.example.tang.wuhua.model.response;
 
 import com.example.tang.wuhua.model.response.card.MomentCard;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class MomentResponse {
 
     private int state;
 
+    @SerializedName("list")
     private List<MomentCard> momentCards;
 
     public boolean success(){
