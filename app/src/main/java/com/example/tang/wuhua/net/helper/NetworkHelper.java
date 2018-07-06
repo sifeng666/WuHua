@@ -1,5 +1,7 @@
 package com.example.tang.wuhua.net.helper;
 
+import android.util.Log;
+
 import com.example.tang.wuhua.model.parameter.CommentModel;
 import com.example.tang.wuhua.model.parameter.InfoUpdateModel;
 import com.example.tang.wuhua.model.parameter.LikeCancelModel;
@@ -104,6 +106,11 @@ public class NetworkHelper {
             long oneDay = 24 * 60 * 60 * 1000;
             paramDate = new Date(System.currentTimeMillis() + oneDay);
         }
+        else {
+            paramDate = new Date(lastMomentTime.getTime() - 1000);
+        }
+
+
         Call<MomentResponse> call =
                 remoteService.refreshMoments(new RefreshModel(latitude, longitude, paramDate));
         call.enqueue(callback);
@@ -186,6 +193,7 @@ public class NetworkHelper {
         // 将日期格式转化为字符串
         DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String publishTimeString = simpleDateFormat.format(momentModel.getPublishTime());
+        Log.d("time", publishTimeString);
         bodyMap.put("Time_m", toRequestBody(publishTimeString));
 
         bodyMap.put("Loc_Des", toRequestBody(String.valueOf(momentModel.getLocation())));
