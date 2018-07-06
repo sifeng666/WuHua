@@ -263,6 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
                 intent.putExtra("user_data", user);
                 startActivityForResult(intent, REQUEST_CODE_PROFILECHANGE);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
 

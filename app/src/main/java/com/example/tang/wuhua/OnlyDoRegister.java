@@ -69,11 +69,12 @@ public class OnlyDoRegister extends AppCompatActivity {
                     Toast.makeText(OnlyDoRegister.this, "密码不一致", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    register(username, password);
-//                    Intent intent = new Intent();
-//                    intent.putExtra("username", editNameRegister.getText().toString());
-//                    setResult(RESULT_OK, intent);
-//                    finish();
+//                    register(username, password);
+                    Intent intent = new Intent();
+                    intent.putExtra("username", editNameRegister.getText().toString());
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                 }
             }
         });

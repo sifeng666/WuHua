@@ -126,14 +126,15 @@ public class LoginAndRegister extends AppCompatActivity {
                     editor.putBoolean("rememberPassword", false);
                     editor.apply();
                 }
-                login(userNameLogin, userPwdLogin);
-//                userNameLogin = "13919334033";
-//                userPwdLogin = "123";
-//                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
-//                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
-//                );
-//                intent.putExtra("offline", true);
-//                startActivity(intent);
+//                login(userNameLogin, userPwdLogin);
+                userNameLogin = "13919334033";
+                userPwdLogin = "123";
+                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
+                );
+                intent.putExtra("offline", true);
+                startActivity(intent);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
 
@@ -142,6 +143,7 @@ public class LoginAndRegister extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginAndRegister.this, OnlyDoRegister.class);
                 startActivityForResult(intent, 1);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
     }

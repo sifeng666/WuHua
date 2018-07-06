@@ -7,9 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by root on 18-6-30.
@@ -17,9 +20,21 @@ import org.w3c.dom.Text;
 
 public class SettingFragment extends Fragment {
 
+
     TextView tvSwitchAccount;
     TextView tvLogout;
     TextView tvExit;
+    @BindView(R.id.layout_profile_settings)
+    LinearLayout layoutProfileSettings;
+    @BindView(R.id.layout_remind_settings)
+    LinearLayout layoutRemindSettings;
+    @BindView(R.id.layout_privacy_settings)
+    LinearLayout layoutPrivacySettings;
+    @BindView(R.id.layout_help_settings)
+    LinearLayout layoutHelpSettings;
+    @BindView(R.id.layout_about_settings)
+    LinearLayout layoutAboutSettings;
+    Unbinder unbinder;
 
     @Nullable
     @Override
@@ -31,10 +46,20 @@ public class SettingFragment extends Fragment {
 
         bindListener();
 
+        unbinder = ButterKnife.bind(this, v);
         return v;
     }
 
     private void bindListener() {
+        layoutProfileSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), ProfileFragment.class);
+            }
+        });
+
+
+
         tvSwitchAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,5 +87,11 @@ public class SettingFragment extends Fragment {
                 System.exit(0);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
