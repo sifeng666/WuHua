@@ -104,4 +104,8 @@ public class Moment {
     public Date getPublishTime() {
         return publishTime;
     }
+
+    public List<String> getImages() {
+        return images;
+    }
 }
