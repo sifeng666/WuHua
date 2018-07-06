@@ -65,16 +65,24 @@ public class OnlyDoRegister extends AppCompatActivity {
                 username = editNameRegister.getText().toString();
                 password = editPwdRegister.getText().toString();
                 passwordConfirm = editPhoneRegister.getText().toString();
+                if (username.length() == 0) {
+                    Toast.makeText(OnlyDoRegister.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (password.length() == 0) {
+                    Toast.makeText(OnlyDoRegister.this, "密码不能为空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!password.equals(passwordConfirm)) {
                     Toast.makeText(OnlyDoRegister.this, "密码不一致", Toast.LENGTH_SHORT).show();
                 }
                 else {
-//                    register(username, password);
-                    Intent intent = new Intent();
-                    intent.putExtra("username", editNameRegister.getText().toString());
-                    setResult(RESULT_OK, intent);
-                    finish();
-                    overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+                    register(username, password);
+//                    Intent intent = new Intent();
+//                    intent.putExtra("username", editNameRegister.getText().toString());
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                    overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                 }
             }
         });
@@ -91,6 +99,7 @@ public class OnlyDoRegister extends AppCompatActivity {
                         intent.putExtra("username", username);
                         setResult(RESULT_OK, intent);
                         finish();
+                        overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                     }
                 }
             }

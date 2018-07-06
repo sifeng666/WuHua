@@ -18,6 +18,8 @@ public class User implements Serializable {
 
     public User(String username) {
         this.username = username;
+        this.nickname = "";
+        this.signature = "";
     }
 
     public User(UserResponse userResponse) {

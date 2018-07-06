@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.example.tang.wuhua.Data.Moment;
 import com.example.tang.wuhua.R;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -24,13 +26,15 @@ public class SimpleMomentAdapter extends RecyclerView.Adapter<SimpleMomentAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvDate;
+        private TextView tvDateDay;
+        private TextView tvDateMonth;
         private TextView tvContent;
         private ImageView ivImg;
 
         public ViewHolder(View view) {
             super(view);
-
+            tvDateDay = view.findViewById(R.id.timeDay);
+            tvDateMonth = view.findViewById(R.id.timeMonth);
         }
     }
 

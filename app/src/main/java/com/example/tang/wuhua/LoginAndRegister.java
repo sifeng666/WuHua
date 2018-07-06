@@ -126,15 +126,15 @@ public class LoginAndRegister extends AppCompatActivity {
                     editor.putBoolean("rememberPassword", false);
                     editor.apply();
                 }
-//                login(userNameLogin, userPwdLogin);
-                userNameLogin = "13919334033";
-                userPwdLogin = "123";
-                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
-                );
-                intent.putExtra("offline", true);
-                startActivity(intent);
-                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+                login(userNameLogin, userPwdLogin);
+//                userNameLogin = "13919334033";
+//                userPwdLogin = "123";
+//                Intent intent = new Intent(LoginAndRegister.this, MainActivity.class).setFlags(
+//                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK
+//                );
+//                intent.putExtra("offline", true);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
             }
         });
 
@@ -175,6 +175,9 @@ public class LoginAndRegister extends AppCompatActivity {
                     String username = data.getStringExtra("username");
                     editNameLogin.setText(username);
                     editPwdLogin.requestFocus();
+                    editPwdLogin.setText("");
+                    cbAccount.setChecked(false);
+                    cbPassword.setChecked(false);
                 }
                 break;
             default:
@@ -195,6 +198,7 @@ public class LoginAndRegister extends AppCompatActivity {
                         );
                         intent.putExtra("user_data", user);
                         startActivity(intent);
+                        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                     }
                     else {
                         Toast.makeText(LoginAndRegister.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();

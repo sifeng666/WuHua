@@ -75,4 +75,12 @@ public class Comment {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public String getSenderId() {
+        return senderId;
+    }
+
+    public String getReceiverId() {
+        return receiverId;
+    }
 }

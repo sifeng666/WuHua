@@ -90,12 +90,12 @@ public class MomentFragment extends Fragment {
         me = ((MainActivity) getActivity()).getUser();
         //ButterKnife.bind(v);
         momentList = new ArrayList<>();
-        requestLocation();
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
+                requestLocation();
                 requestMoments(latitude, longitude, true, new Date());
                 //initData();
                 //momentAdapter.notifyDataSetChanged();
@@ -105,6 +105,10 @@ public class MomentFragment extends Fragment {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
+                requestLocation();
+                Date lastTime = momentList.get(momentList.size()-1).getPublishTime();
+                Log.d("lastTime", lastTime.toString());
+                requestMoments(latitude, longitude, false, lastTime);
             }
         });
 
@@ -130,8 +134,16 @@ public class MomentFragment extends Fragment {
                     Toast.makeText(getContext(), tv.getText(), Toast.LENGTH_SHORT).show();
                 } else if (viewName == MomentAdapter.ViewName.COMMENT) {
                     //mainLayoutManager.setStackFromEnd(true); // 使输入框弹出时内容上移
-                    //弹出输入框
 
+                    //如果点击的用户名是自己的话，提示并返回
+                    if (view.getId() != R.id.img_comment) {
+                        if (me.getNickname() == ((TextView) view).getText().toString()) {
+                            Toast.makeText(getContext(), "不能回复自己", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    //弹出输入框
                     mainLayoutManager.scrollToPositionWithOffset(position, 0); // 使输入框弹出时内容上移
                     //Log.d("position", Integer.toString(position));
 
@@ -190,14 +202,34 @@ public class MomentFragment extends Fragment {
                                 return;
                             }
                             Comment comment;
+                            String desId = "";
+
+                            //点击的是评论按钮
                             if (personView.getId() == R.id.img_comment) {
                                 comment = new Comment(me.getUsername(), content);
+                                //desId = null;
                             }
+                            //点击的是用户昵称
                             else {
                                 comment = new Comment(me.getUsername(), ((TextView) personView).getText().toString(), content);
+                                String destName = ((TextView) personView).getText().toString();
+                                List<Comment> clist = momentList.get(position).getComments();
+                                for (int i = 0;i < clist.size(); i++) {
+                                    Comment comment1 = clist.get(i);
+                                    if (destName.equals(comment1.getSender())) {
+                                        desId = comment1.getSenderId();
+                                        break;
+                                    }
+                                    if (destName.equals(comment1.getReceiverId())) {
+                                        desId = comment1.getReceiverId();
+                                        break;
+                                    }
+                                }
                             }
-                            momentList.get(position).getComments().add(comment);
-                            momentAdapter.notifyDataSetChanged();
+                            Log.d("desId", desId);
+                            sendComment(me.getId(), desId, content, momentList.get(position).getId(), new Date(), position);
+                            //momentList.get(position).getComments().add(comment);
+                            //momentAdapter.notifyDataSetChanged();
                             etCommentInput.setText("");
                             holder.popupWindow.dismiss();
                         }
@@ -207,14 +239,16 @@ public class MomentFragment extends Fragment {
                     StringBuilder likeName = new StringBuilder(holder.tvLikePeople.getText().toString());
                     String myUsername = me.getUsername();
                     if (!momentList.get(position).isLike()) {
-                        momentList.get(position).getLikes().add(myUsername);
-                        momentList.get(position).setLike(true);
-                        momentAdapter.notifyDataSetChanged();
+                        //momentList.get(position).getLikes().add(myUsername);
+                        //momentList.get(position).setLike(true);
+                        sendLike(momentList.get(position).getId(), me.getId(), new Date(), position);
+                        //momentAdapter.notifyDataSetChanged();
                         //holder.lbLike.setLiked(true);
                     } else {
-                        momentList.get(position).getLikes().remove(momentList.get(position).getLikes().size()-1);
-                        momentList.get(position).setLike(false);
-                        momentAdapter.notifyDataSetChanged();
+                        //momentList.get(position).getLikes().remove(momentList.get(position).getLikes().size()-1);
+                        //momentList.get(position).setLike(false);
+                        cancelLike(momentList.get(position).getId(), me.getId(), new Date(), position);
+                        //momentAdapter.notifyDataSetChanged();
                         //holder.lbLike.setLiked(false);
                     }
                 } else if (viewName == MomentAdapter.ViewName.SHOW) {
@@ -288,16 +322,19 @@ public class MomentFragment extends Fragment {
                         if (isMovingUp) {
                             momentList.clear();
                         }
+                        int originSize = momentList.size();
                         for (int i = 0; i < momentCardList.size(); i++) {
                             momentList.add(new Moment(momentCardList.get(i)));
-                            getUserInfo(momentList.get(i).getUserId(), i);
-                            //getComments(momentList.get(i).getId(), i);
-                            //getLikes(momentList.get(i).getId(), i);
                         }
                         momentAdapter.notifyDataSetChanged();
+                        for (int i = 0; i < momentCardList.size(); i++) {
+                            getUserInfo(momentList.get(originSize+i).getUserId(), originSize+i);
+                            getComments(momentList.get(originSize+i).getId(), originSize+i);
+                            getLikes(momentList.get(originSize+i).getId(), originSize+i);
+                        }
                     }
                     else {
-                        Toast.makeText(getContext(), "获取失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
@@ -341,18 +378,20 @@ public class MomentFragment extends Fragment {
             public void onResponse(Call<LikeResponse> call, Response<LikeResponse> response) {
                 if (response.isSuccessful()) {
                     LikeResponse result = response.body();
+                    Log.d("cancelIngetLikes", result.toString());
                     if (result.success()) {
                         List<LikeCard> likeCardList = result.getLikeCards();
                         //boolean isLike = false;
+                        momentList.get(position).getLikes().clear();
                         for (int i = 0; i < likeCardList.size(); i++) {
                             String name = likeCardList.get(i).getNickname();
-                            if (name == me.getNickname()) {
+                            if (name.equals(me.getNickname())) {
                                 momentList.get(position).setLike(true);
                             }
                             momentList.get(position).getLikes().add(name);
                         }
+                        Log.d("cancel", Integer.toString(momentList.get(position).getLikes().size()));
                         momentAdapter.notifyDataSetChanged();
-
                     }
                 }
             }
@@ -366,19 +405,30 @@ public class MomentFragment extends Fragment {
 
     //position: momentList中的位置
     private void sendComment(String sourceId, String desId, String text, final String mid, Date time, final int position) {
+        //Log.d("sendComment", new CommentModel(sourceId, desId, text, mid, time).toString());
+        //desId = "";
+        Log.d("desId", desId);
         NetworkHelper.publishComment(new CommentModel(sourceId, desId, text, mid, time), new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.isSuccessful()) {
+                    Log.d("sendCommentResponse", response.body().toString());
                     if (response.body().success()) {
+                        Log.d("sendCommentResponse", "success");
                         getComments(mid, position);
                     }
+                    else {
+                        Log.d("sendCommentResponse", "fail1");
+                    }
+                }
+                else {
+                    Log.d("sendCommentResponse", "fail2");
                 }
             }
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-
+                Log.d("sendCommentResponse", "fail3");
             }
         });
     }
@@ -407,14 +457,22 @@ public class MomentFragment extends Fragment {
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body().success()) {
+                        Log.d("cancelLike", "success");
                         getLikes(mid, position);
                     }
+                    else {
+                        Log.d("cancelLike", "fail1");
+                    }
+                }
+                else {
+                    Log.d("cancelLike", "fail2");
+                    Toast.makeText(getContext(), "cancel fail2", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-
+                Toast.makeText(getContext(), "cancel fail3", Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -132,7 +132,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         holder.tvUsername.setText(moment.getOwner().getNickname());
 
         Picasso.with(context)
-                .load(moment.getOwner().getPortrait())
+                .load(Constant.Value.BASE_URL + moment.getOwner().getPortrait())
                 .into(holder.ivPortrait);
 
         holder.tvLocation.setText(moment.getLocation());
@@ -141,29 +141,37 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         }
 
         List<String> images = moment.getImages();
-        for (int i = images.size()-1; i >= 0; i--) {
-            String url = images.get(i);
-            if (url == "") {
-                images.remove(url);
+        if (images != null) {
+            for (int i = images.size() - 1; i >= 0; i--) {
+                String url = images.get(i);
+                if (url.equals("")) {
+                    images.remove(url);
+                }
             }
-        }
-        if (images.size() > 0) {
-            holder.llNineImage.removeView(holder.nineGridImageView);
-            holder.nineGridImageView = new NineGridImageView<String>(context);
-            holder.nineGridImageView.setGap(4);
-            holder.nineGridImageView.setPadding(0, 10, 10, 0);
+            if (images.size() > 0) {
+                holder.llNineImage.removeView(holder.nineGridImageView);
+                holder.nineGridImageView = new NineGridImageView<String>(context);
+                holder.nineGridImageView.setVisibility(View.VISIBLE);
+                holder.nineGridImageView.setGap(4);
+                holder.nineGridImageView.setPadding(0, 10, 10, 0);
 
-            if (images.size() <= 4) {
-                holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_FILL);
-                //holder.nineGridImageView.setSingleImgSize(750);
+                if (images.size() <= 4) {
+                    holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_FILL);
+                    //holder.nineGridImageView.setSingleImgSize(750);
+                } else {
+                    holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_GRID);
+                }
+                holder.nineGridImageView.setAdapter(holder.imageAdapter);
+                holder.nineGridImageView.setImagesData(images);
+                holder.llNineImage.addView(holder.nineGridImageView, 2);
+
             }
             else {
-                holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_GRID);
+                holder.nineGridImageView.setVisibility(View.GONE);
             }
-            holder.nineGridImageView.setAdapter(holder.imageAdapter);
-            holder.nineGridImageView.setImagesData(images);
-            holder.llNineImage.addView(holder.nineGridImageView, 2);
-
+        }
+        else {
+            holder.nineGridImageView.setVisibility(View.GONE);
         }
 
         //设置文字内容，如果文字长度大于108个字，那么只显示部分内容，并显示全文按钮

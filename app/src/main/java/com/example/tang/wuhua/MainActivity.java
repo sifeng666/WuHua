@@ -253,6 +253,7 @@ public class MainActivity extends AppCompatActivity {
                         SendPageNineImage.class);
                 intent.putExtra("user_data", user);
                 startActivityForResult(intent, RESULT_CODE_SEND);
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 //finish();
             }
         });

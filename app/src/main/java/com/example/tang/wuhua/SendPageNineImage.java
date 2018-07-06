@@ -119,6 +119,7 @@ public class SendPageNineImage extends AppCompatActivity {
             public void onClick(View v) {
                 setResult(RESULT_CANCELED);
                 finish();
+                overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
             }
         });
 
@@ -233,6 +234,7 @@ public class SendPageNineImage extends AppCompatActivity {
                                 setResult(RESULT_OK);
                                 Log.d("send", "ok");
                                 finish();
+                                overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                             }
                             else {
                                 Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
