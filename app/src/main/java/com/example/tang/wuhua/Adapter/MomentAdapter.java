@@ -2,6 +2,7 @@ package com.example.tang.wuhua.Adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.tang.wuhua.Constant;
 import com.example.tang.wuhua.Data.Comment;
 import com.example.tang.wuhua.Data.Moment;
 import com.example.tang.wuhua.MainActivity;
 import com.example.tang.wuhua.R;
+import com.jaeger.ninegridimageview.NineGridImageView;
+import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 import com.squareup.picasso.Picasso;
@@ -63,6 +68,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         public TextView tvPublishTime; //时间
         public boolean isLike;
         public PopupWindow popupWindow;
+        public NineGridImageView nineGridImageView;
+        public LinearLayout llNineImage;
+        private NineGridImageViewAdapter<String> imageAdapter;
 
         public ViewHolder(View view) {
             super(view);
@@ -77,7 +85,30 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             ivPortrait = (ImageView) view.findViewById(R.id.img_portrait);
             tvLocation = (TextView) view.findViewById(R.id.text_location);
             tvPublishTime = (TextView) view.findViewById(R.id.text_time);
+            nineGridImageView = (NineGridImageView) view.findViewById(R.id.layout_nine_grid);
+            llNineImage = (LinearLayout) view.findViewById(R.id.nine_image_layout_in_main_board);
             isLike = false;
+            imageAdapter = new NineGridImageViewAdapter<String>() {
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String url) {
+                    Log.d("url", url);
+                    Picasso.with(context)
+                            .load(Constant.Value.BASE_URL + url)
+                            .into(imageView);
+                }
+
+                @Override
+                protected ImageView generateImageView(Context context) {
+
+                    return super.generateImageView(context);
+                }
+
+                @Override
+                protected void onItemImageClick(Context context, int index, List list) {
+                    super.onItemImageClick(context, index, list);
+                    Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+                }
+            };
         }
     }
 
@@ -107,6 +138,32 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         holder.tvLocation.setText(moment.getLocation());
         if (moment.getPublishTime() != null) {
             holder.tvPublishTime.setText(moment.getPublishTime().toString());
+        }
+
+        List<String> images = moment.getImages();
+        for (int i = images.size()-1; i >= 0; i--) {
+            String url = images.get(i);
+            if (url == "") {
+                images.remove(url);
+            }
+        }
+        if (images.size() > 0) {
+            holder.llNineImage.removeView(holder.nineGridImageView);
+            holder.nineGridImageView = new NineGridImageView<String>(context);
+            holder.nineGridImageView.setGap(4);
+            holder.nineGridImageView.setPadding(0, 10, 10, 0);
+
+            if (images.size() <= 4) {
+                holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_FILL);
+                //holder.nineGridImageView.setSingleImgSize(750);
+            }
+            else {
+                holder.nineGridImageView.setShowStyle(NineGridImageView.STYLE_GRID);
+            }
+            holder.nineGridImageView.setAdapter(holder.imageAdapter);
+            holder.nineGridImageView.setImagesData(images);
+            holder.llNineImage.addView(holder.nineGridImageView, 2);
+
         }
 
         //设置文字内容，如果文字长度大于108个字，那么只显示部分内容，并显示全文按钮

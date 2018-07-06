@@ -25,9 +25,11 @@ app:cardUseCompatPadding="false">
         android:src="@mipmap/messi_1" />
 
     <LinearLayout
+        android:id="@+id/nine_image_layout_in_main_board"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
+        android:paddingRight="10dp"
         android:orientation="vertical">
 
         <TextView
@@ -46,6 +48,7 @@ app:cardUseCompatPadding="false">
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:paddingRight="10dp"
+            android:layout_marginBottom="10dp"
             android:text="我是梅西，我现在慌得一比"
             android:textColor="#666"
             android:textSize="16sp" />
@@ -69,7 +72,7 @@ app:cardUseCompatPadding="false">
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginRight="40dp"
+            android:layout_marginRight="30dp"
             android:visibility="gone">
 
             <ImageView
@@ -143,7 +146,7 @@ app:cardUseCompatPadding="false">
                         android:layout_height="20dp"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
+                        android:layout_marginRight="5dp"
                         app:cardBackgroundColor="@color/comment_heart_color_1"
                         app:cardCornerRadius="3dp"
                         app:cardElevation="2dp">
