@@ -24,8 +24,6 @@ public class SettingFragment extends Fragment {
     TextView tvSwitchAccount;
     TextView tvLogout;
     TextView tvExit;
-    @BindView(R.id.layout_profile_settings)
-    LinearLayout layoutProfileSettings;
     @BindView(R.id.layout_remind_settings)
     LinearLayout layoutRemindSettings;
     @BindView(R.id.layout_privacy_settings)
@@ -51,12 +49,7 @@ public class SettingFragment extends Fragment {
     }
 
     private void bindListener() {
-        layoutProfileSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), ProfileFragment.class);
-            }
-        });
+        
 
 
 
