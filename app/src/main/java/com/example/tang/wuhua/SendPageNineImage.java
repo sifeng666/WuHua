@@ -40,6 +40,7 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,6 +85,7 @@ public class SendPageNineImage extends AppCompatActivity {
 
     private List<String> urls_list = new ArrayList<>();
     private List<String> urls_list_send = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
     private String[] IMG_URL_LIST = {
             "http://pic9.nipic.com/20100814/2889649_133155087075_2.jpg",
             "http://img5.imgtn.bdimg.com/it/u=3173289370,1988370443&fm=27&gp=0.jpg",
@@ -158,17 +160,20 @@ public class SendPageNineImage extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("resultCode", Integer.toString(resultCode));
         if (requestCode == REQUEST_CODE_CHOOSE && resultCode == RESULT_OK) {
             List<Uri> result = Matisse.obtainResult(data);
             for (int i = 0; i < result.size(); i++) {
                 Log.d("img", result.get(i).toString());
                 urls_list.add("file://" + getRealPathFromUri(getApplicationContext(),  result.get(i)));
                 urls_list_send.add(getRealPathFromUri(getApplicationContext(),  result.get(i)));
+                //images.add("file://" + new File(urls_list.get(i)).getPath());
             }
             layout.removeView(nine_grid);
             nine_grid = new NineGridImageView<String>(this);
             nine_grid.setAdapter(mAdapter1);
             nine_grid.setImagesData(urls_list);
+            //nine_grid.setImagesData(images);
             nine_grid.setGap(4);
             nine_grid.setShowStyle(NineGridImageView.STYLE_GRID);
             nine_grid.setPadding(10, 0, 10, 0);
@@ -220,6 +225,30 @@ public class SendPageNineImage extends AppCompatActivity {
 
 
         };
+//        mAdapter1 = new NineGridImageViewAdapter<File>() {
+//            @Override
+//            protected void onDisplayImage(Context context, ImageView imageView, File url) {
+//                Log.d("url", url.toString());
+//                Picasso.with(context)
+//                        .load(url)
+//                        .into(imageView);
+//            }
+//
+//            @Override
+//            protected ImageView generateImageView(Context context) {
+//
+//                return super.generateImageView(context);
+//            }
+//
+//            @Override
+//            protected void onItemImageClick(Context context, int index, List list) {
+//                super.onItemImageClick(context, index, list);
+//                Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+//            }
+//
+//
+//
+//        };
     }
 
     public void sendMoment(String userId, double latitude, double longitude, String text, List<String> images,
