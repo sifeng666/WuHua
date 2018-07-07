@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -43,6 +46,7 @@ import com.zhihu.matisse.internal.entity.CaptureStrategy;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,6 +67,7 @@ public class SendPageNineImage extends AppCompatActivity {
     private TextView tvHint;
     private TextView cancel;
     private TextView send;
+    private ImageView showImageSendPage;
     private LocationClient mLocationClient; //位置信息
     private String location;
     private double latitude; //经度
@@ -79,6 +84,17 @@ public class SendPageNineImage extends AppCompatActivity {
     TextView tvLocation;
     @BindView(R.id.edit_input_in_send_page)
     EditText etText;
+
+    private MaterialDialog.Builder mBuilderReTry;
+    private MaterialDialog.Builder mBuilderSuccess;
+    private MaterialDialog.Builder mBuilderFail;
+    private MaterialDialog mMaterialDialogReTry;
+    private MaterialDialog mMaterialDialogSuccess;
+    private MaterialDialog mMaterialDialogFail;
+
+    private MaterialDialog.Builder mBuilder;
+    private MaterialDialog mMaterialDialog;
+
 
     private NineGridImageViewAdapter<String> mAdapter1;
 
@@ -112,11 +128,13 @@ public class SendPageNineImage extends AppCompatActivity {
         layout = (LinearLayout) findViewById(R.id.send_layout);
         cancel = (TextView) findViewById(R.id.cancel_in_send_page);
         send = (TextView) findViewById(R.id.btn_send_moment);
+        showImageSendPage = (ImageView) findViewById(R.id.show_image_send_page);
         requestLocation();
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                showSorry();
                 setResult(RESULT_CANCELED);
                 finish();
                 overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
@@ -153,6 +171,51 @@ public class SendPageNineImage extends AppCompatActivity {
         initAdapter();
         nine_grid.setAdapter(mAdapter1);
         nine_grid.setImagesData(urls_list);
+    }
+
+    private void showSorry() {
+        mBuilder = new MaterialDialog.Builder(this);
+        mBuilder.title("提醒");
+        mBuilder.titleGravity(GravityEnum.CENTER);
+        mBuilder.titleColor(Color.parseColor("#000000"));
+        mBuilder.content("很抱歉，该功能尚未完成\n敬请期待！");
+        mBuilder.contentColor(Color.parseColor("#000000"));
+        mMaterialDialog = mBuilder.build();
+        mMaterialDialog.show();
+
+    }
+
+    private void showReTry() {
+        mBuilderReTry = new MaterialDialog.Builder(SendPageNineImage.this);
+        mBuilderReTry.title("Warning!");
+        mBuilderReTry.titleGravity(GravityEnum.CENTER);
+        mBuilderReTry.titleColor(Color.parseColor("#000000"));
+        mBuilderReTry.content("发送失败，请重试");
+        mBuilderReTry.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogReTry = mBuilderReTry.build();
+        mMaterialDialogReTry.show();
+    }
+
+    private void showSuccess() {
+        mBuilderSuccess = new MaterialDialog.Builder(SendPageNineImage.this);
+        mBuilderSuccess.title("哈哈！");
+        mBuilderSuccess.titleGravity(GravityEnum.CENTER);
+        mBuilderSuccess.titleColor(Color.parseColor("#000000"));
+        mBuilderSuccess.content("发送成功");
+        mBuilderSuccess.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogSuccess = mBuilderSuccess.build();
+        mMaterialDialogSuccess.show();
+    }
+
+    private void showFail() {
+        mBuilderFail = new MaterialDialog.Builder(SendPageNineImage.this);
+        mBuilderFail.title("Warning!");
+        mBuilderFail.titleGravity(GravityEnum.CENTER);
+        mBuilderFail.titleColor(Color.parseColor("#000000"));
+        mBuilderFail.content("网络失败，请重试");
+        mBuilderFail.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogFail = mBuilderFail.build();
+        mMaterialDialogFail.show();
     }
 
     @Override
@@ -215,6 +278,10 @@ public class SendPageNineImage extends AppCompatActivity {
             protected void onItemImageClick(Context context, int index, List list) {
                 super.onItemImageClick(context, index, list);
                 Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+                Picasso.with(context)
+                        .load("http://ww3.sinaimg.cn/large/610dc034jw1fasakfvqe1j20u00mhgn2.jpg")
+                        .into(showImageSendPage);
+
             }
 
 
@@ -233,21 +300,28 @@ public class SendPageNineImage extends AppCompatActivity {
                             if (response.body().success()) {
                                 setResult(RESULT_OK);
                                 Log.d("send", "ok");
+                                showSuccess();
+                                // TODO: 2018/7/7
+                                // 如何wait一段时间再finish。不会。
                                 finish();
                                 overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                             }
                             else {
-                                Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+                                showReTry();
                             }
                         }
                         else {
-                            Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(SendPageNineImage.this, "发送失败，请重试", Toast.LENGTH_SHORT).show();
+                            showReTry();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
-                        Toast.makeText(SendPageNineImage.this, "网络失败，请重试", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SendPageNineImage.this, "网络失败，请重试", Toast.LENGTH_SHORT).show();
+                        showFail();
+
                         t.printStackTrace();
                     }
                 });
@@ -278,7 +352,7 @@ public class SendPageNineImage extends AppCompatActivity {
                     tvLocation.setText(loc);
                 }
             });
-            Log.d("location", location);
+//            Log.d("location", location);
             mLocationClient.stop();
         }
     }
