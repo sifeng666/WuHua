@@ -29,6 +29,8 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by root on 18-6-26.
  */
@@ -63,7 +65,8 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         public TextView tvShowAndPack; //显示全文
         public LikeButton lbLike; //点赞按钮
         public TextView tvLikePeople; //点赞的用户名
-        public ImageView ivPortrait; //头像
+        //public ImageView ivPortrait; //头像
+        public CircleImageView ivPortrait;
         public TextView tvLocation; //位置
         public TextView tvPublishTime; //时间
         public boolean isLike;
@@ -82,7 +85,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             lbLike = (LikeButton) view.findViewById(R.id.img_heart);
             tvLikePeople = (TextView) view.findViewById(R.id.text_all_like_people);
             tvShowAndPack = (TextView) view.findViewById(R.id.text_show_and_pack);
-            ivPortrait = (ImageView) view.findViewById(R.id.img_portrait);
+            ivPortrait = (CircleImageView) view.findViewById(R.id.img_portrait);
             tvLocation = (TextView) view.findViewById(R.id.text_location);
             tvPublishTime = (TextView) view.findViewById(R.id.text_time);
             nineGridImageView = (NineGridImageView) view.findViewById(R.id.layout_nine_grid);

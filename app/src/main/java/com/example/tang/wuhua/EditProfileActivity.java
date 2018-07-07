@@ -144,6 +144,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             if (response.body().success()) {
                                 Toast.makeText(EditProfileActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK);
                                 finish();
                                 overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
                             }

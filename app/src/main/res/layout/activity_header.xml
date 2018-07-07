@@ -50,15 +50,19 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="15dp">
 
-            android:background="@mipmap/messi_1">
+            <!--<net.datafans.android.common.widget.imageview.CommonImageView-->
+                <!--android:id="@+id/commonImg_icon_header"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_margin="2dp" />-->
 
-            <net.datafans.android.common.widget.imageview.CommonImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/commonImg_icon_header"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="2dp" />
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_margin="2dp"/>
         </FrameLayout>
 
         <TextView

@@ -16,13 +16,20 @@ app:cardUseCompatPadding="false">
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/img_portrait"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/messi_1" />
+        <!--<ImageView-->
+            <!--android:id="@+id/img_portrait"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_marginLeft="12dp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:src="@mipmap/messi_1" />-->
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_portrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="10dp"/>
 
     <LinearLayout
         android:id="@+id/nine_image_layout_in_main_board"

@@ -70,8 +70,16 @@ public class MainActivity extends AppCompatActivity {
     private long mExitTime; //退出时的时间
     private User user; //登录的用户
     private boolean isOffline; //离线测试
-    final private int RESULT_CODE_SEND = 10;
+    final private int REQUEST_CODE_SEND = 10;
     private TextView tvMenuTitle;
+    private enum fragmentId {
+        PROFILE,
+        ALBUM,
+        MOMENT,
+        SETTING,
+        SUPPORT
+    }
+    private fragmentId curFragment;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.root)
@@ -154,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 //menuTransaction.addToBackStack(null);
                 menuTransaction.commit();
                 tvMenuTitle.setText("个人信息");
+                curFragment = fragmentId.PROFILE;
                 sendLyle.setVisibility(View.GONE);
                 changeProfile.setVisibility(View.VISIBLE);
                 ivSwitchMenu.post(new Runnable() {
@@ -172,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new AlbumFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("相册");
+                curFragment = fragmentId.ALBUM;
                 sendLyle.setVisibility(View.GONE);
                 changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
@@ -190,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new MomentFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("lyle");
+                curFragment = fragmentId.MOMENT;
                 sendLyle.setVisibility(View.VISIBLE);
                 changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
@@ -208,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new SettingFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("设置");
+                curFragment = fragmentId.SETTING;
                 sendLyle.setVisibility(View.GONE);
                 changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
@@ -226,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
                 menuTransaction.replace(R.id.main_frame, new SupportFragment());
                 menuTransaction.commit();
                 tvMenuTitle.setText("赞赏");
+                curFragment = fragmentId.SUPPORT;
                 sendLyle.setVisibility(View.GONE);
                 changeProfile.setVisibility(View.GONE);
                 ivSwitchMenu.post(new Runnable() {
@@ -252,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this,
                         SendPageNineImage.class);
                 intent.putExtra("user_data", user);
-                startActivityForResult(intent, RESULT_CODE_SEND);
+                startActivityForResult(intent, REQUEST_CODE_SEND);
                 overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
                 //finish();
             }
@@ -298,8 +311,14 @@ public class MainActivity extends AppCompatActivity {
             List<Uri> result = Matisse.obtainResult(data);
             Log.d("Matisse", "mSelected: " + result);
         }
-        else if (requestCode == RESULT_CODE_SEND && resultCode == RESULT_OK) {
+        else if (requestCode == REQUEST_CODE_SEND && resultCode == RESULT_OK) {
             Log.d("send", "send");
+            MomentFragment momentFragment = (MomentFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
+            momentFragment.refreshLayout.autoRefresh();
+        }
+        else if (requestCode == REQUEST_CODE_PROFILECHANGE && resultCode == RESULT_OK) {
+            ProfileFragment profileFragment = (ProfileFragment) getSupportFragmentManager().findFragmentById(R.id.main_frame);
+            profileFragment.getUserInfo(user.getId());
         }
     }
 
@@ -327,6 +346,10 @@ public class MainActivity extends AppCompatActivity {
 //            return null;
 //        }
         return user;
+    }
+
+    public void setUser(User newUser) {
+        user = newUser;
     }
 
     public TextView getTvMenuTitle() {
