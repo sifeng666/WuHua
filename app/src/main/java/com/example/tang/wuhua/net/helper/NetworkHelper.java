@@ -189,12 +189,7 @@ public class NetworkHelper {
         bodyMap.put("LocX", toRequestBody(String.valueOf(momentModel.getLongitude())));
         bodyMap.put("Text_m", toRequestBody(momentModel.getText()));
         bodyMap.put("type", toRequestBody(String.valueOf(momentModel.getMediaFileType())));
-
-        // 将日期格式转化为字符串
-        DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String publishTimeString = simpleDateFormat.format(momentModel.getPublishTime());
-        Log.d("time", publishTimeString);
-        bodyMap.put("Time_m", toRequestBody(publishTimeString));
+        bodyMap.put("Time_m", toRequestBody(momentModel.getPublishTime().toString()));
 
         bodyMap.put("Loc_Des", toRequestBody(String.valueOf(momentModel.getLocation())));
         Call<BaseResponse> call = remoteService.publishMoment(bodyMap, mediaParts);
