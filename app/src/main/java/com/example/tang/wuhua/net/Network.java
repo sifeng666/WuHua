@@ -83,7 +83,7 @@ public class Network {
         if (instance.mGson == null) {
             instance.mGson =
                     new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd hh:mm:ss")
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss")
                     .create();
         }
 
