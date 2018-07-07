@@ -77,7 +77,7 @@ public class AlbumFragment extends Fragment {
                         List<MomentCard> momentCardList = result.getMomentCards();
                         Log.d("album", Integer.toString(momentCardList.size()));
                         for (int i = 0; i < momentCardList.size(); i++) {
-                            mMomentList.add(new Moment(momentCardList.get(i)));
+                            mMomentList.add(0, new Moment(momentCardList.get(i)));
                         }
                         simpleMomentAdapter.notifyDataSetChanged();
                         Log.d("album", Integer.toString(mMomentList.size()));

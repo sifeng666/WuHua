@@ -20,7 +20,7 @@ public class CommentCard {
     private String sourceId;
 
     // 评论人的昵称
-    @SerializedName("Source_nickname")
+    @SerializedName("Source_name")
     private String sourceNickname;
 
     // 被评论的人的id
@@ -28,7 +28,7 @@ public class CommentCard {
     private String destinationId;
 
     // 被评论的人的id
-    @SerializedName("Dest_nickname")
+    @SerializedName("Dest_name")
     private String destinationNickname;
 
     // 评论内容
