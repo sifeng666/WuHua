@@ -3,6 +3,7 @@ package com.example.tang.wuhua;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.tang.wuhua.Data.User;
 import com.example.tang.wuhua.model.parameter.LoginModel;
 import com.example.tang.wuhua.model.response.UserResponse;
@@ -45,6 +48,9 @@ public class LoginAndRegister extends AppCompatActivity {
     private CheckBox cbAccount;
     private CheckBox cbPassword;
     private long mExitTime; //退出时的时间
+
+    private MaterialDialog.Builder mBuilderBegin;
+    private MaterialDialog mMaterialDialogBegin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +132,7 @@ public class LoginAndRegister extends AppCompatActivity {
                     editor.putBoolean("rememberPassword", false);
                     editor.apply();
                 }
+                showBegin();
                 login(userNameLogin, userPwdLogin);
 //                userNameLogin = "13919334033";
 //                userPwdLogin = "123";
@@ -184,10 +191,22 @@ public class LoginAndRegister extends AppCompatActivity {
         }
     }
 
+    private void showBegin() {
+        mBuilderBegin = new MaterialDialog.Builder(LoginAndRegister.this);
+        mBuilderBegin.title("提醒");
+        mBuilderBegin.titleGravity(GravityEnum.CENTER);
+        mBuilderBegin.titleColor(Color.parseColor("#000000"));
+        mBuilderBegin.content("正在登录，请稍等");
+        mBuilderBegin.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogBegin = mBuilderBegin.build();
+        mMaterialDialogBegin.show();
+    }
+
     private void login(String username, String password) {
         NetworkHelper.login(new LoginModel(userNameLogin, userPwdLogin), new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                mMaterialDialogBegin.dismiss();
                 if (response.isSuccessful()) {
                     UserResponse result = response.body();
                     Log.d("response", result.toString());

@@ -2,6 +2,7 @@ package com.example.tang.wuhua;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.GravityEnum;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.tang.wuhua.Data.User;
 import com.example.tang.wuhua.model.parameter.InfoUpdateModel;
 import com.example.tang.wuhua.model.response.BaseResponse;
@@ -48,6 +51,9 @@ public class EditProfileActivity extends AppCompatActivity {
     User user;
     String portrait;
     private static final int REQUEST_CODE_CHOOSE = 23;
+
+    private MaterialDialog.Builder mBuilderBegin;
+    private MaterialDialog mMaterialDialogBegin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +111,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (newPwd == "") {
                     newPwd = null;
                 }
-                Log.d("update", "fuck");
+                showBegin();
                 updateInfo(user.getUsername(), etNickname.getText().toString(), newPwd, portrait, etSignature.getText().toString());
             }
         });
@@ -140,6 +146,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                        mMaterialDialogBegin.dismiss();
                         Log.d("updateInfo", response.toString());
                         if (response.isSuccessful()) {
                             if (response.body().success()) {
@@ -157,5 +164,16 @@ public class EditProfileActivity extends AppCompatActivity {
                         Toast.makeText(EditProfileActivity.this, "Fail", Toast.LENGTH_SHORT);
                     }
                 });
+    }
+
+    private void showBegin() {
+        mBuilderBegin = new MaterialDialog.Builder(EditProfileActivity.this);
+        mBuilderBegin.title("提醒");
+        mBuilderBegin.titleGravity(GravityEnum.CENTER);
+        mBuilderBegin.titleColor(Color.parseColor("#000000"));
+        mBuilderBegin.content("正在上传，请稍等");
+        mBuilderBegin.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogBegin = mBuilderBegin.build();
+        mMaterialDialogBegin.show();
     }
 }

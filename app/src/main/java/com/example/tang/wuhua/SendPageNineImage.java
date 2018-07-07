@@ -89,9 +89,11 @@ public class SendPageNineImage extends AppCompatActivity {
     private MaterialDialog.Builder mBuilderReTry;
     private MaterialDialog.Builder mBuilderSuccess;
     private MaterialDialog.Builder mBuilderFail;
+    private MaterialDialog.Builder mBuilderBegin;
     private MaterialDialog mMaterialDialogReTry;
     private MaterialDialog mMaterialDialogSuccess;
     private MaterialDialog mMaterialDialogFail;
+    private MaterialDialog mMaterialDialogBegin;
 
     private MaterialDialog.Builder mBuilder;
     private MaterialDialog mMaterialDialog;
@@ -150,7 +152,9 @@ public class SendPageNineImage extends AppCompatActivity {
                 Log.d("latitude", Double.toString(latitude));
                 Log.d("longitude", Double.toString(longitude));
                 Log.d("publishTime", new Date().toString());
+                showBegin();
                 sendMoment(me.getId(), latitude, longitude, textContent, urls_list_send, MomentModel.MEDIA_TYPE_IMG, new Date(), location);
+
 //                setResult(RESULT_OK);
 //                finish();
             }
@@ -185,6 +189,17 @@ public class SendPageNineImage extends AppCompatActivity {
         mMaterialDialog = mBuilder.build();
         mMaterialDialog.show();
 
+    }
+
+    private void showBegin() {
+        mBuilderBegin = new MaterialDialog.Builder(SendPageNineImage.this);
+        mBuilderBegin.title("提醒");
+        mBuilderBegin.titleGravity(GravityEnum.CENTER);
+        mBuilderBegin.titleColor(Color.parseColor("#000000"));
+        mBuilderBegin.content("正在发送，请稍等");
+        mBuilderBegin.contentColor(Color.parseColor("#000000"));
+        mMaterialDialogBegin = mBuilderBegin.build();
+        mMaterialDialogBegin.show();
     }
 
     private void showReTry() {
@@ -324,12 +339,14 @@ public class SendPageNineImage extends AppCompatActivity {
                 new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                        mMaterialDialogBegin.dismiss();
                         if (response.isSuccessful()) {
                             Log.d("sendResponse", response.toString());
+                            Log.d("sendResponseBody", response.body().toString());
                             if (response.body().success()) {
                                 setResult(RESULT_OK);
                                 Log.d("send", "ok");
-                                showSuccess();
+                                //showSuccess();
                                 // TODO: 2018/7/7
                                 // 如何wait一段时间再finish。不会。
                                 finish();
@@ -350,7 +367,7 @@ public class SendPageNineImage extends AppCompatActivity {
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
 //                        Toast.makeText(SendPageNineImage.this, "网络失败，请重试", Toast.LENGTH_SHORT).show();
                         showFail();
-
+                        Log.d("sendM", "fail");
                         t.printStackTrace();
                     }
                 });

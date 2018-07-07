@@ -17,6 +17,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:layout_marginLeft="30dp"
             android:layout_width="90dp"
             android:layout_height="wrap_content">
 

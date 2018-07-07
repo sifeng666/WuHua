@@ -138,7 +138,7 @@ public class MomentFragment extends Fragment {
 
                     //如果点击的用户名是自己的话，提示并返回
                     if (view.getId() != R.id.img_comment) {
-                        if (me.getNickname() == ((TextView) view).getText().toString()) {
+                        if (me.getNickname().equals(((TextView) view).getText().toString())) {
                             Toast.makeText(getContext(), "不能回复自己", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -328,11 +328,11 @@ public class MomentFragment extends Fragment {
                             momentList.add(new Moment(momentCardList.get(i)));
                         }
                         momentAdapter.notifyDataSetChanged();
-                        //for (int i = 0; i < momentCardList.size(); i++) {
-                            //getUserInfo(momentList.get(originSize+i).getUserId(), originSize+i);
-                            //getComments(momentList.get(originSize+i).getId(), originSize+i);
-                            //getLikes(momentList.get(originSize+i).getId(), originSize+i);
-                        //}
+                        for (int i = 0; i < momentCardList.size(); i++) {
+                            getUserInfo(momentList.get(originSize+i).getUserId(), originSize+i);
+                            getComments(momentList.get(originSize+i).getId(), originSize+i);
+                            getLikes(momentList.get(originSize+i).getId(), originSize+i);
+                        }
                     }
                     else {
                         Toast.makeText(getContext(), "没有更多了", Toast.LENGTH_SHORT).show();
@@ -360,6 +360,7 @@ public class MomentFragment extends Fragment {
                     CommentResponse result = response.body();
                     if (result.success()) {
                         List<CommentCard> commentCardList = result.getCommentCards();
+                        momentList.get(position).getComments().clear();
                         if (commentCardList != null) {
                             for (int i = 0; i < commentCardList.size(); i++) {
                                 momentList.get(position).getComments().add(new Comment(commentCardList.get(i)));
@@ -401,7 +402,10 @@ public class MomentFragment extends Fragment {
                     }
                     else {
                         if (result.getLikeCards() == null) {
+                            Log.d("likeCard", "null");
                             momentList.get(position).getLikes().clear();
+                            momentList.get(position).setLike(false);
+                            momentAdapter.notifyDataSetChanged();
                         }
                     }
                 }

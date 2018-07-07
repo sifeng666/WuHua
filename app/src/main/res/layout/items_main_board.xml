@@ -119,15 +119,55 @@ app:cardUseCompatPadding="false">
                     android:textSize="16sp"
                     android:visibility="visible"/>
 
-                <TextView
-                    android:id="@+id/text_location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="莫斯科"
-                    android:textColor="@color/usr_name_color_2"
-                    android:textSize="10sp"
-                    android:visibility="visible"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/text_location"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:text="莫斯科"-->
+                    <!--android:textColor="@color/usr_name_color_2"-->
+                    <!--android:textSize="10sp"-->
+                    <!--android:visibility="visible"/>-->
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="#B0E2FF"
+                    app:cardCornerRadius="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_gravity="left|center"
+                    android:layout_marginBottom="10dp">
+
+                    <RelativeLayout
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/location_icon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentLeft="true"
+                            android:src="@mipmap/location_2" />
+                        <TextView
+                            android:layout_centerVertical="true"
+                            android:id="@+id/text_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="正在获取"
+                            android:maxWidth="100dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"
+                            android:layout_toRightOf="@+id/location_icon"
+                            android:layout_marginLeft="3dp"
+                            />
+
+                </RelativeLayout>
+
+                </android.support.v7.widget.CardView>
 
                 <RelativeLayout
                     android:layout_width="match_parent"

@@ -27,6 +27,7 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -141,6 +142,16 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         holder.tvLocation.setText(moment.getLocation());
         if (moment.getPublishTime() != null) {
             holder.tvPublishTime.setText(moment.getPublishTime().toString());
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(moment.getPublishTime());
+            int year = cal.get(Calendar.YEAR);//获取年份
+            int month=cal.get(Calendar.MONTH) + 1;//获取月份
+            int day=cal.get(Calendar.DATE);//获取日
+            int hour=cal.get(Calendar.HOUR_OF_DAY);//小时
+            int minute=cal.get(Calendar.MINUTE);//分
+            int second=cal.get(Calendar.SECOND);//秒
+            holder.tvPublishTime.setText(Integer.toString(year) + "年" + Integer.toString(month) + "月" + Integer.toString(day) +
+                    "日 " + Integer.toString(hour) + "时" + Integer.toString(minute) + "分");
         }
 
         List<String> images = moment.getImages();
@@ -227,6 +238,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         }
 
         //显示点赞内容;
+        holder.lbLike.setLiked(mMomentList.get(position).isLike());
         if (mMomentList.get(position).getLikes().size() == 0) {
             holder.llLike.setVisibility(View.GONE);
         }

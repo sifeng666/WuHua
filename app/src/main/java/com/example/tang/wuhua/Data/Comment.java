@@ -1,5 +1,7 @@
 package com.example.tang.wuhua.Data;
 
+import android.util.Log;
+
 import com.example.tang.wuhua.model.response.card.CommentCard;
 
 /**
@@ -36,7 +38,7 @@ public class Comment {
         this.receiver = commentCard.getDestinationNickname();
         this.receiverId = commentCard.getDestinationId();
         this.content = commentCard.getText();
-        if (this.receiverId == null) {
+        if (this.receiverId .equals("-1")) {
             this.type = 1;
         }
         else {
