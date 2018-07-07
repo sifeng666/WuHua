@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tang.wuhua.Adapter.SimpleMomentAdapter;
@@ -40,6 +41,7 @@ public class AlbumFragment extends Fragment {
     private TextView tvNickname;
     private TextView tvSignature;
     //private CommonImageView ivPortrait;
+    private ImageView imgBackGround;
     private CircleImageView ivPortrait;
     private RecyclerView albumRecyclerView;
     private List<Moment> mMomentList;
@@ -51,6 +53,7 @@ public class AlbumFragment extends Fragment {
         tvNickname = v.findViewById(R.id.text_name_header);
         tvSignature = v.findViewById(R.id.text_sign_header);
         ivPortrait = v.findViewById(R.id.commonImg_icon_header);
+        imgBackGround = v.findViewById(R.id.Img_cover_header);
         user = ((MainActivity) getActivity()).getUser();
         tvNickname.setText(user.getNickname());
         tvSignature.setText(user.getSignature());
@@ -59,6 +62,24 @@ public class AlbumFragment extends Fragment {
         albumRecyclerView = v.findViewById(R.id.recyclerview_show_header);
         LinearLayoutManager albumLayoutManager = new LinearLayoutManager(getContext());
         albumRecyclerView.setLayoutManager(albumLayoutManager);
+        int index = tvNickname.getText().length() % 5;
+        switch (index) {
+            case 0:
+                imgBackGround.setImageResource(R.mipmap.bg_random_1);
+                break;
+            case 1:
+                imgBackGround.setImageResource(R.mipmap.bg_random_2);
+                break;
+            case 2:
+                imgBackGround.setImageResource(R.mipmap.bg_random_3);
+                break;
+            case 3:
+                imgBackGround.setImageResource(R.mipmap.bg_random_4);
+                break;
+            case 4:
+                imgBackGround.setImageResource(R.mipmap.bg_random_5);
+                break;
+        }
         mMomentList = new ArrayList<>();
         simpleMomentAdapter = new SimpleMomentAdapter(getContext(), mMomentList);
         albumRecyclerView.setAdapter(simpleMomentAdapter);
