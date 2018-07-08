@@ -4,8 +4,10 @@ import android.Manifest;
 import android.animation.TimeInterpolator;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -14,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,6 +60,9 @@ import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,6 +122,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bigImgDialog.dismiss();
+            }
+        });
+
+        bigImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setItems(new String[]{getResources().getString(R.string.save_picture)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        saveCroppedImage(((BitmapDrawable) bigImageView.getDrawable()).getBitmap());
+                    }
+                });
+                builder.show();
+                return true;
             }
         });
 
@@ -376,6 +397,34 @@ public class MainActivity extends AppCompatActivity {
 
     public ImageView getBigImageView() {
         return bigImageView;
+    }
+
+    //保存图片
+    private void saveCroppedImage(Bitmap bmp) {
+        File file = new File("/sdcard/myFolder");
+        if (!file.exists())
+            file.mkdir();
+
+        file = new File("/sdcard/temp.jpg".trim());
+        String fileName = file.getName();
+        String mName = fileName.substring(0, fileName.lastIndexOf("."));
+        String sName = fileName.substring(fileName.lastIndexOf("."));
+
+        // /sdcard/myFolder/temp_cropped.jpg
+        String newFilePath = "/sdcard/myFolder" + "/" + mName + "_cropped" + sName;
+        file = new File(newFilePath);
+        try {
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+            fos.flush();
+            fos.close();
+            Toast.makeText(MainActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }
 

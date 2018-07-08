@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">WuHua</string>
 
+    <string name="save_picture">保存图片</string>
+
     <string name="colon">:</string>
     <string name="reply">回复</string>
     <string name="showAll">全文</string>
