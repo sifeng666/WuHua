@@ -307,30 +307,7 @@ public class SendPageNineImage extends AppCompatActivity {
 
 
         };
-//        mAdapter1 = new NineGridImageViewAdapter<File>() {
-//            @Override
-//            protected void onDisplayImage(Context context, ImageView imageView, File url) {
-//                Log.d("url", url.toString());
-//                Picasso.with(context)
-//                        .load(url)
-//                        .into(imageView);
-//            }
-//
-//            @Override
-//            protected ImageView generateImageView(Context context) {
-//
-//                return super.generateImageView(context);
-//            }
-//
-//            @Override
-//            protected void onItemImageClick(Context context, int index, List list) {
-//                super.onItemImageClick(context, index, list);
-//                Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
-//            }
-//
-//
-//
-//        };
+
     }
 
     public void sendMoment(String userId, double latitude, double longitude, String text, List<String> images,
