@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.UiThread;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -103,6 +106,7 @@ public class SendPageNineImage extends AppCompatActivity {
 
     private ImageView bigImageView; //大图
     private Dialog dialog; //显示大图
+    private int bigImgIndex = 0;
 
 
     private NineGridImageViewAdapter<String> mAdapter1;
@@ -139,6 +143,40 @@ public class SendPageNineImage extends AppCompatActivity {
         cancel = (TextView) findViewById(R.id.cancel_in_send_page);
         send = (TextView) findViewById(R.id.btn_send_moment);
         showImageSendPage = (ImageView) findViewById(R.id.show_image_send_page);
+        dialog = new Dialog(SendPageNineImage.this);
+        bigImageView = new ImageView(SendPageNineImage.this);
+        bigImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        bigImageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SendPageNineImage.this);
+                builder.setItems(new String[]{getResources().getString(R.string.cancel_picture)}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface mDialog, int which) {
+                        urls_list.remove(bigImgIndex);
+                        layout.removeView(nine_grid);
+                        nine_grid = new NineGridImageView<String>(SendPageNineImage.this);
+                        nine_grid.setAdapter(mAdapter1);
+                        nine_grid.setImagesData(urls_list);
+                        //nine_grid.setImagesData(images);
+                        nine_grid.setGap(4);
+                        nine_grid.setShowStyle(NineGridImageView.STYLE_GRID);
+                        nine_grid.setPadding(10, 0, 10, 0);
+                        layout.addView(nine_grid, 3);
+                        dialog.dismiss();
+                    }
+                });
+                builder.show();
+                //dialog.dismiss();
+                return true;
+            }
+        });
         requestLocation();
 
         cancel.setOnClickListener(new View.OnClickListener() {
@@ -301,25 +339,17 @@ public class SendPageNineImage extends AppCompatActivity {
             }
 
             @Override
-            protected void onItemImageClick(Context context, int index, List list) {
+            protected void onItemImageClick(Context context, final int index, final List list) {
                 super.onItemImageClick(context, index, list);
                 //Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
 //                Picasso.with(context)
 //                        .load("http://ww3.sinaimg.cn/large/610dc034jw1fasakfvqe1j20u00mhgn2.jpg")
 //                        .into(showImageSendPage);
-                dialog = new Dialog(SendPageNineImage.this);
-                bigImageView = new ImageView(SendPageNineImage.this);
+                bigImgIndex = index;
                 Picasso.with(SendPageNineImage.this).load((String) list.get(index)).into(bigImageView);
                 //bigImageView.loadImage((String) list.get(index));
                 dialog.setContentView(bigImageView);
                 dialog.show();
-                bigImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
             }
 
 
