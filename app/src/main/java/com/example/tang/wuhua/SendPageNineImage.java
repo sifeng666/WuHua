@@ -1,6 +1,7 @@
 package com.example.tang.wuhua;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
@@ -42,6 +43,8 @@ import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.engine.impl.GlideEngine;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import net.datafans.android.common.widget.imageview.CommonImageView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -97,6 +100,9 @@ public class SendPageNineImage extends AppCompatActivity {
 
     private MaterialDialog.Builder mBuilder;
     private MaterialDialog mMaterialDialog;
+
+    private ImageView bigImageView; //大图
+    private Dialog dialog; //显示大图
 
 
     private NineGridImageViewAdapter<String> mAdapter1;
@@ -297,10 +303,22 @@ public class SendPageNineImage extends AppCompatActivity {
             @Override
             protected void onItemImageClick(Context context, int index, List list) {
                 super.onItemImageClick(context, index, list);
-                Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
-                Picasso.with(context)
-                        .load("http://ww3.sinaimg.cn/large/610dc034jw1fasakfvqe1j20u00mhgn2.jpg")
-                        .into(showImageSendPage);
+                //Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+//                Picasso.with(context)
+//                        .load("http://ww3.sinaimg.cn/large/610dc034jw1fasakfvqe1j20u00mhgn2.jpg")
+//                        .into(showImageSendPage);
+                dialog = new Dialog(SendPageNineImage.this);
+                bigImageView = new ImageView(SendPageNineImage.this);
+                Picasso.with(SendPageNineImage.this).load((String) list.get(index)).into(bigImageView);
+                //bigImageView.loadImage((String) list.get(index));
+                dialog.setContentView(bigImageView);
+                dialog.show();
+                bigImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
             }
 

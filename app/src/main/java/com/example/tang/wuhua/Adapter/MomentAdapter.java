@@ -1,5 +1,6 @@
 package com.example.tang.wuhua.Adapter;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -110,7 +111,11 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 @Override
                 protected void onItemImageClick(Context context, int index, List list) {
                     super.onItemImageClick(context, index, list);
-                    Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(context, "" + index, Toast.LENGTH_LONG).show();
+                    Picasso.with(context)
+                            .load(Constant.Value.BASE_URL + (String) list.get(index))
+                            .into(((MainActivity) context).getBigImageView());
+                    ((MainActivity) context).getBigImgDialog().show();
                 }
             };
         }

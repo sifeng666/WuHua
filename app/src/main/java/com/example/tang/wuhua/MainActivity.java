@@ -2,6 +2,7 @@ package com.example.tang.wuhua;
 
 import android.Manifest;
 import android.animation.TimeInterpolator;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.change_profile)
     ImageView changeProfile;
 
+    private Dialog bigImgDialog;
+    private ImageView bigImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +108,16 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(getResources().getColor(R.color.guillotine_background));
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        bigImgDialog = new Dialog(MainActivity.this);
+        bigImageView = new ImageView(MainActivity.this);
+        bigImgDialog.setContentView(bigImageView);
+        bigImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bigImgDialog.dismiss();
+            }
+        });
 
         //if (user == null) {
         user = (User) getIntent().getSerializableExtra("user_data");
@@ -354,6 +368,14 @@ public class MainActivity extends AppCompatActivity {
 
     public TextView getTvMenuTitle() {
         return tvMenuTitle;
+    }
+
+    public Dialog getBigImgDialog() {
+        return bigImgDialog;
+    }
+
+    public ImageView getBigImageView() {
+        return bigImageView;
     }
 }
 

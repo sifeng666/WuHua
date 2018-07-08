@@ -8,6 +8,7 @@ package com.example.tang.wuhua;
 public interface Constant {
     interface Value {
         // 基础url
+        //String BASE_URL = "http://192.168.199.171:8080/MyServer/";
         String BASE_URL = "http://3wepm7.natappfree.cc/MyServer/";
         //String BASE_URL = "http://swc3iw.natappfree.cc/MyServer/";
 
